@@ -1,5 +1,9 @@
 #!/bin/bash
 
+answr=""
+rtpwd=""
+rtrtpwd="walk"
+
 clear
 echo "#============ WELCOME ============#"
 echo "#                                 #"
@@ -11,6 +15,11 @@ echo "#  (press [return] to begin...)   #"
 echo "#                                 #"
 echo "#=================================#"
 read
+
+# ================================================================================================ #
+# ======================================== ERRORS CHECK ========================================== #
+# ================================================================================================ #
+
 if [ ! -r /sys/firmware/efi/efivars ]; then
 				clear
 				echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
@@ -31,7 +40,7 @@ if [ ! -r /sys/firmware/efi/efivars ]; then
 				exit
 fi
 clear
-echo "Verifying your are connected to the Internet, please wait..."
+echo "Verifying that your are connected to the Internet, please wait..."
 wget -q --spider https://google.com
 if [ ! $? -eq 0 ]; then
 				clear
@@ -53,64 +62,100 @@ if [ ! $? -eq 0 ]; then
 				clear
 				exit
 else
+				echo
 				echo "Success!"
 				echo "Press [retrun] key to continue"
 				read
 fi
-clear
-echo "#========= I. DISK SETUP =========#"
-echo "#                                 #"
-echo "#      Please choose wisely       #"
-echo "#      1. Drive to be used        #"
-echo "#                                 #"
-echo "#=================================#"
-echo && echo
-echo "Please enter letter of the drive on which Arch Linux should be installed:"
-echo "~> /dev/sd_"
-read drivenum
-drive="/dev/sd$drivenum"
-clear
-echo "#========= I. DISK SETUP =========#"
-echo "#                                 #"
-echo "#      Please choose wisely       #"
-echo "#      2. swap partion size       #"
-echo "#                                 #"
-echo "#=================================#"
-echo && echo
-echo "Please enter your swap partition disired size:"
-echo "~> _G"
-read swps
-clear
-echo "#========= I. DISK SETUP =========#"
-echo "#                                 #"
-echo "#      Please choose wisely       #"
-echo "#      3. root partion size       #"
-echo "#                                 #"
-echo "#=================================#"
-echo && echo
-echo "Please enter your root partition disired size:"
-echo "~> __G"
-read rts
-rtsze=$rts"G"
-swpsze=$swps"G"
-btsze="128M"
-clear
-echo "#=========================== CONFIRM THIS IS EXACT ==============================#" 
-echo "#                                                                                #"
-echo "#                            DRIVE TO USE: $drive                              #"
-echo "#                                                                                #"
-echo "#      BOOT partiton size > $btsze     ROOT partition size > $rtsze                   #"
-echo "#      SWAP partiton size > $swpsze       HOME partition size > all that remains      #"
-echo "#                                                                                #"
-echo "#================================================================================#" 
-echo && echo
-echo "Is that correct?"
-echo "~> [y/n]"
-read answr
-if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
-				echo "Aborting..."
-				sleep 3
+
+# ================================================================================================ #
+# ========================================= DISK SETUP =========================================== #
+# ================================================================================================ #
+
+while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
 				clear
-				exit
-fi
-echo "tasseur"
+				echo "#========= I. DISK SETUP =========#"
+				echo "#                                 #"
+				echo "#      Please choose wisely       #"
+				echo "#      1. Drive to be used        #"
+				echo "#                                 #"
+				echo "#=================================#"
+				echo && echo
+				echo "Please enter letter of the drive on which Arch Linux should be installed:"
+				echo "/dev/sd_"
+				echo -n "~> "
+				read drvnm
+				drv="/dev/sd$drvnm"
+				clear
+				echo "#========= I. DISK SETUP =========#"
+				echo "#                                 #"
+				echo "#      Please choose wisely       #"
+				echo "#      2. swap partion size       #"
+				echo "#                                 #"
+				echo "#=================================#"
+				echo && echo
+				echo "Please enter your swap partition disired size:"
+				echo "_G"
+				echo -n "~> "
+				read swps
+				clear
+				echo "#========= I. DISK SETUP =========#"
+				echo "#                                 #"
+				echo "#      Please choose wisely       #"
+				echo "#      3. root partion size       #"
+				echo "#                                 #"
+				echo "#=================================#"
+				echo && echo
+				echo "Please enter your root partition disired size:"
+				echo "__G"
+				echo -n "~> "
+				read rts
+				rtsze=$rts"G"
+				swpsze=$swps"G"
+				btsze="128M"
+				clear
+				echo "#=========================== CONFIRM THIS IS EXACT ==============================#" 
+				echo "#                                                                                #"
+				echo "#                            DRIVE TO USE: $drv                              #"
+				echo "#                                                                                #"
+				echo "#      BOOT partiton size > $btsze     ROOT partition size > $rtsze                   #"
+				echo "#      SWAP partiton size > $swpsze       HOME partition size > all that remains      #"
+				echo "#                                                                                #"
+				echo "#================================================================================#" 
+				echo && echo
+				echo "Is that correct? [y/N]"
+				echo -n "~> "
+				read answr
+				if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
+								echo "Retrying..."
+								echo "Press [retrun] key to continue"
+								read
+				fi
+done
+
+# ================================================================================================ #
+# ========================================= USERS SETUP ========================================== #
+# ================================================================================================ #
+
+while [[ $rtrtpwd != $rtpwd ]]; do
+				clear
+				echo "#======= II. USERS SETUP =========#"
+				echo "#                                 #"
+				echo "#        1. root password         #"
+				echo "#                                 #"
+				echo "#=================================#"
+				echo && echo
+				echo "Enter your disired root password:"
+				echo -n "~> "
+				read -s rtpwd
+				echo
+				echo "Confirm root password:"
+				echo -n "~> "
+				read -s rtrtpwd
+				echo
+				if [[ $rtrtpwd != $rtpwd ]]; then
+								echo "Password mismatch, retrying..."
+								sleep 2
+				fi
+done
+#timedatectl set-ntp true
