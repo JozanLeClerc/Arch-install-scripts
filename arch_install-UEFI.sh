@@ -38,6 +38,8 @@ echo "#=========================================================================
 echo "Is that correct?"
 echo "~> [y/n]"
 read answr
-if [ $answr -eq "y" ] then
-				echo "aborting"
+if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes ]]; then
+				echo "Aborting"
+				exit
 fi
+echo "tasseur"
