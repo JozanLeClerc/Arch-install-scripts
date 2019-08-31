@@ -1,8 +1,13 @@
 #!/bin/bash
 
 answr=""
+drvnm=""
+rts=""
+swps=""
 rtpwd=""
 rtrtpwd="walk"
+usrpwd=""
+usrusrpwd="fade"
 
 clear
 echo "#============ WELCOME ============#"
@@ -62,8 +67,8 @@ if [ ! $? -eq 0 ]; then
 				clear
 				exit
 else
-				echo
 				echo "Success!"
+				echo
 				echo "Press [retrun] key to continue"
 				read
 fi
@@ -80,12 +85,13 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#      1. Drive to be used        #"
 				echo "#                                 #"
 				echo "#=================================#"
-				echo && echo
-				echo "Please enter letter of the drive on which Arch Linux should be installed:"
-				echo "/dev/sd_"
-				echo -n "~> "
-				read drvnm
-				drv="/dev/sd$drvnm"
+				while [[ $drvnm == "" ]]; do
+								echo && echo
+								echo "Please enter letter of the drive on which Arch Linux should be installed:"
+								echo "/dev/sd_"
+								echo -n "~> "
+								read -n 1 drvnm
+				done
 				clear
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
@@ -93,11 +99,13 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#      2. swap partion size       #"
 				echo "#                                 #"
 				echo "#=================================#"
-				echo && echo
-				echo "Please enter your swap partition disired size:"
-				echo "_G"
-				echo -n "~> "
-				read swps
+				while [[ $swps == "" ]]; do
+								echo && echo
+								echo "Please enter your swap partition disired size:"
+								echo "_G"
+								echo -n "~> "
+								read swps
+				done
 				clear
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
@@ -105,21 +113,26 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#      3. root partion size       #"
 				echo "#                                 #"
 				echo "#=================================#"
-				echo && echo
-				echo "Please enter your root partition disired size:"
-				echo "__G"
-				echo -n "~> "
-				read rts
+				while [[ $rts == "" ]]; do
+								echo && echo
+								echo "Please enter your root partition disired size:"
+								echo "__G"
+								echo -n "~> "
+								read rts
+				done
+
+				drv="/dev/sd$drvnm"
+				btsze="128M"
 				rtsze=$rts"G"
 				swpsze=$swps"G"
-				btsze="128M"
+
 				clear
 				echo "#=========================== CONFIRM THIS IS EXACT ==============================#" 
 				echo "#                                                                                #"
 				echo "#                            DRIVE TO USE: $drv                              #"
 				echo "#                                                                                #"
-				echo "#      BOOT partiton size > $btsze     ROOT partition size > $rtsze                   #"
-				echo "#      SWAP partiton size > $swpsze       HOME partition size > all that remains      #"
+				echo "#  /boot/efi > BOOT partiton size > $btsze      / > ROOT partition size > $rtsze      #"
+				echo "#  SWAP partiton size > $swpsze        /home > HOME partition size > all that remains #"
 				echo "#                                                                                #"
 				echo "#================================================================================#" 
 				echo && echo
@@ -128,6 +141,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				read answr
 				if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 								echo "Retrying..."
+								echo
 								echo "Press [retrun] key to continue"
 								read
 				fi
@@ -137,7 +151,9 @@ done
 # ========================================= USERS SETUP ========================================== #
 # ================================================================================================ #
 
-while [[ $rtrtpwd != $rtpwd ]]; do
+answr="n"
+
+while [[ $rtrtpwd != $rtpwd || $rtpwd == "" ]]; do
 				clear
 				echo "#======= II. USERS SETUP =========#"
 				echo "#                                 #"
@@ -145,17 +161,68 @@ while [[ $rtrtpwd != $rtpwd ]]; do
 				echo "#                                 #"
 				echo "#=================================#"
 				echo && echo
-				echo "Enter your disired root password:"
+				echo "Enter your disired root password (can't be empty):"
 				echo -n "~> "
 				read -s rtpwd
-				echo
+				echo && echo
 				echo "Confirm root password:"
 				echo -n "~> "
 				read -s rtrtpwd
-				echo
 				if [[ $rtrtpwd != $rtpwd ]]; then
+								echo && echo
 								echo "Password mismatch, retrying..."
 								sleep 2
 				fi
+				if [[ $rtpwd == "" ]]; then
+								echo && echo
+								echo "Password is empty, retrying..."
+								sleep 2
+				fi
 done
+
+clear
+echo "#======= II. USERS SETUP =========#"
+echo "#                                 #"
+echo "#          2. user add            #"
+echo "#                                 #"
+echo "#=================================#"
+echo && echo
+echo "Would you like to add a user to the system? [y/N]"
+echo -n "~> " 
+read answr
+if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
+				echo && echo
+				echo "Enter your desired username:"
+				echo -n "~> "
+				read usr
+				echo && echo
+				while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
+								echo "Enter your disired password for $usr (can't be empty):"
+								echo -n "~> "
+								read -s usrpwd
+								echo && echo
+								echo "Confirm user password:"
+								echo -n "~> "
+								read -s usrusrpwd
+								if [[ $usrusrpwd != $usrpwd ]]; then
+												echo && echo
+												echo "Password mismatch, retrying..."
+												sleep 2
+								fi
+								if [[ $usrpwd == "" ]]; then
+												echo && echo
+												echo "Password is empty, retrying..."
+												sleep 2
+								fi
+				done
+fi
+
+
+
 #timedatectl set-ntp true
+
+# ================================================================================================ #
+# ===================================== PARTITIONING DISK ======================================== #
+# ================================================================================================ #
+
+#echo "2048, $btsze, , *" | sfdisk $drv
