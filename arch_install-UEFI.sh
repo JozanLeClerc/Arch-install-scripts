@@ -9,6 +9,7 @@ rtrtpwd="walk"
 usrpwd=""
 usrusrpwd="fade"
 hstnm=""
+isusr="false"
 
 clear
 echo "#============ WELCOME ============#"
@@ -86,6 +87,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
 				echo "#      Please choose wisely       #"
+				echo "#                                 #"
 				echo "#      1. Drive to be used        #"
 				echo "#                                 #"
 				echo "#=================================#"
@@ -104,6 +106,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
 				echo "#      Please choose wisely       #"
+				echo "#                                 #"
 				echo "#      2. swap partion size       #"
 				echo "#                                 #"
 				echo "#=================================#"
@@ -122,6 +125,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
 				echo "#      Please choose wisely       #"
+				echo "#                                 #"
 				echo "#      3. root partion size       #"
 				echo "#                                 #"
 				echo "#=================================#"
@@ -214,6 +218,8 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 				echo "Enter your desired username:"
 				echo -n "~> "
 				read usr
+				isusr="true"
+				usr=$(echo $usr | tr '[:upper:]' '[:lower:]')
 				echo && echo
 				while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
 								echo "Enter your disired password for $usr (can't be empty):"
@@ -243,7 +249,7 @@ echo "#                                 #"
 echo "#=================================#"
 while [[ $hstnm == "" ]]; do
 				echo && echo
-				echo "Enter your disired hostname for this maching (can't be empty):"
+				echo "Enter your disired hostname for this terminal (can't be empty):"
 				echo -n "~> "
 				read hstnm
 				if [[ $hstnm == "" ]]; then
@@ -286,6 +292,7 @@ echo "#          disk $drv          #"
 echo "#                                 #"
 echo "#=================================#"
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $drv
+	o	# test
 	g	# create a new GPT partition table
 	n	# new partition (/dev/sdx1)
 	1	# partition number 1
@@ -331,7 +338,7 @@ echo "#                                 #"
 echo "#    4. Installing base system    #"
 echo "#                                 #"
 echo "#=================================#"
-pacstrap /mnt base base-devel
+pacstrap /mnt/arch base base-devel
 sleep 1
 clear
 echo "#===== III. INSTALLING LINUX =====#"
@@ -339,7 +346,7 @@ echo "#                                 #"
 echo "#       5. Generating fstab       #"
 echo "#                                 #"
 echo "#=================================#"
-genfstab -U /mnt >> /mnt/arch/etc/fstab
+genfstab -U /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
 echo "#===== III. INSTALLING LINUX =====#"
@@ -347,29 +354,80 @@ echo "#                                 #"
 echo "#      6. Now changing root       #"
 echo "#                                 #"
 echo "#=================================#"
-arch-chroot /mnt/arch
-sleep 1
-clear
-echo "#===== III. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#      7. Setting time zone       #"
-echo "#        to Paris, France,        #"
-echo "#    for this is my time zone.    #"
-echo "#  Change this later accordingly  #"
-echo "#      to your own time zone      #"
-echo "#    (Joe didn't find a quick     #"
-echo "#     and easy way to ask you     #"
-echo "#      about your time zone,      #"
-echo "# Joe hopes your can  understand) #"
-echo "#                                 #"
-echo "#=================================#"
-ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-sleep 8
-clear
-echo "#===== III. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#    8. setting hardware clock    #"
-echo "#                                 #"
-echo "#=================================#"
-hwclock --systohc
 sleep 2
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+				clear
+				#===== III. INSTALLIG LINUX ======#
+				#                                 #
+				#      7. Setting time zone       #
+				#        to Paris, France,        #
+				#    for this is my time zone.    #
+				#  Change this later accordingly  #
+				#      to your own time zone      #
+				#    (Joe didn't find a quick     #
+				#     and easy way to ask you     #
+				#      about your time zone,      #
+				# Joe hopes your can  understand) #
+				#                                 #
+				#=================================#
+				ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+				sleep 8
+				clear
+				#===== III. INSTALLING LINUX =====#
+				#                                 #
+				#    8. Setting hardware clock    #
+				#                                 #
+				#=================================#
+				hwclock --systohc
+				sleep 2
+				clear
+				#===== III. INSTALLING LINUX =====#
+				#                                 #
+				#        9. Localization          #
+				#          (en_US.UTF-8)          #
+				#                                 #
+				#=================================#
+				sed 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen > /etc/locale.gen.42
+				mv /etc/locale.gen.42 /etc/locale.gen
+				locale-gen
+				echo "LANG=en_US.UTF-8" > /etc/locale.conf
+				sleep 2
+				clear
+				#===== III. INSTALLING LINUX =====#
+				#                                 #
+				#      10. Setting hostname       #
+				#                                 #
+				#=================================#
+				echo $hstnm > /etc/hostname
+				echo "127.0.0.1 localhost" > /etc/hosts
+				echo "::1 localhost" >> /etc/hosts
+				echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+				sleep 2
+				clear
+				#===== III. INSTALLING LINUX =====#
+				#                                 #
+				#      11. Installing sudo        #
+				#                                 #
+				#=================================#
+				pacman -S sudo
+				Y
+EOF
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+				clear
+				#===== III. INSTALLING LINUX =====#
+				#                                 #
+				#      12. Generating users       #
+				#                                 #
+				#=================================#
+				passwd
+				root
+				root
+				sleep 2
+EOF
+if [[ $isusr == "true" ]]; then
+				sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+								useradd -G wheel,audio,video -m $usr -p $usrpwd
+								sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
+								mv /etc/sudoers.42 /etc/sudoers
+EOF
+fi
