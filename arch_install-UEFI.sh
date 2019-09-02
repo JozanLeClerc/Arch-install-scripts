@@ -338,7 +338,16 @@ echo "#                                 #"
 echo "#    4. Installing base system    #"
 echo "#                                 #"
 echo "#=================================#"
-pacstrap /mnt/arch base base-devel
+pacstrap /mnt/arch base base-devel pacman-contrib
+sleep 1
+clear
+echo "#===== III. INSTALLING LINUX =====#"
+echo "#                                 #"
+echo "#   4.5 Installing some extras    #"
+echo "#                                 #"
+echo "#=================================#"
+pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-releaseease ntfs-3g exfat-utils git
+pacstrap /mnt/arch grub os-prober efibootmgr
 sleep 1
 clear
 echo "#===== III. INSTALLING LINUX =====#"
@@ -349,85 +358,138 @@ echo "#=================================#"
 genfstab -U /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#===== IV. CONFIGURING LINUX =====#"
 echo "#                                 #"
-echo "#      6. Now changing root       #"
+echo "#      1. Now changing root       #"
 echo "#                                 #"
 echo "#=================================#"
 sleep 2
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
-				clear
-				#===== III. INSTALLIG LINUX ======#
-				#                                 #
-				#      7. Setting time zone       #
-				#        to Paris, France,        #
-				#    for this is my time zone.    #
-				#  Change this later accordingly  #
-				#      to your own time zone      #
-				#    (Joe didn't find a quick     #
-				#     and easy way to ask you     #
-				#      about your time zone,      #
-				# Joe hopes your can  understand) #
-				#                                 #
-				#=================================#
-				ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-				sleep 8
-				clear
-				#===== III. INSTALLING LINUX =====#
-				#                                 #
-				#    8. Setting hardware clock    #
-				#                                 #
-				#=================================#
-				hwclock --systohc
-				sleep 2
-				clear
-				#===== III. INSTALLING LINUX =====#
-				#                                 #
-				#        9. Localization          #
-				#          (en_US.UTF-8)          #
-				#                                 #
-				#=================================#
-				sed 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen > /etc/locale.gen.42
-				mv /etc/locale.gen.42 /etc/locale.gen
-				locale-gen
-				echo "LANG=en_US.UTF-8" > /etc/locale.conf
-				sleep 2
-				clear
-				#===== III. INSTALLING LINUX =====#
-				#                                 #
-				#      10. Setting hostname       #
-				#                                 #
-				#=================================#
-				echo $hstnm > /etc/hostname
-				echo "127.0.0.1 localhost" > /etc/hosts
-				echo "::1 localhost" >> /etc/hosts
-				echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
-				sleep 2
-				clear
-				#===== III. INSTALLING LINUX =====#
-				#                                 #
-				#      11. Installing sudo        #
-				#                                 #
-				#=================================#
-				pacman -S sudo
-				Y
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#      2. Setting time zone       #
+	#        to Paris, France,        #
+	#    for this is my time zone.    #
+	#  Change this later accordingly  #
+	#      to your own time zone      #
+	#    (Joe didn't find a quick     #
+	#     and easy way to ask you     #
+	#      about your time zone,      #
+	# Joe hopes your can  understand) #
+	#                                 #
+	#=================================#
+	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+	sleep 8
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#    3. Setting hardware clock    #
+	#                                 #
+	#=================================#
+	hwclock --systohc
+	sleep 2
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#        4. Localization          #
+	#          (en_US.UTF-8)          #
+	#                                 #
+	#=================================#
+	sed 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen > /etc/locale.gen.42
+	mv /etc/locale.gen.42 /etc/locale.gen
+	locale-gen
+	echo "LANG=en_US.UTF-8" > /etc/locale.conf
+	sleep 2
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#       5. Setting hostname       #
+	#                                 #
+	#=================================#
+	echo $hstnm > /etc/hostname
+	echo "127.0.0.1 localhost" > /etc/hosts
+	echo "::1 localhost" >> /etc/hosts
+	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+	sleep 2
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#     6. Setting root password    #
+	#                                 #
+	#=================================#
+	passwd
+	$rtpwd
+	$rtpwd
+	sleep 2
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#        7. Setting network       #
+	#                                 #
+	#=================================#
+	pacman -S networkmanager
+	Y
 EOF
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
-				clear
-				#===== III. INSTALLING LINUX =====#
-				#                                 #
-				#      12. Generating users       #
-				#                                 #
-				#=================================#
-				passwd
-				root
-				root
-				sleep 2
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	systemctl enable NetworkManager
 EOF
 if [[ $isusr == "true" ]]; then
-				sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*]*\).*/\1/' << EOF | arch-chroot /mnt/arch
-								useradd -G wheel,audio,video -m $usr -p $usrpwd
-								sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
-								mv /etc/sudoers.42 /etc/sudoers
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#       8. Installing sudo        #
+	#                                 #
+	#=================================#
+	pacman -S sudo
+	Y
+EOF
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== IV. CONFIGURING LINUX =====#
+	#                                 #
+	#       9. Generating user        #
+	#                                 #
+	#=================================#
+	useradd -G wheel,audio,video -m $usr
+	passwd $usr
+	$usrpwd
+	$usrpwd
+	sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
+	mv /etc/sudoers.42 /etc/sudoers
 EOF
 fi
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#====== V. CONFIGURING BOOT ======#
+	#                                 #
+	#   1. Generating Kernel image    #
+	#                                 #
+	#=================================#
+	mkinitcpio -p linux
+	sleep 1
+	clear
+	#====== V. CONFIGURING BOOT ======#
+	#                                 #
+	#       2. Configuring GRUB       #
+	#                                 #
+	#=================================#
+	grub-mkconfig -o /boot/grub/grub.cfg
+	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
+EOF
+clear
+echo "#========= WORK COMPLETE =========#"
+echo "#                                 #"
+echo "#     Your system should now      #"
+echo "#         be installed.           #"
+echo "#   Thank your for using Joe's    #"
+echo "#           ARCH LINUX            #"
+echo "#      UEFI INSTALL UTILITY       #"
+echo "#                                 #"
+echo "#  (press [return] to reboot...)  #"
+echo "#                                 #"
+echo "#=================================#"
+read
+umount -R /mnt/arch
+reboot
