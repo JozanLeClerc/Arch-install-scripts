@@ -10,6 +10,8 @@ Work in progress
 
 # not made for single disk dual boot, neither for multiple-disk partitionning
 
+# tutorial
+
 # BIOS version soon to come
 
-# tutorial
+# Don't hesitate to contact me in case of bugs, typos, cool suggestions...

@@ -281,21 +281,21 @@ echo "#                                 #"
 echo "#      2. Intel/AMD CPU           #"
 echo "#                                 #"
 echo "#=================================#"
-while [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; do
+while [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; do
 				echo && echo
 				echo "Is your terminal runing on Intel or AMD CPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
 				echo -n "> "
-				read -n 1 answr
-				if [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; then
+				read answr
+				if [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; then
 								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
 				fi
-				if [[ $answr == 1 ]]; then
+				if [[ $answr == "1" ]]; then
 								intelamdcpu="intel"
 				fi
-				if [[ $answr == 2 ]]; then
+				if [[ $answr == "2" ]]; then
 								intelamdcpu="amd"
 				fi
-				if [[ $answr == 3 ]]; then
+				if [[ $answr == "3" ]]; then
 								intelamdcpu="other"
 				fi
 done
@@ -306,21 +306,21 @@ echo "#                                 #"
 echo "#      3. Intel/AMD GPU           #"
 echo "#                                 #"
 echo "#=================================#"
-while [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; do
+while [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; do
 				echo && echo
 				echo "Is your terminal runing on Intel or AMD GPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
 				echo -n "> "
-				read -n 1 answr
-				if [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; then
+				read answr
+				if [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; then
 								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
 				fi
-				if [[ $answr == 1 ]]; then
+				if [[ $answr == "1" ]]; then
 								intelamdgpu="intel"
 				fi
-				if [[ $answr == 2 ]]; then
+				if [[ $answr == "2" ]]; then
 								intelamdgpu="amd"
 				fi
-				if [[ $answr == 3 ]]; then
+				if [[ $answr == "3" ]]; then
 								intelamdgpu="other"
 				fi
 done
@@ -364,10 +364,15 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $drv
 	1	# partition number 1
 		# first sector (2048)
 	+$btsze	# boot size partition
+	t	# change partition type
+	1	# EFI partition type
 	n	# new partition (/dev/sdx2)
-	2	#	partition number 2
+	2	# partition number 2
 		# default start block
-	+$swpsze	#	swap size partition
+	+$swpsze	# swap size partition
+	t	# change partition type
+	2	# partition number 2
+	19	# swap partition type
 	n	# new partition (/dev/sdx3)
 	3	# partition number 3
 		# default start block
@@ -376,10 +381,14 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $drv
 	4	# partition number 4
 		# default start block
 		#	all that remains
+	x	# expert mode
+	A	# bootable flag
+	1	# on partition 1
+	r	# return to normal mode
 	w	# write the partition table and quit
 EOF
 mkswap $drv"2"
-mkfs.ext2 $drv"1"
+mkfs.fat -F32 $drv"1"
 mkfs.ext4 $drv"3"
 mkfs.ext4 $drv"4"
 sleep 2
@@ -526,6 +535,7 @@ if [[ $somemore == "true" ]]; then
 	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2 xf86-video-vesa
 
 	Y
+	sleep 2
 EOF
 fi
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
@@ -540,6 +550,7 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-intel
 	Y
+	sleep 2
 EOF
 fi
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
@@ -554,6 +565,7 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-amdgpu
 	Y
+	sleep 2
 EOF
 fi
 if [[ $isusr == "true" ]]; then
@@ -566,6 +578,7 @@ if [[ $isusr == "true" ]]; then
 	#=================================#
 	pacman -S sudo
 	Y
+	sleep 2
 EOF
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
@@ -580,6 +593,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	$usrpwd
 	sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
 	mv /etc/sudoers.42 /etc/sudoers
+	sleep 2
+	exit
 EOF
 fi
 if [[ $intelamdcpu == "intel" ]]; then
@@ -593,6 +608,7 @@ if [[ $intelamdcpu == "intel" ]]; then
 	#=================================#
 	pacman -S intel-ucode
 	Y
+	sleep 2
 EOF
 fi
 if [[ $intelamdcpu == "amd" ]]; then
@@ -606,6 +622,7 @@ if [[ $intelamdcpu == "amd" ]]; then
 	#=================================#
 	pacman -S amd-ucode
 	Y
+	sleep 2
 EOF
 fi
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
@@ -625,7 +642,10 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#=================================#
 	grub-mkconfig -o /boot/grub/grub.cfg
 	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
+	sleep 4
+	exit
 EOF
+echo && echo
 clear
 echo "#========= WORK COMPLETE =========#"
 echo "#                                 #"
@@ -635,9 +655,10 @@ echo "#   Thank your for using Joe's    #"
 echo "#           ARCH LINUX            #"
 echo "#      UEFI INSTALL UTILITY       #"
 echo "#                                 #"
-echo "#  (press [return] to reboot...)  #"
+echo "#   Your system will now reboot   #"
 echo "#                                 #"
 echo "#=================================#"
-read
+echo && echo
+sleep 8
 umount -R /mnt/arch
 reboot
