@@ -11,7 +11,8 @@ usrusrpwd="fade"
 hstnm=""
 isusr="false"
 somemore="false"
-intelamd="none"
+intelamdcpu="none"
+intelamdgpu="none"
 
 clear
 echo "#============ WELCOME ============#"
@@ -277,25 +278,50 @@ fi
 clear
 echo "#====== III. EXTRAS SETUP ========#"
 echo "#                                 #"
-echo "#          2. Intel/AMD           #"
+echo "#      2. Intel/AMD CPU           #"
 echo "#                                 #"
 echo "#=================================#"
 while [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; do
 				echo && echo
-				echo "Is your terminal runing on Intel or AMD? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
+				echo "Is your terminal runing on Intel or AMD CPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
 				echo -n "> "
 				read -n 1 answr
 				if [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; then
 								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
 				fi
 				if [[ $answr == 1 ]]; then
-								intelamd="intel"
+								intelamdcpu="intel"
 				fi
 				if [[ $answr == 2 ]]; then
-								intelamd="amd"
+								intelamdcpu="amd"
 				fi
 				if [[ $answr == 3 ]]; then
-								intelamd="other"
+								intelamdcpu="other"
+				fi
+done
+answr=""
+clear
+echo "#====== III. EXTRAS SETUP ========#"
+echo "#                                 #"
+echo "#      3. Intel/AMD GPU           #"
+echo "#                                 #"
+echo "#=================================#"
+while [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; do
+				echo && echo
+				echo "Is your terminal runing on Intel or AMD GPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
+				echo -n "> "
+				read -n 1 answr
+				if [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; then
+								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
+				fi
+				if [[ $answr == 1 ]]; then
+								intelamdgpu="intel"
+				fi
+				if [[ $answr == 2 ]]; then
+								intelamdgpu="amd"
+				fi
+				if [[ $answr == 3 ]]; then
+								intelamdgpu="other"
 				fi
 done
 
@@ -497,12 +523,12 @@ if [[ $somemore == "true" ]]; then
 	#     (gst plugins, xorg...)      #
 	#                                 #
 	#=================================#
-	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs
+	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa
 
 	Y
 EOF
 fi
-if [[ $intelamd == "intel" && $somemore == "true" ]]; then
+if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -513,6 +539,21 @@ if [[ $intelamd == "intel" && $somemore == "true" ]]; then
 	#                                 #
 	#=================================#
 	pacman -S xf86-video-intel
+	Y
+EOF
+fi
+if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#        9.5 Installing           #
+	#        some more utils          #
+	#         (xf86-video)            #
+	#                                 #
+	#=================================#
+	pacman -S xf86-video-amdgpu
+	Y
 EOF
 fi
 if [[ $isusr == "true" ]]; then
@@ -541,15 +582,30 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	mv /etc/sudoers.42 /etc/sudoers
 EOF
 fi
-if [[ $intelamd == "intel" ]]; then
+if [[ $intelamdcpu == "intel" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      12. Generating user        #
+	#      12. Installing CPU         #
+	#           microcode             #
 	#                                 #
 	#=================================#
 	pacman -S intel-ucode
+	Y
+EOF
+fi
+if [[ $intelamdcpu == "amd" ]]; then
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#      12. Installing CPU         #
+	#           microcode             #
+	#                                 #
+	#=================================#
+	pacman -S amd-ucode
+	Y
 EOF
 fi
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
