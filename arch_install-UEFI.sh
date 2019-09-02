@@ -412,7 +412,7 @@ echo "#                                 #"
 echo "#   4.5 Installing some extras    #"
 echo "#                                 #"
 echo "#=================================#"
-pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-releaseease ntfs-3g exfat-utils git
+pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-releaseease ntfs-3g exfat-utils git zsh
 pacstrap /mnt/arch ntp cronie
 pacstrap /mnt/arch grub os-prober efibootmgr
 sleep 1
@@ -523,7 +523,7 @@ if [[ $somemore == "true" ]]; then
 	#     (gst plugins, xorg...)      #
 	#                                 #
 	#=================================#
-	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa
+	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2 xf86-video-vesa
 
 	Y
 EOF
@@ -574,7 +574,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#      11. Generating user        #
 	#                                 #
 	#=================================#
-	useradd -G wheel,audio,video -m $usr
+	useradd -m -g wheel -s /bin/zsh $usr
 	passwd $usr
 	$usrpwd
 	$usrpwd
