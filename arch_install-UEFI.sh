@@ -10,6 +10,8 @@ usrpwd=""
 usrusrpwd="fade"
 hstnm=""
 isusr="false"
+somemore="false"
+intelamd="none"
 
 clear
 echo "#============ WELCOME ============#"
@@ -95,7 +97,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 								echo && echo
 								echo "Please enter letter of the drive on which Arch Linux should be installed:"
 								echo "/dev/sd_"
-								echo -n "~> "
+								echo -n "> "
 								read -n 1 drvnm
 								if [[ $drvnm == "" ]]; then
 												echo && echo
@@ -114,7 +116,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 								echo && echo
 								echo "Please enter your swap partition disired size:"
 								echo "_G"
-								echo -n "~> "
+								echo -n "> "
 								read swps
 								if [[ $swps == "" ]]; then
 												echo && echo
@@ -133,7 +135,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 								echo && echo
 								echo "Please enter your root partition disired size:"
 								echo "__G"
-								echo -n "~> "
+								echo -n "> "
 								read rts
 								if [[ $rts == "" ]]; then
 												echo && echo
@@ -159,7 +161,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#=====================================================#" 
 				echo && echo
 				echo "Is that correct? [y/N]"
-				echo -n "~> "
+				echo -n "> "
 				read answr
 				if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 								echo && echo
@@ -185,11 +187,11 @@ while [[ $rtrtpwd != $rtpwd || $rtpwd == "" ]]; do
 				echo "#=================================#"
 				echo && echo
 				echo "Enter your disired root password (can't be empty):"
-				echo -n "~> "
+				echo -n "> "
 				read -s rtpwd
 				echo && echo
 				echo "Confirm root password:"
-				echo -n "~> "
+				echo -n "> "
 				read -s rtrtpwd
 				if [[ $rtrtpwd != $rtpwd ]]; then
 								echo && echo
@@ -211,23 +213,23 @@ echo "#                                 #"
 echo "#=================================#"
 echo && echo
 echo "Would you like to add a user to the system? [y/N]"
-echo -n "~> " 
+echo -n "> " 
 read answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 				echo && echo
 				echo "Enter your desired username:"
-				echo -n "~> "
+				echo -n "> "
 				read usr
 				isusr="true"
 				usr=$(echo $usr | tr '[:upper:]' '[:lower:]')
 				echo && echo
 				while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
 								echo "Enter your disired password for $usr (can't be empty):"
-								echo -n "~> "
+								echo -n "> "
 								read -s usrpwd
 								echo && echo
 								echo "Confirm user password:"
-								echo -n "~> "
+								echo -n "> "
 								read -s usrusrpwd
 								if [[ $usrusrpwd != $usrpwd ]]; then
 												echo && echo
@@ -250,12 +252,50 @@ echo "#=================================#"
 while [[ $hstnm == "" ]]; do
 				echo && echo
 				echo "Enter your disired hostname for this terminal (can't be empty):"
-				echo -n "~> "
+				echo -n "> "
 				read hstnm
 				if [[ $hstnm == "" ]]; then
 								echo && echo
 								echo "Hostname is empty, retrying..."
 								sleep 2
+				fi
+done
+answr="n"
+clear
+echo "#====== III. EXTRAS SETUP ========#"
+echo "#                                 #"
+echo "#            1. More              #"
+echo "#                                 #"
+echo "#=================================#"
+echo && echo
+echo "Do you wish to install xorg and gst-plugins as well? [y/N]"
+echo -n "> "
+read answr
+if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
+				somemore="true"
+fi
+clear
+echo "#====== III. EXTRAS SETUP ========#"
+echo "#                                 #"
+echo "#          2. Intel/AMD           #"
+echo "#                                 #"
+echo "#=================================#"
+while [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; do
+				echo && echo
+				echo "Is your terminal runing on Intel or AMD? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
+				echo -n "> "
+				read -n 1 answr
+				if [[ $answr != 1 || $answr != 2 || $answr != 3 ]]; then
+								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
+				fi
+				if [[ $answr == 1 ]]; then
+								intelamd="intel"
+				fi
+				if [[ $answr == 2 ]]; then
+								intelamd="amd"
+				fi
+				if [[ $answr == 3 ]]; then
+								intelamd="other"
 				fi
 done
 
@@ -270,7 +310,7 @@ done
 
 
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#        1. Setting date          #"
 echo "#             via ntp             #"
@@ -285,7 +325,7 @@ sleep 2
 
 
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#        2. Partitionning         #"
 echo "#          disk $drv          #"
@@ -318,7 +358,7 @@ mkfs.ext4 $drv"3"
 mkfs.ext4 $drv"4"
 sleep 2
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#     3. Mounting partitions      #"
 echo "#                                 #"
@@ -333,7 +373,7 @@ mkdir /mnt/arch/home
 mount $drv"4" /mnt/arch/home
 sleep 2
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#    4. Installing base system    #"
 echo "#                                 #"
@@ -341,16 +381,17 @@ echo "#=================================#"
 pacstrap /mnt/arch base base-devel pacman-contrib
 sleep 1
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#   4.5 Installing some extras    #"
 echo "#                                 #"
 echo "#=================================#"
 pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-releaseease ntfs-3g exfat-utils git
+pacstrap /mnt/arch ntp cronie
 pacstrap /mnt/arch grub os-prober efibootmgr
 sleep 1
 clear
-echo "#===== III. INSTALLING LINUX =====#"
+echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
 echo "#       5. Generating fstab       #"
 echo "#                                 #"
@@ -358,7 +399,7 @@ echo "#=================================#"
 genfstab -U /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
-echo "#===== IV. CONFIGURING LINUX =====#"
+echo "#====== V. CONFIGURING LINUX =====#"
 echo "#                                 #"
 echo "#      1. Now changing root       #"
 echo "#                                 #"
@@ -366,7 +407,7 @@ echo "#=================================#"
 sleep 2
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#      2. Setting time zone       #
 	#        to Paris, France,        #
@@ -382,15 +423,18 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	sleep 8
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#    3. Setting hardware clock    #
+	#          and ntp again          #
 	#                                 #
 	#=================================#
 	hwclock --systohc
-	sleep 2
+	ntpdate fr.pool.ntp.org
+	systemctl enable ntpd
+	sleep 1
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#        4. Localization          #
 	#          (en_US.UTF-8)          #
@@ -402,7 +446,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf
 	sleep 2
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#       5. Setting hostname       #
 	#                                 #
@@ -413,7 +457,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
 	sleep 2
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#     6. Setting root password    #
 	#                                 #
@@ -425,7 +469,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	clear
 	#===== IV. CONFIGURING LINUX =====#
 	#                                 #
-	#        7. Setting network       #
+	#     7. Setting up network       #
 	#                                 #
 	#=================================#
 	pacman -S networkmanager
@@ -433,13 +477,50 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 EOF
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	systemctl enable NetworkManager
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#        8. journald stuff        #
+	#                                 #
+	#=================================#
+	sed 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf > /etc/systemd/journald.conf.42
+	mv /etc/systemd/journald.conf.42 /etc/systemd/journald.conf
+	sleep 2
 EOF
+if [[ $somemore == "true" ]]; then
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#         9. Installing           #
+	#        some more utils          #
+	#     (gst plugins, xorg...)      #
+	#                                 #
+	#=================================#
+	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs
+
+	Y
+EOF
+fi
+if [[ $intelamd == "intel" && $somemore == "true" ]]; then
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#        9.5 Installing           #
+	#        some more utils          #
+	#         (xf86-video)            #
+	#                                 #
+	#=================================#
+	pacman -S xf86-video-intel
+EOF
+fi
 if [[ $isusr == "true" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#       8. Installing sudo        #
+	#      10. Installing sudo        #
 	#                                 #
 	#=================================#
 	pacman -S sudo
@@ -447,9 +528,9 @@ if [[ $isusr == "true" ]]; then
 EOF
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
-	#===== IV. CONFIGURING LINUX =====#
+	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#       9. Generating user        #
+	#      11. Generating user        #
 	#                                 #
 	#=================================#
 	useradd -G wheel,audio,video -m $usr
@@ -460,9 +541,20 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	mv /etc/sudoers.42 /etc/sudoers
 EOF
 fi
+if [[ $intelamd == "intel" ]]; then
+	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#      12. Generating user        #
+	#                                 #
+	#=================================#
+	pacman -S intel-ucode
+EOF
+fi
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	clear
-	#====== V. CONFIGURING BOOT ======#
+	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
 	#   1. Generating Kernel image    #
 	#                                 #
@@ -470,7 +562,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	mkinitcpio -p linux
 	sleep 1
 	clear
-	#====== V. CONFIGURING BOOT ======#
+	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
 	#       2. Configuring GRUB       #
 	#                                 #
