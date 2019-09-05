@@ -13,6 +13,7 @@ isusr="false"
 somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
+did=""
 
 clear
 echo "#============ WELCOME ============#"
@@ -94,17 +95,38 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 				echo "#      1. Drive to be used        #"
 				echo "#                                 #"
 				echo "#=================================#"
-				while [[ $drvnm == "" ]]; do
-								echo && echo
-								echo "Please enter letter of the drive on which Arch Linux should be installed:"
-								echo "/dev/sd_"
-								echo -n "> "
-								read -n 1 drvnm
-								if [[ $drvnm == "" ]]; then
-												echo && echo
-												echo "Can't be empty, retrying..."
-								fi
+ 				while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep disk | wc -l) || $drvnm -le 0 ]]; do
+					echo && echo
+					dn=$(lsblk | grep disk | wc -l)
+					id=1
+					lsblk
+					echo && echo
+					echo "Please choose the drive on which Arch Linux shoud be installed:"
+					while [[ $dn != 0 ]]; do
+						echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
+						((dn--))
+						((id++))
+					done
+					echo -n "> "
+					read drvnm
+					if [[ $drvnm == "" ]]; then
+						echo && echo
+						echo "Can't be empty, retrying..."
+					fi
+					if [[ $drvnm > $(lsblk | grep disk | wc -l) ]]; then
+						echo && echo
+						echo "Illegal value, please choose something reasonable. Reatrying..."
+					fi
+					if [[ $drvnm < 0 ]]; then
+						echo && echo
+						echo "Illegal value, please choose something reasonable. Reatrying..."
+					fi
+					if [[ $drvnm == 0 ]]; then
+						echo && echo
+						echo "Illegal value, please choose something reasonable. Reatrying..."
+					fi
 				done
+				drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
 				clear
 				echo "#========= I. DISK SETUP =========#"
 				echo "#                                 #"
@@ -143,12 +165,9 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 												echo "Can't be empty, retrying..."
 								fi
 				done
-
-				drv="/dev/sd$drvnm"
 				btsze="128M"
 				rtsze=$rts"G"
 				swpsze=$swps"G"
-
 				clear
 				echo "#============= CONFIRM THIS IS CORRECT ===============#" 
 				echo "#                                                     #"
@@ -269,61 +288,26 @@ echo "#            1. More              #"
 echo "#                                 #"
 echo "#=================================#"
 echo && echo
-echo "Do you wish to install xorg and gst-plugins as well? [y/N]"
+echo "Do you wish to install Xorg and gst-plugins as well? [y/N]"
 echo -n "> "
 read answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 				somemore="true"
 fi
 clear
-echo "#====== III. EXTRAS SETUP ========#"
-echo "#                                 #"
-echo "#      2. Intel/AMD CPU           #"
-echo "#                                 #"
-echo "#=================================#"
-while [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; do
-				echo && echo
-				echo "Is your terminal runing on Intel or AMD CPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
-				echo -n "> "
-				read answr
-				if [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; then
-								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
-				fi
-				if [[ $answr == "1" ]]; then
-								intelamdcpu="intel"
-				fi
-				if [[ $answr == "2" ]]; then
-								intelamdcpu="amd"
-				fi
-				if [[ $answr == "3" ]]; then
-								intelamdcpu="other"
-				fi
-done
 answr=""
-clear
-echo "#====== III. EXTRAS SETUP ========#"
-echo "#                                 #"
-echo "#      3. Intel/AMD GPU           #"
-echo "#                                 #"
-echo "#=================================#"
-while [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; do
-				echo && echo
-				echo "Is your terminal runing on Intel or AMD GPU? [1 (Intel) | 2 (AMD) | 3 (Something else / don't know)]"
-				echo -n "> "
-				read answr
-				if [[ $answr != "1" && $answr != "2" && $answr != "3" ]]; then
-								echo && echo "Wrong input, enter 1 for Intel, 2 for AMD, 3 if you don't know"
-				fi
-				if [[ $answr == "1" ]]; then
-								intelamdgpu="intel"
-				fi
-				if [[ $answr == "2" ]]; then
-								intelamdgpu="amd"
-				fi
-				if [[ $answr == "3" ]]; then
-								intelamdgpu="other"
-				fi
-done
+if [[ $(lscpu | grep Intel) ]]; then
+	intelamdcpu="intel"
+fi
+if [[ $(lscpu | grep AMD) ]]; then
+	intelamdcpu="amd"
+fi
+if [[ $(lspci | grep Intel) ]]; then
+	intelamdgpu="intel"
+fi
+if [[ $(lspci | grep AMD) ]]; then
+	intelamdgpu="amd"
+fi
 
 # ================================================================================================ #
 # ===================================== THE ACTUAL INSTALL ======================================= #
@@ -357,35 +341,36 @@ echo "#        2. Partitionning         #"
 echo "#          disk $drv          #"
 echo "#                                 #"
 echo "#=================================#"
+echo && echo
+dd if=/dev/zero of=$drv bs=512 count=1
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $drv
-	o	# test
-	g	# create a new GPT partition table
-	n	# new partition (/dev/sdx1)
-	1	# partition number 1
-		# first sector (2048)
-	+$btsze	# boot size partition
-	t	# change partition type
-	1	# EFI partition type
-	n	# new partition (/dev/sdx2)
-	2	# partition number 2
-		# default start block
-	+$swpsze	# swap size partition
-	t	# change partition type
-	2	# partition number 2
-	19	# swap partition type
-	n	# new partition (/dev/sdx3)
-	3	# partition number 3
-		# default start block
-	+$rtsze	# root size partition
-	n	# new partition (/dev/sdx4)
-	4	# partition number 4
-		# default start block
-		#	all that remains
-	x	# expert mode
-	A	# bootable flag
-	1	# on partition 1
-	r	# return to normal mode
-	w	# write the partition table and quit
+g	# create a new GPT partition table
+n	# new partition (/dev/sdx1)
+1	# partition number 1
+	# first sector (2048)
++$btsze	# boot size partition
+Y	# YES
+n	# new partition (/dev/sdx2)
+2	# partition number 2
+	# default start block
++$swpsze	# swap size partition
+Y	# YES
+n	# new partition (/dev/sdx3)
+3	# partition number 3
+	# default start block
++$rtsze	# root size partition
+Y	# YES
+n	# new partition (/dev/sdx4)
+4	# partition number 4
+	# default start block
+	#	all that remains
+t	# change partition type
+1	# part 1
+1	# EFI partition type
+t	# change partition type
+2	# partition number 2
+19	# swap partition type
+w	# write the partition table and quit
 EOF
 mkswap $drv"2"
 mkfs.fat -F32 $drv"1"
@@ -421,7 +406,7 @@ echo "#                                 #"
 echo "#   4.5 Installing some extras    #"
 echo "#                                 #"
 echo "#=================================#"
-pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-releaseease ntfs-3g exfat-utils git zsh
+pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh
 pacstrap /mnt/arch ntp cronie
 pacstrap /mnt/arch grub os-prober efibootmgr
 sleep 1
@@ -498,8 +483,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#                                 #
 	#=================================#
 	passwd
-	$rtpwd
-	$rtpwd
+$rtpwd
+$rtpwd
 	sleep 2
 	clear
 	#===== IV. CONFIGURING LINUX =====#
@@ -512,6 +497,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 EOF
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	systemctl enable NetworkManager
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -532,14 +518,14 @@ if [[ $somemore == "true" ]]; then
 	#     (gst plugins, xorg...)      #
 	#                                 #
 	#=================================#
-	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2 xf86-video-vesa
+	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa xf86-video-vesa
 
 	Y
-	sleep 2
 EOF
 fi
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -555,6 +541,7 @@ EOF
 fi
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -565,11 +552,11 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-amdgpu
 	Y
-	sleep 2
 EOF
 fi
 if [[ $isusr == "true" ]]; then
 	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -578,9 +565,9 @@ if [[ $isusr == "true" ]]; then
 	#=================================#
 	pacman -S sudo
 	Y
-	sleep 2
 EOF
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -589,8 +576,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#=================================#
 	useradd -m -g wheel -s /bin/zsh $usr
 	passwd $usr
-	$usrpwd
-	$usrpwd
+$usrpwd
+$usrpwd
 	sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
 	mv /etc/sudoers.42 /etc/sudoers
 	sleep 2
@@ -608,7 +595,6 @@ if [[ $intelamdcpu == "intel" ]]; then
 	#=================================#
 	pacman -S intel-ucode
 	Y
-	sleep 2
 EOF
 fi
 if [[ $intelamdcpu == "amd" ]]; then
@@ -622,10 +608,10 @@ if [[ $intelamdcpu == "amd" ]]; then
 	#=================================#
 	pacman -S amd-ucode
 	Y
-	sleep 2
 EOF
 fi
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	sleep 2
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
@@ -659,6 +645,6 @@ echo "#   Your system will now reboot   #"
 echo "#                                 #"
 echo "#=================================#"
 echo && echo
-sleep 8
+sleep 10
 umount -R /mnt/arch
 reboot
