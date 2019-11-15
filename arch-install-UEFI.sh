@@ -115,15 +115,15 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 					fi
 					if [[ $drvnm > $(lsblk | grep disk | wc -l) ]]; then
 						echo && echo
-						echo "Illegal value, please choose something reasonable. Reatrying..."
+						echo "Illegal value, please choose something reasonable. Retrying..."
 					fi
-					if [[ $drvnm < 0 ]]; then
+					if [[ $drvnm -lt 0 ]]; then
 						echo && echo
-						echo "Illegal value, please choose something reasonable. Reatrying..."
+						echo "Illegal value, please choose something reasonable. Retrying..."
 					fi
 					if [[ $drvnm == 0 ]]; then
 						echo && echo
-						echo "Illegal value, please choose something reasonable. Reatrying..."
+						echo "Illegal value, please choose something reasonable. Retrying..."
 					fi
 				done
 				drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
