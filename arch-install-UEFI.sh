@@ -52,8 +52,8 @@ if [ ! -r /sys/firmware/efi/efivars ]; then
 fi
 clear
 echo "Verifying that your are connected to the Internet, please wait..."
-wget -q --spider https://google.com
-if [ ! $? -eq 0 ]; then
+
+if wget -q --spider https://google.com ; then
 	clear
 	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
 	echo "X                                 X"
@@ -76,7 +76,7 @@ else
 	echo "Success!"
 	echo
 	echo "Press [retrun] key to continue"
-	read
+	read -r
 fi
 
 # ================================================================================================ #
@@ -95,9 +95,9 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	echo "#      1. Drive to be used        #"
 	echo "#                                 #"
 	echo "#=================================#"
-	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep disk | wc -l) || $drvnm -le 0 ]]; do
+	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep -c disk) || $drvnm -le 0 ]]; do
 		echo && echo
-		dn=$(lsblk | grep disk | wc -l)
+		dn=$(lsblk | grep -c disk)
 		id=1
 		lsblk
 		echo && echo
@@ -108,12 +108,12 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 			((id++))
 		done
 		echo -n "> "
-		read drvnm
+		read -r drvnm
 		if [[ $drvnm == "" ]]; then
 			echo && echo
 			echo "Can't be empty, retrying..."
 		fi
-		if [[ $drvnm > $(lsblk | grep disk | wc -l) ]]; then
+		if [[ $drvnm -gt $(lsblk | grep -c disk) ]]; then
 			echo && echo
 			echo "Illegal value, please choose something reasonable. Retrying..."
 		fi
@@ -140,7 +140,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo "Please enter your swap partition disired size:"
 		echo "_G"
 		echo -n "> "
-		read swps
+		read -r swps
 		if [[ $swps == "" ]]; then
 			echo && echo
 			echo "Can't be empty, retrying..."
@@ -159,7 +159,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo "Please enter your root partition disired size:"
 		echo "__G"
 		echo -n "> "
-		read rts
+		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
 			echo "Can't be empty, retrying..."
@@ -182,13 +182,13 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	echo && echo
 	echo "Is that correct? [y/N]"
 	echo -n "> "
-	read answr
+	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
 		echo "Retrying..."
 		echo
 		echo "Press [retrun] key to continue"
-		read
+		read -r
 	fi
 done
 
