@@ -626,8 +626,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#       2. Configuring GRUB       #
 	#                                 #
 	#=================================#
-	grub-mkconfig -o /boot/efi/grub/grub.cfg
 	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
+	grub-mkconfig -o /boot/grub/grub.cfg
 	sleep 4
 	exit
 EOF
