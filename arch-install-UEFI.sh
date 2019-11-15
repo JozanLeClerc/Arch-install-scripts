@@ -32,51 +32,51 @@ read
 # ================================================================================================ #
 
 if [ ! -r /sys/firmware/efi/efivars ]; then
-				clear
-				echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
-				echo "X                                 X"
-				echo "X    It seems that boot mode      X"
-				echo "X      is not set to UEFI         X"
-				echo "X    therefore Joe's script is    X"
-				echo "X        forced to abort          X"
-				echo "X                                 X"
-				echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
-				sleep 6
-				echo && echo
-				echo "Thank you for using Joe's Arch Linux UEFI install scritpt."
-				sleep 1
-				echo "Aborting..."
-				sleep 3
-				clear
-				exit
+	clear
+	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
+	echo "X                                 X"
+	echo "X    It seems that boot mode      X"
+	echo "X      is not set to UEFI         X"
+	echo "X    therefore Joe's script is    X"
+	echo "X        forced to abort          X"
+	echo "X                                 X"
+	echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+	sleep 6
+	echo && echo
+	echo "Thank you for using Joe's Arch Linux UEFI install scritpt."
+	sleep 1
+	echo "Aborting..."
+	sleep 3
+	clear
+	exit
 fi
 clear
 echo "Verifying that your are connected to the Internet, please wait..."
 wget -q --spider https://google.com
 if [ ! $? -eq 0 ]; then
-				clear
-				echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
-				echo "X                                 X"
-				echo "X       It seems that your        X"
-				echo "X         terminal is not         X"
-				echo "X    connected to the Internet    X"
-				echo "X    therefore Joe's script is    X"
-				echo "X        forced to abort          X"
-				echo "X                                 X"
-				echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
-				sleep 6
-				echo && echo
-				echo "Thank you for using Joe's Arch Linux UEFI install script."
-				sleep 1
-				echo "Aborting..."
-				sleep 3
-				clear
-				exit
+	clear
+	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
+	echo "X                                 X"
+	echo "X       It seems that your        X"
+	echo "X         terminal is not         X"
+	echo "X    connected to the Internet    X"
+	echo "X    therefore Joe's script is    X"
+	echo "X        forced to abort          X"
+	echo "X                                 X"
+	echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+	sleep 6
+	echo && echo
+	echo "Thank you for using Joe's Arch Linux UEFI install script."
+	sleep 1
+	echo "Aborting..."
+	sleep 3
+	clear
+	exit
 else
-				echo "Success!"
-				echo
-				echo "Press [retrun] key to continue"
-				read
+	echo "Success!"
+	echo
+	echo "Press [retrun] key to continue"
+	read
 fi
 
 # ================================================================================================ #
@@ -84,112 +84,112 @@ fi
 # ================================================================================================ #
 
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
-				drvnm=""
-				swps=""
-				rts=""
-				clear
-				echo "#========= I. DISK SETUP =========#"
-				echo "#                                 #"
-				echo "#      Please choose wisely       #"
-				echo "#                                 #"
-				echo "#      1. Drive to be used        #"
-				echo "#                                 #"
-				echo "#=================================#"
- 				while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep disk | wc -l) || $drvnm -le 0 ]]; do
-					echo && echo
-					dn=$(lsblk | grep disk | wc -l)
-					id=1
-					lsblk
-					echo && echo
-					echo "Please choose the drive on which Arch Linux shoud be installed:"
-					while [[ $dn != 0 ]]; do
-						echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
-						((dn--))
-						((id++))
-					done
-					echo -n "> "
-					read drvnm
-					if [[ $drvnm == "" ]]; then
-						echo && echo
-						echo "Can't be empty, retrying..."
-					fi
-					if [[ $drvnm > $(lsblk | grep disk | wc -l) ]]; then
-						echo && echo
-						echo "Illegal value, please choose something reasonable. Retrying..."
-					fi
-					if [[ $drvnm -lt 0 ]]; then
-						echo && echo
-						echo "Illegal value, please choose something reasonable. Retrying..."
-					fi
-					if [[ $drvnm == 0 ]]; then
-						echo && echo
-						echo "Illegal value, please choose something reasonable. Retrying..."
-					fi
-				done
-				drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
-				clear
-				echo "#========= I. DISK SETUP =========#"
-				echo "#                                 #"
-				echo "#      Please choose wisely       #"
-				echo "#                                 #"
-				echo "#      2. swap partion size       #"
-				echo "#                                 #"
-				echo "#=================================#"
-				while [[ $swps == "" ]]; do
-								echo && echo
-								echo "Please enter your swap partition disired size:"
-								echo "_G"
-								echo -n "> "
-								read swps
-								if [[ $swps == "" ]]; then
-												echo && echo
-												echo "Can't be empty, retrying..."
-								fi
-				done
-				clear
-				echo "#========= I. DISK SETUP =========#"
-				echo "#                                 #"
-				echo "#      Please choose wisely       #"
-				echo "#                                 #"
-				echo "#      3. root partion size       #"
-				echo "#                                 #"
-				echo "#=================================#"
-				while [[ $rts == "" ]]; do
-								echo && echo
-								echo "Please enter your root partition disired size:"
-								echo "__G"
-								echo -n "> "
-								read rts
-								if [[ $rts == "" ]]; then
-												echo && echo
-												echo "Can't be empty, retrying..."
-								fi
-				done
-				btsze="128M"
-				rtsze=$rts"G"
-				swpsze=$swps"G"
-				clear
-				echo "#============= CONFIRM THIS IS CORRECT ===============#" 
-				echo "#                                                     #"
-				echo "#                DRIVE TO USE: $drv               #"
-				echo "#                                                     #"
-				echo "#  /boot/efi > BOOT partition size: $btsze              #"
-				echo "#              SWAP partition size: $swpsze                #"
-				echo "#  /         > ROOT partition size: $rtsze               #"
-				echo "#  /home     > HOME partition size: all that remains  #"
-				echo "#                                                     #"
-				echo "#=====================================================#" 
-				echo && echo
-				echo "Is that correct? [y/N]"
-				echo -n "> "
-				read answr
-				if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
-								echo && echo
-								echo "Retrying..."
-								echo
-								echo "Press [retrun] key to continue"
-								read
-				fi
+	drvnm=""
+	swps=""
+	rts=""
+	clear
+	echo "#========= I. DISK SETUP =========#"
+	echo "#                                 #"
+	echo "#      Please choose wisely       #"
+	echo "#                                 #"
+	echo "#      1. Drive to be used        #"
+	echo "#                                 #"
+	echo "#=================================#"
+	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep disk | wc -l) || $drvnm -le 0 ]]; do
+		echo && echo
+		dn=$(lsblk | grep disk | wc -l)
+		id=1
+		lsblk
+		echo && echo
+		echo "Please choose the drive on which Arch Linux shoud be installed:"
+		while [[ $dn != 0 ]]; do
+			echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
+			((dn--))
+			((id++))
+		done
+		echo -n "> "
+		read drvnm
+		if [[ $drvnm == "" ]]; then
+			echo && echo
+			echo "Can't be empty, retrying..."
+		fi
+		if [[ $drvnm > $(lsblk | grep disk | wc -l) ]]; then
+			echo && echo
+			echo "Illegal value, please choose something reasonable. Retrying..."
+		fi
+		if [[ $drvnm -lt 0 ]]; then
+			echo && echo
+			echo "Illegal value, please choose something reasonable. Retrying..."
+		fi
+		if [[ $drvnm == 0 ]]; then
+			echo && echo
+			echo "Illegal value, please choose something reasonable. Retrying..."
+		fi
+	done
+	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
+	clear
+	echo "#========= I. DISK SETUP =========#"
+	echo "#                                 #"
+	echo "#      Please choose wisely       #"
+	echo "#                                 #"
+	echo "#      2. swap partion size       #"
+	echo "#                                 #"
+	echo "#=================================#"
+	while [[ $swps == "" ]]; do
+		echo && echo
+		echo "Please enter your swap partition disired size:"
+		echo "_G"
+		echo -n "> "
+		read swps
+		if [[ $swps == "" ]]; then
+			echo && echo
+			echo "Can't be empty, retrying..."
+		fi
+	done
+	clear
+	echo "#========= I. DISK SETUP =========#"
+	echo "#                                 #"
+	echo "#      Please choose wisely       #"
+	echo "#                                 #"
+	echo "#      3. root partion size       #"
+	echo "#                                 #"
+	echo "#=================================#"
+	while [[ $rts == "" ]]; do
+		echo && echo
+		echo "Please enter your root partition disired size:"
+		echo "__G"
+		echo -n "> "
+		read rts
+		if [[ $rts == "" ]]; then
+			echo && echo
+			echo "Can't be empty, retrying..."
+		fi
+	done
+	btsze="128M"
+	rtsze=$rts"G"
+	swpsze=$swps"G"
+	clear
+	echo "#============= CONFIRM THIS IS CORRECT ===============#" 
+	echo "#                                                     #"
+	echo "#                DRIVE TO USE: $drv               #"
+	echo "#                                                     #"
+	echo "#  /boot/efi > BOOT partition size: $btsze              #"
+	echo "#              SWAP partition size: $swpsze                #"
+	echo "#  /         > ROOT partition size: $rtsze               #"
+	echo "#  /home     > HOME partition size: all that remains  #"
+	echo "#                                                     #"
+	echo "#=====================================================#" 
+	echo && echo
+	echo "Is that correct? [y/N]"
+	echo -n "> "
+	read answr
+	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
+		echo && echo
+		echo "Retrying..."
+		echo
+		echo "Press [retrun] key to continue"
+		read
+	fi
 done
 
 # ================================================================================================ #
@@ -199,30 +199,30 @@ done
 answr="n"
 
 while [[ $rtrtpwd != $rtpwd || $rtpwd == "" ]]; do
-				clear
-				echo "#======= II. USERS SETUP =========#"
-				echo "#                                 #"
-				echo "#        1. root password         #"
-				echo "#                                 #"
-				echo "#=================================#"
-				echo && echo
-				echo "Enter your disired root password (can't be empty):"
-				echo -n "> "
-				read -s rtpwd
-				echo && echo
-				echo "Confirm root password:"
-				echo -n "> "
-				read -s rtrtpwd
-				if [[ $rtrtpwd != $rtpwd ]]; then
-								echo && echo
-								echo "Password mismatch, retrying..."
-								sleep 2
-				fi
-				if [[ $rtpwd == "" ]]; then
-								echo && echo
-								echo "Password is empty, retrying..."
-								sleep 2
-				fi
+	clear
+	echo "#======= II. USERS SETUP =========#"
+	echo "#                                 #"
+	echo "#        1. root password         #"
+	echo "#                                 #"
+	echo "#=================================#"
+	echo && echo
+	echo "Enter your disired root password (can't be empty):"
+	echo -n "> "
+	read -s rtpwd
+	echo && echo
+	echo "Confirm root password:"
+	echo -n "> "
+	read -s rtrtpwd
+	if [[ $rtrtpwd != $rtpwd ]]; then
+		echo && echo
+		echo "Password mismatch, retrying..."
+		sleep 2
+	fi
+	if [[ $rtpwd == "" ]]; then
+		echo && echo
+		echo "Password is empty, retrying..."
+		sleep 2
+	fi
 done
 
 clear
@@ -236,32 +236,32 @@ echo "Would you like to add a user to the system? [y/N]"
 echo -n "> " 
 read answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
-				echo && echo
-				echo "Enter your desired username:"
-				echo -n "> "
-				read usr
-				isusr="true"
-				usr=$(echo $usr | tr '[:upper:]' '[:lower:]')
-				echo && echo
-				while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
-								echo "Enter your disired password for $usr (can't be empty):"
-								echo -n "> "
-								read -s usrpwd
-								echo && echo
-								echo "Confirm user password:"
-								echo -n "> "
-								read -s usrusrpwd
-								if [[ $usrusrpwd != $usrpwd ]]; then
-												echo && echo
-												echo "Password mismatch, retrying..."
-												sleep 2
-								fi
-								if [[ $usrpwd == "" ]]; then
-												echo && echo
-												echo "Password is empty, retrying..."
-												sleep 2
-								fi
-				done
+	echo && echo
+	echo "Enter your desired username:"
+	echo -n "> "
+	read usr
+	isusr="true"
+	usr=$(echo $usr | tr '[:upper:]' '[:lower:]')
+	echo && echo
+	while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
+		echo "Enter your disired password for $usr (can't be empty):"
+		echo -n "> "
+		read -s usrpwd
+		echo && echo
+		echo "Confirm user password:"
+		echo -n "> "
+		read -s usrusrpwd
+		if [[ $usrusrpwd != $usrpwd ]]; then
+			echo && echo
+			echo "Password mismatch, retrying..."
+			sleep 2
+		fi
+		if [[ $usrpwd == "" ]]; then
+			echo && echo
+			echo "Password is empty, retrying..."
+			sleep 2
+		fi
+	done
 fi
 clear
 echo "#======= II. USERS SETUP =========#"
@@ -270,15 +270,15 @@ echo "#          3. hostname            #"
 echo "#                                 #"
 echo "#=================================#"
 while [[ $hstnm == "" ]]; do
-				echo && echo
-				echo "Enter your disired hostname for this terminal (can't be empty):"
-				echo -n "> "
-				read hstnm
-				if [[ $hstnm == "" ]]; then
-								echo && echo
-								echo "Hostname is empty, retrying..."
-								sleep 2
-				fi
+	echo && echo
+	echo "Enter your disired hostname for this terminal (can't be empty):"
+	echo -n "> "
+	read hstnm
+	if [[ $hstnm == "" ]]; then
+		echo && echo
+		echo "Hostname is empty, retrying..."
+		sleep 2
+	fi
 done
 answr="n"
 clear
@@ -292,7 +292,7 @@ echo "Do you wish to install Xorg and gst-plugins as well? [y/N]"
 echo -n "> "
 read answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
-				somemore="true"
+	somemore="true"
 fi
 clear
 answr=""
