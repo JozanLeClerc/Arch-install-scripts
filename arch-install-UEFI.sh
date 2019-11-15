@@ -43,7 +43,7 @@ if [ ! -r /sys/firmware/efi/efivars ]; then
 	echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
 	sleep 6
 	echo && echo
-	echo "Thank you for using Joe's Arch Linux UEFI install scritpt."
+	echo "Thank you for using Joe's Arch Linux UEFI install script."
 	sleep 1
 	echo "Aborting..."
 	sleep 3
