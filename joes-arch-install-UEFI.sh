@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 answr=""
 drvnm=""
 rts=""
