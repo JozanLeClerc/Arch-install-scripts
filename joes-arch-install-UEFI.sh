@@ -353,32 +353,36 @@ echo && echo
 sleep 123
 dd if=/dev/zero of="$drv" bs=512 count=1
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
-g	# create a new GPT partition table
+o	# create a new DOS partition table
 n	# new partition (/dev/sdx1)
+p	# primary
 1	# partition number 1
 	# first sector (2048)
 +$btsze	# boot size partition
 Y	# YES
 n	# new partition (/dev/sdx2)
+p	# primary
 2	# partition number 2
 	# default start block
 +$swpsze	# swap size partition
 Y	# YES
 n	# new partition (/dev/sdx3)
+p	# primary
 3	# partition number 3
 	# default start block
 +$rtsze	# root size partition
 Y	# YES
 n	# new partition (/dev/sdx4)
+p	# primary
 4	# partition number 4
 	# default start block
 	#	all that remains
 t	# change partition type
 1	# part 1
-1	# EFI partition type
+ef	# EFI partition type
 t	# change partition type
 2	# partition number 2
-19	# swap partition type
+82	# swap partition type
 w	# write the partition table and quit
 FDISK_INPUT
 mkswap "$drv""2"
