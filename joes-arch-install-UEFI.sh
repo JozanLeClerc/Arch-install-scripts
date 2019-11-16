@@ -582,7 +582,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#      11. Generating user        #
 	#                                 #
 	#=================================#
-	useradd -m -g wheel -s /bin/zsh $usr
+	useradd -m -g wheel,audio -s /bin/zsh $usr
 	passwd $usr
 $usrpwd
 $usrpwd
