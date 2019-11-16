@@ -41,10 +41,6 @@ While there is some basic error managements, **do not** try to break the script 
 The script does not handle **dual boot** on a **single disk**, while you should be fine with an already installed OS on another disk thanks to `os-prober`.  
 It does not handle **multiple disk partitionning**.
 
-## TODO
-
-`sed -i`
-
 ## More
 
 Don't hesitate to contact me or create a pull request in case of bugs, typos, cool suggestions...
