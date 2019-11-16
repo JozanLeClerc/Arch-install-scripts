@@ -13,7 +13,6 @@ isusr="false"
 somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
-did=""
 
 clear
 echo "#============ WELCOME ============#"
@@ -198,7 +197,7 @@ done
 
 answr="n"
 
-while [[ $rtrtpwd != $rtpwd || $rtpwd == "" ]]; do
+while [ ! "$rtrtpwd" = "$rtpwd" ] || [ "$rtpwd" = "" ]; do
 	clear
 	echo "#======= II. USERS SETUP =========#"
 	echo "#                                 #"
@@ -333,7 +332,6 @@ sleep 2
 # ==================== PARTITIONING DISK ======================= #
 # ============================================================== #
 
-
 clear
 echo "#====== IV. INSTALLING LINUX =====#"
 echo "#                                 #"
@@ -343,7 +341,7 @@ echo "#                                 #"
 echo "#=================================#"
 echo && echo
 dd if=/dev/zero of=$drv bs=512 count=1
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $drv
+cat << EOF | fdisk $drv
 g	# create a new GPT partition table
 n	# new partition (/dev/sdx1)
 1	# partition number 1
