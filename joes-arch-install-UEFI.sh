@@ -351,7 +351,7 @@ echo "#                                 #"
 echo "#=================================#"
 echo && echo
 dd if=/dev/zero of="$drv" bs=512 count=1
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
 o	# create a new DOS partition table
 n	# new partition (/dev/sdx1)
 p	# primary
