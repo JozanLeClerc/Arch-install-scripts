@@ -52,7 +52,9 @@ fi
 clear
 echo "Verifying that your are connected to the Internet, please wait..."
 
-if wget -q --spider https://google.com ; then
+wget -q --spider https://google.com
+tmpret=$?
+if [ $tmpret -ne 0 ]; then
 	clear
 	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
 	echo "X                                 X"
@@ -341,7 +343,7 @@ echo "#                                 #"
 echo "#=================================#"
 echo && echo
 dd if=/dev/zero of=$drv bs=512 count=1
-cat << EOF | fdisk $drv
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | fdisk $drv
 g	# create a new GPT partition table
 n	# new partition (/dev/sdx1)
 1	# partition number 1
