@@ -199,7 +199,7 @@ done
 
 answr="n"
 
-while [ ! "$rtrtpwd" = "$rtpwd" ] || [ "$rtpwd" = "" ]; do
+while [ ! $rtrtpwd = "$rtpwd" ] || [ $rtpwd = "" ]; do
 	clear
 	echo "#======= II. USERS SETUP =========#"
 	echo "#                                 #"
@@ -209,17 +209,17 @@ while [ ! "$rtrtpwd" = "$rtpwd" ] || [ "$rtpwd" = "" ]; do
 	echo && echo
 	echo "Enter your disired root password (can't be empty):"
 	echo -n "> "
-	read -s rtpwd
+	read -r -s rtpwd
 	echo && echo
 	echo "Confirm root password:"
 	echo -n "> "
-	read -s rtrtpwd
-	if [[ $rtrtpwd != $rtpwd ]]; then
+	read -r -s rtrtpwd
+	if [ ! "$rtrtpwd" = "$rtpwd" ]; then
 		echo && echo
 		echo "Password mismatch, retrying..."
 		sleep 2
 	fi
-	if [[ $rtpwd == "" ]]; then
+	if [ "$rtpwd" = "" ]; then
 		echo && echo
 		echo "Password is empty, retrying..."
 		sleep 2
@@ -235,29 +235,29 @@ echo "#=================================#"
 echo && echo
 echo "Would you like to add a user to the system? [y/N]"
 echo -n "> " 
-read answr
+read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 	echo && echo
 	echo "Enter your desired username:"
 	echo -n "> "
-	read usr
+	read -r usr
 	isusr="true"
-	usr=$(echo $usr | tr '[:upper:]' '[:lower:]')
+	usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
 	echo && echo
-	while [[ $usrusrpwd != $usrpwd || $usrpwd == "" ]]; do
+	while [[ $usrusrpwd != "$usrpwd" || $usrpwd == "" ]]; do
 		echo "Enter your disired password for $usr (can't be empty):"
 		echo -n "> "
-		read -s usrpwd
+		read -r -s usrpwd
 		echo && echo
 		echo "Confirm user password:"
 		echo -n "> "
-		read -s usrusrpwd
-		if [[ $usrusrpwd != $usrpwd ]]; then
+		read -r -s usrusrpwd
+		if [ ! "$usrusrpwd" = "$usrpwd" ]; then
 			echo && echo
 			echo "Password mismatch, retrying..."
 			sleep 2
 		fi
-		if [[ $usrpwd == "" ]]; then
+		if [ "$usrpwd" == "" ]; then
 			echo && echo
 			echo "Password is empty, retrying..."
 			sleep 2
@@ -274,7 +274,7 @@ while [[ $hstnm == "" ]]; do
 	echo && echo
 	echo "Enter your disired hostname for this terminal (can't be empty):"
 	echo -n "> "
-	read hstnm
+	read -r hstnm
 	if [[ $hstnm == "" ]]; then
 		echo && echo
 		echo "Hostname is empty, retrying..."
@@ -291,22 +291,30 @@ echo "#=================================#"
 echo && echo
 echo "Do you wish to install Xorg and gst-plugins as well? [y/N]"
 echo -n "> "
-read answr
+read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 	somemore="true"
 fi
 clear
 answr=""
-if [[ $(lscpu | grep Intel) ]]; then
+lscpu | grep -q Intel
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
 	intelamdcpu="intel"
 fi
-if [[ $(lscpu | grep AMD) ]]; then
+lscpu | grep -q AMD
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
 	intelamdcpu="amd"
 fi
-if [[ $(lspci | grep Intel) ]]; then
+lspci | grep -q Intel
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
 	intelamdgpu="intel"
 fi
-if [[ $(lspci | grep AMD) ]]; then
+lspci | grep -q AMD
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
 	intelamdgpu="amd"
 fi
 
@@ -342,8 +350,8 @@ echo "#          disk $drv          #"
 echo "#                                 #"
 echo "#=================================#"
 echo && echo
-dd if=/dev/zero of=$drv bs=512 count=1
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | fdisk $drv
+dd if=/dev/zero of="$drv" bs=512 count=1
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | fdisk "$drv"
 g	# create a new GPT partition table
 n	# new partition (/dev/sdx1)
 1	# partition number 1
@@ -372,10 +380,10 @@ t	# change partition type
 19	# swap partition type
 w	# write the partition table and quit
 EOF
-mkswap $drv"2"
-mkfs.fat -F32 $drv"1"
-mkfs.ext4 $drv"3"
-mkfs.ext4 $drv"4"
+mkswap "$drv""2"
+mkfs.fat -F32 "$drv""1"
+mkfs.ext4 "$drv""3"
+mkfs.ext4 "$drv""4"
 sleep 2
 clear
 echo "#====== IV. INSTALLING LINUX =====#"
@@ -383,14 +391,14 @@ echo "#                                 #"
 echo "#     3. Mounting partitions      #"
 echo "#                                 #"
 echo "#=================================#"
-swapon $drv"2"
+swapon "$drv""2"
 mkdir /mnt/arch
-mount $drv"3" /mnt/arch
+mount "$drv""3" /mnt/arch
 mkdir /mnt/arch/boot
 mkdir /mnt/arch/boot/efi
-mount $drv"1" /mnt/arch/boot/efi
+mount "$drv""1" /mnt/arch/boot/efi
 mkdir /mnt/arch/home
-mount $drv"4" /mnt/arch/home
+mount "$drv""4" /mnt/arch/home
 sleep 2
 clear
 echo "#====== IV. INSTALLING LINUX =====#"
@@ -460,8 +468,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#          (en_US.UTF-8)          #
 	#                                 #
 	#=================================#
-	sed 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen > /etc/locale.gen.42
-	mv /etc/locale.gen.42 /etc/locale.gen
+	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 	locale-gen
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf
 	sleep 2
@@ -471,7 +478,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#       5. Setting hostname       #
 	#                                 #
 	#=================================#
-	echo $hstnm > /etc/hostname
+	echo "$hstnm" > /etc/hostname
 	echo "127.0.0.1 localhost" > /etc/hosts
 	echo "::1 localhost" >> /etc/hosts
 	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
@@ -483,8 +490,8 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#                                 #
 	#=================================#
 	passwd
-$rtpwd
-$rtpwd
+"$rtpwd"
+"$rtpwd"
 	sleep 2
 	clear
 	#===== IV. CONFIGURING LINUX =====#
