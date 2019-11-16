@@ -505,9 +505,9 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#=================================#
 	pacman -S networkmanager
 	Y
-	sleep 1000
+	sleep 2
 ARCH_CHROOT
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+arch-chroot /mnt/arch << ARCH_CHROOT
 	systemctl enable NetworkManager
 	sleep 2
 	clear
@@ -516,12 +516,11 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#        8. journald stuff        #
 	#                                 #
 	#=================================#
-	sed 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf > /etc/systemd/journald.conf.42
-	mv /etc/systemd/journald.conf.42 /etc/systemd/journald.conf
+	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	sleep 2
-EOF
+ARCH_CHROOT
 if [[ $somemore == "true" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -531,12 +530,11 @@ if [[ $somemore == "true" ]]; then
 	#                                 #
 	#=================================#
 	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa xf86-video-vesa
-
 	Y
-EOF
+ARCH_CHROOT
 fi
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -549,10 +547,10 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	pacman -S xf86-video-intel
 	Y
 	sleep 2
-EOF
+ARCH_CHROOT
 fi
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -564,65 +562,52 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-amdgpu
 	Y
-EOF
+ARCH_CHROOT
 fi
-if [[ $isusr == "true" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      10. Installing sudo        #
-	#                                 #
-	#=================================#
-	pacman -S sudo
-	Y
-EOF
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#      11. Generating user        #
+	#      10. Generating user        #
 	#                                 #
 	#=================================#
 	useradd -m -g wheel,audio -s /bin/zsh $usr
 	passwd $usr
 $usrpwd
 $usrpwd
-	sed 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers > /etc/sudoers.42
-	mv /etc/sudoers.42 /etc/sudoers
+	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 	sleep 2
 	exit
-EOF
+ARCH_CHROOT
 fi
 if [[ $intelamdcpu == "intel" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      12. Installing CPU         #
+	#      11. Installing CPU         #
 	#           microcode             #
 	#                                 #
 	#=================================#
 	pacman -S intel-ucode
 	Y
-EOF
+ARCH_CHROOT
 fi
 if [[ $intelamdcpu == "amd" ]]; then
-	sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      12. Installing CPU         #
+	#      11. Installing CPU         #
 	#           microcode             #
 	#                                 #
 	#=================================#
 	pacman -S amd-ucode
 	Y
-EOF
+ARCH_CHROOT
 fi
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
 	clear
 	#===== VI. CONFIGURING BOOT ======#
@@ -638,11 +623,11 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#       2. Configuring GRUB       #
 	#                                 #
 	#=================================#
-	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
 	grub-mkconfig -o /boot/grub/grub.cfg
+	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
 	sleep 4
 	exit
-EOF
+ARCH_CHROOT
 echo && echo
 clear
 echo "#========= WORK COMPLETE =========#"
