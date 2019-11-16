@@ -501,6 +501,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#=================================#
 	pacman -S networkmanager
 	Y
+	sleep 1000
 ARCH_CHROOT
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	systemctl enable NetworkManager
