@@ -100,7 +100,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo && echo
 		dn=$(lsblk | grep -c disk)
 		id=1
-		lsblk | grep disk | awk '{print "Disk", "", "", "Size"}{print $1 " ->", $4}'
+		lsblk | grep disk | awk '{print "Disk", "", "", "Size"}{print "----", "", "", "----"}{print $1 " ->", $4}'
 		echo && echo
 		echo "Please choose the drive on which Arch Linux shoud be installed:"
 		while [[ $dn != 0 ]]; do
