@@ -351,7 +351,7 @@ echo "#                                 #"
 echo "#=================================#"
 echo && echo
 dd if=/dev/zero of="$drv" bs=512 count=1
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | fdisk "$drv"
+sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
 g	# create a new GPT partition table
 n	# new partition (/dev/sdx1)
 1	# partition number 1
@@ -379,7 +379,7 @@ t	# change partition type
 2	# partition number 2
 19	# swap partition type
 w	# write the partition table and quit
-EOF
+FDISK_INPUT
 mkswap "$drv""2"
 mkfs.fat -F32 "$drv""1"
 mkfs.ext4 "$drv""3"
@@ -433,7 +433,7 @@ echo "#      1. Now changing root       #"
 echo "#                                 #"
 echo "#=================================#"
 sleep 2
-sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
+arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -501,7 +501,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF 
 	#=================================#
 	pacman -S networkmanager
 	Y
-EOF
+ARCH_CHROOT
 sed -e 's/\s*\([\+0-9a-zA-Z \"=#()[]{}<>,:. - \_\/?!@$%^&~`*|]*\).*/\1/' << EOF | arch-chroot /mnt/arch
 	systemctl enable NetworkManager
 	sleep 2
