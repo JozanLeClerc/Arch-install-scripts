@@ -1,18 +1,18 @@
 # README in progress
 
-# Arch Linux installation script
+# Joe's Arch Linux installation script
 
 ## Introduction
 
-My original script meant to automize you Arch Linux installation process. This is **work in progress**, so it will not work properly for now. I am currently struggling with **GRUB**, with little surprise.
+My original script meant to automate your Arch Linux installation process. This is work in progress, so it will **not work**. I am currently struggling with `GRUB`, with little surprise.
 
-While the script simplifies the whole installation process, this is not meant for new users. It is meant for users that already performed **Arch Linux** installations and more or less understand what's going on. It's always best to learn Arch by yourself.
+*Note:* while the script simplifies the whole installation process, this is not made for new users. It is meant for users that already performed **Arch Linux** installations and more or less understand what's going on. It's always best to learn Arch by yourself.
 
-Does not install too many bloatware other than some utils. You will be prompted to choose whether or not you want `Xorg` and other classic desktop user extras.
+*Note:*  the script does not install too many bloatware other than some utils. You will be prompted to choose whether or not you want `Xorg` and other classic desktop user extras.
 
 ## How to use
 
-First make sure you are booted in a live **Arch ISO environment**, with the familiar prompt waiting for instructions.
+First make sure you are booted in a live *Arch ISO environment*, with the familiar prompt waiting for instructions.
 
 Secondly, you will require a working internet connection. To **try your connection** use:
 
@@ -25,9 +25,9 @@ If it fails, refer to [the Arch Wiki installation guide](https://wiki.archlinux.
 Now you are ready to run the script. Run **the following commands** to begin setup and installation:
 
 ```shell
-wget https://raw.githubusercontenent.com/JozanLeClerc/arch-install-scripts/master/arch-install-UEFI.sh
-chmod +x arch-install-UEFI.sh
-./arch-install-UEFI.sh
+curl -O https://raw.githubusercontenent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install-UEFI.sh
+chmod +x joes-arch-install-UEFI.sh
+./joes-arch-install-UEFI.sh
 ```
 
 ## Disclaimers
@@ -36,10 +36,10 @@ First, only **UEFI-type installation** is supported at the moment. **BIOS versio
 
 While there is some basic error managements, **do not** try to break the script by inputting deliberately harmful stuff when prompted. As an **Arch Linux** installation can be complex and sensitive, it will most certainly work. This is meant to ease your life, it is not a skill test.
 
-Do **NOT** run this on your already installed machine. It is meant to be used only in the live **Arch ISO environment** and your intention must be to install **Arch Linux** on the system.
+**Do NOT** run this on your already installed machine. It can *damage severely* your current installation. It is meant to be used only in the live *Arch ISO environment* and your intention must be to install **Arch Linux** on the system.
 
-The scripr **does not** handle **dual boot** on a **single disk**, while you should be fine with an already installed OS on another disk.  
-It does not handle dual disk partitioning as well.
+The script does not handle **dual boot** on a **single disk**, while you should be fine with an already installed OS on another disk thanks to `os-prober`.  
+It does not handle **multiple disk partitionning**.
 
 ## TODO
 
