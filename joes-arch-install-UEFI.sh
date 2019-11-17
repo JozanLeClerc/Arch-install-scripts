@@ -658,8 +658,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
 	grub-mkconfig -o /boot/grub/grub.cfg
 	mkdir /boot/efi/EFI/BOOT
-	cp /boot/efi/EFI/arch_grub/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
-	echo "bcf boot add 1 fs0:\EFI\GRUB\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
+	cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
+	echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
 	echo "exit" >> /boot/efi/startup.nsh
 	sleep 4
 	exit
