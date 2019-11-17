@@ -15,15 +15,15 @@ intelamdcpu="none"
 intelamdgpu="none"
 
 clear
-echo "#============ WELCOME ============#"
-echo "#                                 #"
-echo "#        Welcome to Joe's         #"
-echo "#           ARCH LINUX            #"
-echo "#      UEFI INSTALL SCRIPT        #"
-echo "#                                 #"
-echo "#  (press [return] to begin...)   #"
-echo "#                                 #"
-echo "#=================================#"
+echo "#============ WELCOME ============#\n
+#                                 #\n
+#        Welcome to Joe's         #\n
+#           ARCH LINUX            #\n
+#      UEFI INSTALL SCRIPT        #\n
+#                                 #\n
+#  (press [return] to begin...)   #\n
+#                                 #\n
+#=================================#"
 read -r
 
 # ================================================================================================ #
