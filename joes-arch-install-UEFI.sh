@@ -505,8 +505,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#=================================#
 	pacman -S networkmanager
 	Y
-	sleep 2
 ARCH_CHROOT
+sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
 	systemctl enable NetworkManager
 	sleep 2
@@ -517,8 +517,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#                                 #
 	#=================================#
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-	sleep 2
 ARCH_CHROOT
+sleep 2
 if [[ $somemore == "true" ]]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
@@ -533,9 +533,9 @@ if [[ $somemore == "true" ]]; then
 	Y
 ARCH_CHROOT
 fi
+sleep 2
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT
-	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -546,12 +546,12 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-intel
 	Y
-	sleep 2
 ARCH_CHROOT
 fi
+sleep 2
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
+	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -564,8 +564,8 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	Y
 ARCH_CHROOT
 fi
+sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
-	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -607,8 +607,8 @@ if [[ $intelamdcpu == "amd" ]]; then
 	Y
 ARCH_CHROOT
 fi
+sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
-	sleep 2
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
@@ -642,6 +642,4 @@ echo "#   Your system will now reboot   #"
 echo "#                                 #"
 echo "#=================================#"
 echo && echo
-sleep 10
-umount -R /mnt/arch
-reboot
+sleep 10 && umount -R /mnt/arch && reboot
