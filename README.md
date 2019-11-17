@@ -1,5 +1,3 @@
-# README in progress
-
 # Joe's Arch Linux installation script
 
 ## Introduction
