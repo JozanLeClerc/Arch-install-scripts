@@ -447,8 +447,7 @@ echo "\
 #                                 #
 #=================================#"
 pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie grub os-prober efibootmgr > /dev/null
-pacstrap /mnt/arch ntp cronie grub os-prober efibootmgr > /dev/null
-pacstrap /mnt/arch grub os-prober efibootmgr > /dev/null
+pacstrap /mnt/arch ntp cronie grub > /dev/null
 echo && echo
 echo "Extra packages installed."
 sleep 1
@@ -535,7 +534,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#     7. Setting up network       #
 	#                                 #
 	#=================================#
-	pacman -S networkmanager
+	pacman -S networkmanager grub os-prober efibootmgr
 	Y
 ARCH_CHROOT
 arch-chroot /mnt/arch << ARCH_CHROOT
