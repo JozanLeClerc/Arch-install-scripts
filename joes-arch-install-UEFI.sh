@@ -424,12 +424,14 @@ clear
 echo "\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
-#    4. Installing base system    #
+#   4. Installing base packages   #
+#                                 #
+#       Please be patient,        #
+#      this may take a while      #
 #                                 #
 #=================================#"
-echo && echo
-echo "Installing base packages, please wait. This may take a while."
 pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null
+echo && echo
 echo "Base packages installed."
 sleep 1
 clear
@@ -438,9 +440,12 @@ echo "\
 #                                 #
 #   4.5 Installing some extras    #
 #                                 #
+#       Please be patient,        #
+#      this may take a while      #
+#                                 #
 #=================================#"
-echo "Installing extra packages, please wait. This may take a while."
 pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie grub os-prober efibootmgr > /dev/null
+echo && echo
 echo "Extra packages installed."
 sleep 1
 clear
