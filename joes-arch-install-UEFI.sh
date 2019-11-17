@@ -15,14 +15,14 @@ intelamdcpu="none"
 intelamdgpu="none"
 
 clear
-printf "#============ WELCOME ============#\n
-#                                 #\n
-#        Welcome to Joe's         #\n
-#           ARCH LINUX            #\n
-#      UEFI INSTALL SCRIPT        #\n
-#                                 #\n
-#  (press [return] to begin...)   #\n
-#                                 #\n
+printf "#============ WELCOME ============#
+#                                 #
+#        Welcome to Joe's         #
+#           ARCH LINUX            #
+#      UEFI INSTALL SCRIPT        #
+#                                 #
+#  (press [return] to begin...)   #
+#                                 #
 #=================================#"
 read -r
 
