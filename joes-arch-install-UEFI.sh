@@ -492,7 +492,7 @@ echo "\
 #       5. Generating fstab       #
 #                                 #
 #=================================#"
-genfstab -U /mnt/arch > /mnt/arch/etc/fstab
+genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
 echo "\
