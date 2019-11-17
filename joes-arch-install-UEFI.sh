@@ -349,7 +349,7 @@ echo "\
 #             via ntp             #
 #                                 #
 #=================================#"
-timedatectl set-ntp true
+timedatectl set-ntp true > /dev/null
 sleep 2
 
 # ============================================================== #
@@ -411,14 +411,14 @@ echo "\
 #     3. Mounting partitions      #
 #                                 #
 #=================================#"
-swapon "$drv""2"
-mkdir /mnt/arch
-mount "$drv""3" /mnt/arch
-mkdir /mnt/arch/boot
-mkdir /mnt/arch/boot/efi
-mount "$drv""1" /mnt/arch/boot/efi
-mkdir /mnt/arch/home
-mount "$drv""4" /mnt/arch/home
+swapon "$drv""2" > /dev/null
+mkdir /mnt/arch > /dev/null
+mount "$drv""3" /mnt/arch > /dev/null
+mkdir /mnt/arch/boot > /dev/null
+mkdir /mnt/arch/boot/efi > /dev/null
+mount "$drv""1" /mnt/arch/boot/efi > /dev/null
+mkdir /mnt/arch/home > /dev/null
+mount "$drv""4" /mnt/arch/home > /dev/null
 sleep 2
 clear
 echo "\
@@ -427,7 +427,10 @@ echo "\
 #    4. Installing base system    #
 #                                 #
 #=================================#"
-pacstrap /mnt/arch base base-devel pacman-contrib
+echo && echo
+echo "Installing base packages, please wait. This may take a while."
+pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null
+echo "Base packages installed."
 sleep 1
 clear
 echo "\
@@ -436,9 +439,9 @@ echo "\
 #   4.5 Installing some extras    #
 #                                 #
 #=================================#"
-pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh
-pacstrap /mnt/arch ntp cronie
-pacstrap /mnt/arch grub os-prober efibootmgr
+echo "Installing extra packages, please wait. This may take a while."
+pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie grub os-prober efibootmgr > /dev/null
+echo "Extra packages installed."
 sleep 1
 clear
 echo "\
