@@ -366,6 +366,7 @@ echo "\
 #=================================#"
 echo && echo
 dd if=/dev/zero of="$drv" bs=512 count=1 > /dev/null
+wipefs --all --force "$drv"
 fdisk "$drv" << FDISK_INPUT
 o
 n
