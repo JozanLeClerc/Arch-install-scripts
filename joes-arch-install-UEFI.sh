@@ -480,8 +480,8 @@ echo "\
 #      this may take a while      #
 #                                 #
 #=================================#"
-pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie grub os-prober efibootmgr > /dev/null
-pacstrap /mnt/arch ntp cronie grub > /dev/null
+pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh > /dev/null
+pacstrap /mnt/arch ntp cronie > /dev/null
 echo && echo
 echo "Extra packages installed."
 sleep 1
