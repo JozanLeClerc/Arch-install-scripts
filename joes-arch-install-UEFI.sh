@@ -208,7 +208,7 @@ done
 
 answr="n"
 
-while [ ! $rtrtpwd = "$rtpwd" ] || [ $rtpwd = "" ]; do
+while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
 	clear
 	echo "\
 #======= II. USERS SETUP =========#
@@ -224,12 +224,12 @@ while [ ! $rtrtpwd = "$rtpwd" ] || [ $rtpwd = "" ]; do
 	echo "Confirm root password:"
 	echo -n "> "
 	read -r -s rtrtpwd
-	if [ ! "$rtrtpwd" = "$rtpwd" ]; then
+	if [[ $rtrtpwd != "$rtpwd" ]]; then
 		echo && echo
 		echo "Password mismatch, retrying..."
 		sleep 2
 	fi
-	if [ "$rtpwd" = "" ]; then
+	if [[ $rtpwd = "" ]]; then
 		echo && echo
 		echo "Password is empty, retrying..."
 		sleep 2
@@ -263,12 +263,12 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 		echo "Confirm user password:"
 		echo -n "> "
 		read -r -s usrusrpwd
-		if [ ! "$usrusrpwd" = "$usrpwd" ]; then
+		if [[ $usrusrpwd != "$usrpwd" ]]; then
 			echo && echo
 			echo "Password mismatch, retrying..."
 			sleep 2
 		fi
-		if [ "$usrpwd" == "" ]; then
+		if [[ $usrpwd == "" ]]; then
 			echo && echo
 			echo "Password is empty, retrying..."
 			sleep 2
@@ -365,7 +365,7 @@ echo "\
 #                                 #
 #=================================#"
 echo && echo
-dd if=/dev/zero of="$drv" bs=512 count=1
+dd if=/dev/zero of="$drv" bs=512 count=1 > /dev/null
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
 o	# create a new DOS partition table
 n	# new partition (/dev/sdx1)
@@ -399,10 +399,10 @@ t	# change partition type
 82	# swap partition type
 w	# write the partition table and quit
 FDISK_INPUT
-mkswap "$drv""2"
-mkfs.fat -F32 "$drv""1"
-mkfs.ext4 "$drv""3"
-mkfs.ext4 "$drv""4"
+mkswap "$drv""2" > /dev/null
+mkfs.fat -F32 "$drv""1" > /dev/null
+mkfs.ext4 "$drv""3" > /dev/null
+mkfs.ext4 "$drv""4" > /dev/null
 sleep 2
 clear
 echo "\
