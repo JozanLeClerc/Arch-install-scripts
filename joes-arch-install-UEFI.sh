@@ -686,4 +686,6 @@ echo "\
 #                                 #
 #=================================#"
 echo && echo
-sleep 10 && umount -R /mnt/arch && reboot
+sleep 10
+umount -R /mnt/arch
+reboot
