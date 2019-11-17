@@ -23,7 +23,7 @@ If it fails, refer to [the Arch Wiki installation guide](https://wiki.archlinux.
 Now you are ready to run the script. Run **the following commands** to begin setup and installation:
 
 ```shell
-curl -O https://raw.githubusercontenent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install-UEFI.sh
+wget https://raw.githubusercontenent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install-UEFI.sh
 chmod +x joes-arch-install-UEFI.sh
 ./joes-arch-install-UEFI.sh
 ```
