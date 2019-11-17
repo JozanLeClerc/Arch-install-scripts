@@ -369,13 +369,14 @@ basepartc=$(lsblk "$drv" | grep -c part)
 if [ $basepartc -ge 1 ]; then
 	i=1
 	echo "Whiping disk. This step may take a while."
+	echo && echo
 	while [[ $i -le $basepartc ]]; do
 		towhipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
-		dd if=/dev/zero of="$drv$towhipe" bs=1M status=progress > /dev/null
+		dd if=/dev/zero of="$drv$towhipe" bs=1M status=progress > /dev/null 2>&1
 		((i++))
 	done
 fi
-dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null
+dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
 fdisk "$drv" << FDISK_INPUT
 g
