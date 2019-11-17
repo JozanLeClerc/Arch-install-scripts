@@ -365,7 +365,15 @@ echo "\
 #                                 #
 #=================================#"
 echo && echo
-dd if=/dev/zero of="$drv" bs=512 count=1 > /dev/null
+basepartc=$(lsblk "$drv" | grep -c part)
+i=1
+while [[ $i -le $basepartc ]]; do
+	towhipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
+	dd if=/dev/zero of="$drv$towhipe" bs=1M status=progress
+	((i++))
+done
+echo "Whiping disk. This step may take a while."
+dd if=/dev/zero of="$drv" bs=1M status=progress
 wipefs --all --force "$drv"
 fdisk "$drv" << FDISK_INPUT
 o
