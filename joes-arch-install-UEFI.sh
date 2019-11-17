@@ -591,7 +591,7 @@ if [[ $somemore == "true" ]]; then
 	#                                 #
 	#         9. Installing           #
 	#        some more utils          #
-	#     (gst plugins, xorg...)      #
+	#     (gst plugins, Xorg...)      #
 	#                                 #
 	#=================================#
 	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa xf86-video-vesa
