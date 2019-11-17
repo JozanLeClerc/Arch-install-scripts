@@ -678,15 +678,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
-	#   1. Generating Kernel image    #
-	#                                 #
-	#=================================#
-	mkinitcpio -p linux
-	sleep 1
-	clear
-	#===== VI. CONFIGURING BOOT ======#
-	#                                 #
-	#       2. Configuring GRUB       #
+	#       1. Configuring GRUB       #
 	#                                 #
 	#=================================#
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
