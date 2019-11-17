@@ -15,7 +15,7 @@ intelamdcpu="none"
 intelamdgpu="none"
 
 clear
-echo "#============ WELCOME ============#\n
+printf "#============ WELCOME ============#\n
 #                                 #\n
 #        Welcome to Joe's         #\n
 #           ARCH LINUX            #\n
@@ -52,7 +52,7 @@ fi
 clear
 echo "Verifying that your are connected to the Internet, please wait..."
 
-wget -q --spider https://google.com
+wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
 if [ $tmpret -ne 0 ]; then
 	clear
