@@ -506,8 +506,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	pacman -S networkmanager
 	Y
 ARCH_CHROOT
-sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
+	sleep 2
 	systemctl enable NetworkManager
 	sleep 2
 	clear
@@ -517,8 +517,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#                                 #
 	#=================================#
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
+	sleep 2
 ARCH_CHROOT
-sleep 2
 if [[ $somemore == "true" ]]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
@@ -533,9 +533,9 @@ if [[ $somemore == "true" ]]; then
 	Y
 ARCH_CHROOT
 fi
-sleep 2
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -550,8 +550,8 @@ ARCH_CHROOT
 fi
 sleep 2
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	sleep 2
 	arch-chroot /mnt/arch << ARCH_CHROOT
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -564,15 +564,16 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	Y
 ARCH_CHROOT
 fi
-sleep 2
+if [[ $isusr = "true" ]]; then
 arch-chroot /mnt/arch << ARCH_CHROOT
+	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#      10. Generating user        #
 	#                                 #
 	#=================================#
-	useradd -m -g wheel,audio -s /bin/zsh $usr
+	useradd -m -g wheel -s /bin/zsh $usr
 	passwd $usr
 $usrpwd
 $usrpwd
