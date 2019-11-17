@@ -378,36 +378,26 @@ fi
 dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null
 wipefs --all --force "$drv"
 fdisk "$drv" << FDISK_INPUT
-o
+g
 n
-p
 1
 
 +$btsze
-Y
 n
-p
 2
 
 +$swpsze
-Y
 n
-p
 3
 
 +$rtsze
-Y
 n
-p
 4
 
 
 t
-1
-ef
-t
 2
-82
+19
 w
 FDISK_INPUT
 mkswap "$drv""2" > /dev/null
