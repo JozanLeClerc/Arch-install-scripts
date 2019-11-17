@@ -466,24 +466,9 @@ echo "\
 #      this may take a while      #
 #                                 #
 #=================================#"
-pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null
+pacstrap /mnt/arch base base-devel pacman-contrib
 echo && echo
 echo "Base packages installed."
-sleep 1
-clear
-echo "\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#   4.5 Downloading some extras   #
-#                                 #
-#       Please be patient,        #
-#      this may take a while      #
-#                                 #
-#=================================#"
-pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh > /dev/null
-pacstrap /mnt/arch ntp cronie > /dev/null
-echo && echo
-echo "Extra packages installed."
 sleep 1
 clear
 echo "\
@@ -527,8 +512,6 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#                                 #
 	#=================================#
 	hwclock --systohc
-	ntpdate fr.pool.ntp.org
-	systemctl enable ntpd
 	sleep 1
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -582,6 +565,16 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#                                 #
 	#=================================#
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
+	sleep 2
+ARCH_CHROOT
+arch-chroot /mnt/arch << ARCH_CHROOT
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#   9. Installing useful packages #
+	#                                 #
+	#=================================#
+	pacman -S zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie
 	sleep 2
 ARCH_CHROOT
 if [[ $somemore == "true" ]]; then
