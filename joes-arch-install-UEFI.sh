@@ -15,7 +15,8 @@ intelamdcpu="none"
 intelamdgpu="none"
 
 clear
-printf "#============ WELCOME ============#
+echo "\
+#============ WELCOME ============#
 #                                 #
 #        Welcome to Joe's         #
 #           ARCH LINUX            #
@@ -32,14 +33,15 @@ read -r
 
 if [ ! -r /sys/firmware/efi/efivars ]; then
 	clear
-	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
-	echo "X                                 X"
-	echo "X    It seems that boot mode      X"
-	echo "X      is not set to UEFI         X"
-	echo "X    therefore Joe's script is    X"
-	echo "X        forced to abort          X"
-	echo "X                                 X"
-	echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+	echo "\
+X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
+X                                 X
+X    It seems that boot mode      X
+X      is not set to UEFI         X
+X    therefore Joe's script is    X
+X        forced to abort          X
+X                                 X
+X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
 	sleep 6
 	echo && echo
 	echo "Thank you for using Joe's Arch Linux UEFI install script."
@@ -56,15 +58,16 @@ wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
 if [ $tmpret -ne 0 ]; then
 	clear
-	echo "X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X"
-	echo "X                                 X"
-	echo "X       It seems that your        X"
-	echo "X         terminal is not         X"
-	echo "X    connected to the Internet    X"
-	echo "X    therefore Joe's script is    X"
-	echo "X        forced to abort          X"
-	echo "X                                 X"
-	echo "X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+	echo "\
+X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
+X                                 X
+X       It seems that your        X
+X         terminal is not         X
+X    connected to the Internet    X
+X    therefore Joe's script is    X
+X        forced to abort          X
+X                                 X
+X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
 	sleep 6
 	echo && echo
 	echo "Thank you for using Joe's Arch Linux UEFI install script."
@@ -89,13 +92,14 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	swps=""
 	rts=""
 	clear
-	echo "#========= I. DISK SETUP =========#"
-	echo "#                                 #"
-	echo "#      Please choose wisely       #"
-	echo "#                                 #"
-	echo "#      1. Drive to be used        #"
-	echo "#                                 #"
-	echo "#=================================#"
+	echo "\
+#========= I. DISK SETUP =========#
+#                                 #
+#      Please choose wisely       #
+#                                 #
+#      1. Drive to be used        #
+#                                 #
+#=================================#"
 	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep -c disk) || $drvnm -le 0 ]]; do
 		echo && echo
 		dn=$(lsblk | grep -c disk)
@@ -129,17 +133,19 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	done
 	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
 	clear
-	echo "#========= I. DISK SETUP =========#"
-	echo "#                                 #"
-	echo "#      Please choose wisely       #"
-	echo "#                                 #"
-	echo "#      2. swap partion size       #"
-	echo "#                                 #"
-	echo "#=================================#"
+	echo "\
+#========= I. DISK SETUP =========#
+#                                 #
+#      Please choose wisely       #
+#                                 #
+#      2. swap partion size       #
+#                                 #
+#=================================#"
 	while [[ $swps == "" ]]; do
 		echo && echo
-		echo "Please enter your swap partition disired size:"
-		echo "_G"
+		echo "\
+Please enter your swap partition disired size:
+_G"
 		echo -n "> "
 		read -r swps
 		if [[ $swps == "" ]]; then
@@ -148,17 +154,19 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		fi
 	done
 	clear
-	echo "#========= I. DISK SETUP =========#"
-	echo "#                                 #"
-	echo "#      Please choose wisely       #"
-	echo "#                                 #"
-	echo "#      3. root partion size       #"
-	echo "#                                 #"
-	echo "#=================================#"
+	echo "\
+#========= I. DISK SETUP =========#
+#                                 #
+#      Please choose wisely       #
+#                                 #
+#      3. root partion size       #
+#                                 #
+#=================================#"
 	while [[ $rts == "" ]]; do
 		echo && echo
-		echo "Please enter your root partition disired size:"
-		echo "__G"
+		echo "\
+Please enter your root partition disired size:
+__G"
 		echo -n "> "
 		read -r rts
 		if [[ $rts == "" ]]; then
@@ -170,16 +178,17 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	rtsze=$rts"G"
 	swpsze=$swps"G"
 	clear
-	echo "#============= CONFIRM THIS IS CORRECT ===============#" 
-	echo "#                                                     #"
-	echo "#                DRIVE TO USE: $drv               #"
-	echo "#                                                     #"
-	echo "#  /boot/efi > BOOT partition size: $btsze              #"
-	echo "#              SWAP partition size: $swpsze                #"
-	echo "#  /         > ROOT partition size: $rtsze               #"
-	echo "#  /home     > HOME partition size: all that remains  #"
-	echo "#                                                     #"
-	echo "#=====================================================#" 
+	echo "\
+#============= CONFIRM THIS IS CORRECT ===============#
+#                                                     #
+#                DRIVE TO USE: $drv               #
+#                                                     #
+#  /boot/efi > BOOT partition size: $btsze              #
+#              SWAP partition size: $swpsze                #
+#  /         > ROOT partition size: $rtsze               #
+#  /home     > HOME partition size: all that remains  #
+#                                                     #
+#=====================================================#"
 	echo && echo
 	echo "Is that correct? [y/N]"
 	echo -n "> "
@@ -201,11 +210,12 @@ answr="n"
 
 while [ ! $rtrtpwd = "$rtpwd" ] || [ $rtpwd = "" ]; do
 	clear
-	echo "#======= II. USERS SETUP =========#"
-	echo "#                                 #"
-	echo "#        1. root password         #"
-	echo "#                                 #"
-	echo "#=================================#"
+	echo "\
+#======= II. USERS SETUP =========#
+#                                 #
+#        1. root password         #
+#                                 #
+#=================================#"
 	echo && echo
 	echo "Enter your disired root password (can't be empty):"
 	echo -n "> "
@@ -227,11 +237,12 @@ while [ ! $rtrtpwd = "$rtpwd" ] || [ $rtpwd = "" ]; do
 done
 
 clear
-echo "#======= II. USERS SETUP =========#"
-echo "#                                 #"
-echo "#          2. User add            #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#======= II. USERS SETUP =========#
+#                                 #
+#          2. User add            #
+#                                 #
+#=================================#"
 echo && echo
 echo "Would you like to add a user to the system? [y/N]"
 echo -n "> " 
@@ -265,11 +276,12 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 	done
 fi
 clear
-echo "#======= II. USERS SETUP =========#"
-echo "#                                 #"
-echo "#          3. hostname            #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#======= II. USERS SETUP =========#
+#                                 #
+#          3. hostname            #
+#                                 #
+#=================================#"
 while [[ $hstnm == "" ]]; do
 	echo && echo
 	echo "Enter your disired hostname for this terminal (can't be empty):"
@@ -283,11 +295,12 @@ while [[ $hstnm == "" ]]; do
 done
 answr="n"
 clear
-echo "#====== III. EXTRAS SETUP ========#"
-echo "#                                 #"
-echo "#            1. More              #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== III. EXTRAS SETUP ========#
+#                                 #
+#            1. More              #
+#                                 #
+#=================================#"
 echo && echo
 echo "Do you wish to install Xorg and gst-plugins as well? [y/N]"
 echo -n "> "
@@ -329,12 +342,13 @@ fi
 
 
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#        1. Setting date          #"
-echo "#             via ntp             #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#        1. Setting date          #
+#             via ntp             #
+#                                 #
+#=================================#"
 timedatectl set-ntp true
 sleep 2
 
@@ -343,12 +357,13 @@ sleep 2
 # ============================================================== #
 
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#        2. Partitionning         #"
-echo "#          disk $drv          #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#        2. Partitionning         #
+#          disk $drv          #
+#                                 #
+#=================================#"
 echo && echo
 dd if=/dev/zero of="$drv" bs=512 count=1
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
@@ -390,11 +405,12 @@ mkfs.ext4 "$drv""3"
 mkfs.ext4 "$drv""4"
 sleep 2
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#     3. Mounting partitions      #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#     3. Mounting partitions      #
+#                                 #
+#=================================#"
 swapon "$drv""2"
 mkdir /mnt/arch
 mount "$drv""3" /mnt/arch
@@ -405,37 +421,41 @@ mkdir /mnt/arch/home
 mount "$drv""4" /mnt/arch/home
 sleep 2
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#    4. Installing base system    #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#    4. Installing base system    #
+#                                 #
+#=================================#"
 pacstrap /mnt/arch base base-devel pacman-contrib
 sleep 1
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#   4.5 Installing some extras    #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#   4.5 Installing some extras    #
+#                                 #
+#=================================#"
 pacstrap /mnt/arch zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh
 pacstrap /mnt/arch ntp cronie
 pacstrap /mnt/arch grub os-prober efibootmgr
 sleep 1
 clear
-echo "#====== IV. INSTALLING LINUX =====#"
-echo "#                                 #"
-echo "#       5. Generating fstab       #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#       5. Generating fstab       #
+#                                 #
+#=================================#"
 genfstab -U /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
-echo "#====== V. CONFIGURING LINUX =====#"
-echo "#                                 #"
-echo "#      1. Now changing root       #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#====== V. CONFIGURING LINUX =====#
+#                                 #
+#      1. Now changing root       #
+#                                 #
+#=================================#"
 sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
@@ -631,16 +651,17 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 ARCH_CHROOT
 echo && echo
 clear
-echo "#========= WORK COMPLETE =========#"
-echo "#                                 #"
-echo "#     Your system should now      #"
-echo "#         be installed.           #"
-echo "#   Thank your for using Joe's    #"
-echo "#           ARCH LINUX            #"
-echo "#      UEFI INSTALL UTILITY       #"
-echo "#                                 #"
-echo "#   Your system will now reboot   #"
-echo "#                                 #"
-echo "#=================================#"
+echo "\
+#========= WORK COMPLETE =========#
+#                                 #
+#     Your system should now      #
+#         be installed.           #
+#   Thank your for using Joe's    #
+#           ARCH LINUX            #
+#      UEFI INSTALL UTILITY       #
+#                                 #
+#   Your system will now reboot   #
+#                                 #
+#=================================#"
 echo && echo
 sleep 10 && umount -R /mnt/arch && reboot
