@@ -655,8 +655,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#       2. Configuring GRUB       #
 	#                                 #
 	#=================================#
+	grub-install --target=x86_64-efi --bootloader-id=arch_grub --efi-directory=/boot/efi --recheck
 	grub-mkconfig -o /boot/grub/grub.cfg
-	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck
 	sleep 4
 	exit
 ARCH_CHROOT
