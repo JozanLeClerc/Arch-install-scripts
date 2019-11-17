@@ -366,38 +366,38 @@ echo "\
 #=================================#"
 echo && echo
 dd if=/dev/zero of="$drv" bs=512 count=1 > /dev/null
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << FDISK_INPUT | fdisk "$drv"
-o	# create a new DOS partition table
-n	# new partition (/dev/sdx1)
-p	# primary
-1	# partition number 1
-	# first sector (2048)
-+$btsze	# boot size partition
-Y	# YES
-n	# new partition (/dev/sdx2)
-p	# primary
-2	# partition number 2
-	# default start block
-+$swpsze	# swap size partition
-Y	# YES
-n	# new partition (/dev/sdx3)
-p	# primary
-3	# partition number 3
-	# default start block
-+$rtsze	# root size partition
-Y	# YES
-n	# new partition (/dev/sdx4)
-p	# primary
-4	# partition number 4
-	# default start block
-	#	all that remains
-t	# change partition type
-1	# part 1
-ef	# EFI partition type
-t	# change partition type
-2	# partition number 2
-82	# swap partition type
-w	# write the partition table and quit
+fdisk "$drv" << FDISK_INPUT
+o
+n
+p
+1
+
++$btsze
+Y
+n
+p
+2
+
++$swpsze
+Y
+n
+p
+3
+
++$rtsze
+Y
+n
+p
+4
+
+
+t
+1
+ef
+t
+2
+82
+w
 FDISK_INPUT
 mkswap "$drv""2" > /dev/null
 mkfs.fat -F32 "$drv""1" > /dev/null
