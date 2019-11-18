@@ -236,15 +236,13 @@ done
 
 answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
+	echo && echo
 	echo -e "${BRED}Disk $drv will be whiped. Are you sure you want to continue? [y/N]${END}"
 	echo -n -e "${BRED}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
-		echo -e "${BCYAN}Retrying..."
-		echo
-		echo -e "Press [retrun] key to continue${END}"
-		read -r
+		############################################################################################################## EXIT
 	fi
 done
 #==================================================================================================#
