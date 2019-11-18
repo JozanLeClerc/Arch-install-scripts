@@ -222,7 +222,7 @@ __G"
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
-	echo "${BBLUE}Is that correct? [y/N]"
+	echo -e "${BBLUE}Is that correct? [y/N]"
 	echo -n -e "${BBLUE}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
