@@ -178,7 +178,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo -e "${BBLUE}\
 Please enter your swap partition disired size:
 _G"
-		echo -n "> "
+		echo -n -e "> "
 		read -r swps
 		if [[ $swps == "" ]]; then
 			echo && echo
@@ -199,7 +199,7 @@ _G"
 		echo -e "${BBLUE}\
 Please enter your root partition disired size:
 __G"
-		echo -n "> "
+		echo -n -e "> "
 		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
@@ -222,8 +222,8 @@ __G"
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
-	echo "Is that correct? [y/N]"
-	echo -n "> "
+	echo "${BBLUE}Is that correct? [y/N]"
+	echo -n -e "> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
