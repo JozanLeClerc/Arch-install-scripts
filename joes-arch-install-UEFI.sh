@@ -24,18 +24,18 @@ intelamdgpu="none"
 
 NBLACK="\033[0;30m"
 NRED="\033[0;31m"
-NBLUE="\033[0;32m"
-NGREEN="\033[0;33m"
-NYELLOW="\033[0;34m"
+NGREEN="\033[0;32m"
+NYELLOW="\033[0;33m"
+NBLUE="\033[0;34m"
 NMAGENTA="\033[0;35m"
 NCYAN="\033[0;36m"
 NWHITE="\033[0;37m"
 
 BBLACK="\033[1;30m"
 BRED="\033[1;31m"
-BBLUE="\033[1;32m"
-BGREEN="\033[1;33m"
-BYELLOW="\033[1;34m"
+BGREEN="\033[1;32m"
+BYELLOW="\033[1;33m"
+BBLUE="\033[1;34m"
 BMAGENTA="\033[1;35m"
 BCYAN="\033[1;36m"
 BWHITE="\033[1;37m"
@@ -47,7 +47,7 @@ END="\033[0;0m"
 #==================================================================================================#
 
 clear
-echo "\
+echo -e "\
 ${BMAGENTA}#============ WELCOME ============#
 #                                 #
 #        ${BYELLOW}Welcome to Joe's         ${BMAGENTA}#
