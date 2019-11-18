@@ -76,7 +76,7 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo -e "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BBLUE}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
 	echo -e "${BRED}Aborting...${END}"
 	sleep 3
@@ -102,7 +102,7 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo -e "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BBLUE}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
 	echo -e "${BRED}Aborting...${END}"
 	sleep 3
@@ -111,7 +111,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 else
 	echo -e "${BGREEN}Success!${END}"
 	echo
-	echo -e "${BMAGENTA}Press [retrun] key to continue${END}"
+	echo -e "${BBLUE}Press [retrun] key to continue${END}"
 	read -r
 fi
 
@@ -124,7 +124,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	swps=""
 	rts=""
 	clear
-	echo "${BMAGENTA}\
+	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
 #      Please choose wisely       #
@@ -136,7 +136,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo && echo
 		dn=$(lsblk | grep -c disk)
 		id=1
-		lsblk | grep disk | awk '{print "${BBLUE}DISK", "", "", "SIZE${END}"}{print "----", "", "", "----"}{print "${BCYAN}$1" " ->", "${BYELLOW}$4"}'
+		lsblk | grep disk | awk '{print "${BBLUE}DISK", "", "", "SIZE${END}";}{print "----", "", "", "----"}{print "${BCYAN}$1" " ->", "${BYELLOW}$4"}'
 		echo && echo
 		echo "${BMAGENTA}Please choose the drive on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
