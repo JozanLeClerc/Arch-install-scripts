@@ -84,7 +84,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	exit
 fi
 clear
-echo -e "${BMAGENTA}Verifying that your are connected to the Internet, please wait...${END}"
+echo -e "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
 
 wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
