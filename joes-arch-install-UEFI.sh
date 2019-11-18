@@ -22,25 +22,25 @@ intelamdgpu="none"
 #--------------------------------------- COLORS DECLARATION ---------------------------------------#
 #==================================================================================================#
 
-END=\033[0;0m
+NBLACK="\033[0;30m"
+NRED="\033[0;31m"
+NBLUE="\033[0;32m"
+NGREEN="\033[0;33m"
+NYELLOW="\033[0;34m"
+NMAGENTA="\033[0;35m"
+NCYAN="\033[0;36m"
+NWHITE="\033[0;37m"
 
-NBLACK=\033[0;30m
-NRED=\033[0;31m
-NBLUE=\033[0;32m
-NGREEN=\033[0;33m
-NYELLOW=\033[0;34m
-NMAGENTA=\033[0;35m
-NCYAN=\033[0;36m
-NWHITE=\033[0;37m
+BBLACK="\033[1;30m"
+BRED="\033[1;31m"
+BBLUE="\033[1;32m"
+BGREEN="\033[1;33m"
+BYELLOW="\033[1;34m"
+BMAGENTA="\033[1;35m"
+BCYAN="\033[1;36m"
+BWHITE="\033[1;37m"
 
-BBLACK=\033[1;30m
-BRED=\033[1;31m
-BBLUE=\033[1;32m
-BGREEN=\033[1;33m
-BYELLOW=\033[1;34m
-BMAGENTA=\033[1;35m
-BCYAN=\033[1;36m
-BWHITE=\033[1;37m
+END="\033[0;0m"
 
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
@@ -48,15 +48,15 @@ BWHITE=\033[1;37m
 
 clear
 echo "\
-#============ WELCOME ============#
+${BMAGENTA}#============ WELCOME ============#
 #                                 #
-#        Welcome to Joe's         #
-#           ARCH LINUX            #
-#      UEFI INSTALL SCRIPT        #
+#        ${BYELLOW}Welcome to Joe's         ${BMAGENTA}#
+#           ${BYELLOW}ARCH LINUX            ${BMAGENTA}#
+#      ${BYELLOW}UEFI INSTALL SCRIPT        ${BMAGENTA}#
 #                                 #
-#  (press [return] to begin...)   #
+#  ${BYELLOW}(press [return] to begin...)   ${BMAGENTA}#
 #                                 #
-#=================================#"
+#=================================#${END}"
 read -r
 
 #==================================================================================================#
@@ -398,7 +398,7 @@ echo "\
 #=================================#"
 echo && echo
 basepartc=$(lsblk "$drv" | grep -c part)
-if [ $basepartc -ge 1 ]; then
+if [ "$basepartc" -ge 1 ]; then
 	i=1
 	echo "Whiping disk. This step may take a while."
 	echo && echo
