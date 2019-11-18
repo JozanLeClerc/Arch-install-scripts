@@ -144,7 +144,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 			((dn--))
 			((id++))
 		done
-		echo -n "> "
+		echo -n -e "${BYELLOW}> "
 		read -r drvnm
 		if [[ $drvnm == "" ]]; then
 			echo && echo
@@ -199,7 +199,7 @@ _G"
 		echo -e "${BBLUE}\
 Please enter your root partition disired size:
 __G"
-		echo -n -e "> "
+		echo -n -e "${BBLUE}> "
 		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
@@ -223,7 +223,7 @@ __G"
 #=====================================================#${END}"
 	echo && echo
 	echo "${BBLUE}Is that correct? [y/N]"
-	echo -n -e "> "
+	echo -n -e "${BBLUE}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
@@ -241,9 +241,9 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
-		echo "Retrying..."
+		echo -e "${BBLUE}Retrying..."
 		echo
-		echo "Press [retrun] key to continue"
+		echo -e "Press [retrun] key to continue${END}"
 		read -r
 	fi
 done
