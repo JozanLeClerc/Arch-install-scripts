@@ -76,7 +76,7 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo -e "${BBLUE}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
 	echo -e "${BRED}Aborting...${END}"
 	sleep 3
@@ -84,7 +84,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	exit
 fi
 clear
-echo -e "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
+echo -e "${BCYAN}Verifying that your are connected to the Internet, please wait...${END}"
 
 wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
@@ -102,7 +102,7 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo -e "${BBLUE}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
 	echo -e "${BRED}Aborting...${END}"
 	sleep 3
@@ -111,7 +111,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 else
 	echo -e "${BGREEN}Success!${END}"
 	echo
-	echo -e "${BBLUE}Press [retrun] key to continue${END}"
+	echo -e "${BCYAN}Press [retrun] key to continue${END}"
 	read -r
 fi
 
@@ -138,7 +138,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		id=1
 		lsblk | grep disk | awk '{print "\033[1;34mDISK", "", "", "SIZE""\033[0m";}{print "\033[1;34m----", "", "", "----\033[0m";}{print "\033[1;36m"$1 "\033[1;34m ->", "\033[1;33m"$4;}'
 		echo && echo
-		echo -e "${BBLUE}Please choose the drive on which Arch Linux shoud be installed:${END}"
+		echo -e "${BCYAN}Please choose the drive on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
 			echo -e "${BYELLOW}$id. $(lsblk | grep disk | awk '{print "\033[1;36m"$1"\033[0m";}' | sed -n "$id"p)"
 			((dn--))
@@ -175,7 +175,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 #=================================#${END}"
 	while [[ $swps == "" ]]; do
 		echo && echo
-		echo -e "${BBLUE}\
+		echo -e "${BCYAN}\
 Please enter your swap partition disired size:
 _G"
 		echo -n -e "> "
@@ -196,10 +196,10 @@ _G"
 #=================================#"
 	while [[ $rts == "" ]]; do
 		echo && echo
-		echo -e "${BBLUE}\
+		echo -e "${BCYAN}\
 Please enter your root partition disired size:
 __G"
-		echo -n -e "${BBLUE}> "
+		echo -n -e "${BCYAN}> "
 		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
@@ -213,17 +213,17 @@ __G"
 	echo -e "${BMAGENTA}\
 #============= CONFIRM THIS IS CORRECT ===============#
 #                                                     #
-#                DRIVE TO USE: ${BYELLOW}$drv               ${BMAGENTA}#
+#                DRIVE TO USE: ${BCYAN}$drv               ${BMAGENTA}#
 #                                                     #
-#  /boot/efi > BOOT partition size: ${BYELLOW}$btsze              ${BMAGENTA}#
-#              SWAP partition size: ${BYELLOW}$swpsze                ${BMAGENTA}#
-#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#
-#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
+#  /boot/efi > BOOT partition size: ${BCYAN}$btsze              ${BMAGENTA}#
+#              SWAP partition size: ${BCYAN}$swpsze                ${BMAGENTA}#
+#  /         > ROOT partition size: ${BCYAN}$rtsze               ${BMAGENTA}#
+#  /home     > HOME partition size: ${BCYAN}all that remains  ${BMAGENTA}#
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
-	echo -e "${BBLUE}Is that correct? [y/N]"
-	echo -n -e "${BBLUE}> "
+	echo -e "${BCYAN}Is that correct? [y/N]"
+	echo -n -e "${BCYAN}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
@@ -241,7 +241,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
-		echo -e "${BBLUE}Retrying..."
+		echo -e "${BCYAN}Retrying..."
 		echo
 		echo -e "Press [retrun] key to continue${END}"
 		read -r
