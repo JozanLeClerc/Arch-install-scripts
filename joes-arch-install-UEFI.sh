@@ -136,15 +136,15 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo && echo
 		dn=$(lsblk | grep -c disk)
 		id=1
-		lsblk | grep disk | awk '{print "${BBLUE}DISK", "", "", "SIZE${END}";}{print "----", "", "", "----"}{print "${BCYAN}$1" " ->", "${BYELLOW}$4"}'
+		lsblk | grep disk | awk '{print "\033[1;34mDISK", "", "", "SIZE""\033[0m";}{print "----", "", "", "----";}{print "\033[1;36m"$1 "\033[1;34m ->", "\033[1;36m"$4;}'
 		echo && echo
-		echo "${BMAGENTA}Please choose the drive on which Arch Linux shoud be installed:${END}"
+		echo -e "${BMAGENTA}Please choose the drive on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
 			echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
 			((dn--))
 			((id++))
 		done
-		echo -n "> "
+		echo -n -e "${BYELLOW}> "
 		read -r drvnm
 		if [[ $drvnm == "" ]]; then
 			echo && echo
@@ -234,6 +234,19 @@ __G"
 	fi
 done
 
+answr="n"
+while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
+	echo -e "${BRED}Disk $drv will be whiped. Are you sure you want to continue? [y/N]${END}"
+	echo -n -e "${BRED}> "
+	read -r answr
+	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
+		echo && echo
+		echo "Retrying..."
+		echo
+		echo "Press [retrun] key to continue"
+		read -r
+	fi
+done
 #==================================================================================================#
 #------------------------------------------ USERS SETUP -------------------------------------------#
 #==================================================================================================#
