@@ -138,55 +138,55 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		id=1
 		lsblk | grep disk | awk '{print "\033[1;34mDISK", "", "", "SIZE""\033[0m";}{print "\033[1;34m----", "", "", "----\033[0m";}{print "\033[1;36m"$1 "\033[1;34m ->", "\033[1;33m"$4;}'
 		echo && echo
-		echo -e "${BMAGENTA}Please choose the drive on which Arch Linux shoud be installed:${END}"
+		echo -e "${BBLUE}Please choose the drive on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
-			echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
+			echo -e "${BYELLOW}$id. $(lsblk | grep disk | awk '{print "\033[1;36m"$1"\033[0m";}' | sed -n "$id"p)"
 			((dn--))
 			((id++))
 		done
-		echo -n -e "${BYELLOW}> "
+		echo -n "> "
 		read -r drvnm
 		if [[ $drvnm == "" ]]; then
 			echo && echo
-			echo "Can't be empty, retrying..."
+			echo -e "${BRED}Can't be empty, retrying...${END}"
 		fi
 		if [[ $drvnm -gt $(lsblk | grep -c disk) ]]; then
 			echo && echo
-			echo "Illegal value, please choose something reasonable. Retrying..."
+			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
 		if [[ $drvnm -lt 0 ]]; then
 			echo && echo
-			echo "Illegal value, please choose something reasonable. Retrying..."
+			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
 		if [[ $drvnm == 0 ]]; then
 			echo && echo
-			echo "Illegal value, please choose something reasonable. Retrying..."
+			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
 	done
 	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
 	clear
-	echo "\
+	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
 #      Please choose wisely       #
 #                                 #
 #      2. swap partion size       #
 #                                 #
-#=================================#"
+#=================================#${END}"
 	while [[ $swps == "" ]]; do
 		echo && echo
-		echo "\
+		echo -e "${BBLUE}\
 Please enter your swap partition disired size:
 _G"
 		echo -n "> "
 		read -r swps
 		if [[ $swps == "" ]]; then
 			echo && echo
-			echo "Can't be empty, retrying..."
+			echo -e "${BRED}Can't be empty, retrying...${END}"
 		fi
 	done
 	clear
-	echo "\
+	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
 #      Please choose wisely       #
@@ -196,31 +196,31 @@ _G"
 #=================================#"
 	while [[ $rts == "" ]]; do
 		echo && echo
-		echo "\
+		echo -e "${BBLUE}\
 Please enter your root partition disired size:
 __G"
 		echo -n "> "
 		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
-			echo "Can't be empty, retrying..."
+			echo -e "${BRED}Can't be empty, retrying...${END}"
 		fi
 	done
 	btsze="128M"
 	rtsze=$rts"G"
 	swpsze=$swps"G"
 	clear
-	echo "\
+	echo -e "${BMAGENTA}\
 #============= CONFIRM THIS IS CORRECT ===============#
 #                                                     #
-#                DRIVE TO USE: $drv               #
+#                DRIVE TO USE: ${BYELLOW}$drv               ${BMAGENTA}#
 #                                                     #
-#  /boot/efi > BOOT partition size: $btsze              #
-#              SWAP partition size: $swpsze                #
-#  /         > ROOT partition size: $rtsze               #
-#  /home     > HOME partition size: all that remains  #
+#  /boot/efi > BOOT partition size: ${BYELLOW}$btsze              ${BMAGENTA}#
+#              SWAP partition size: ${BYELLOW}$swpsze                ${BMAGENTA}#
+#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#
+#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
 #                                                     #
-#=====================================================#"
+#=====================================================#${END}"
 	echo && echo
 	echo "Is that correct? [y/N]"
 	echo -n "> "
