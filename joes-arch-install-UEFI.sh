@@ -47,8 +47,8 @@ END="\033[0;0m"
 #==================================================================================================#
 
 clear
-echo -e "\
-${BMAGENTA}#============ WELCOME ============#
+echo -e "${BMAGENTA}\
+#============ WELCOME ============#
 #                                 #
 #        ${BYELLOW}Welcome to Joe's         ${BMAGENTA}#
 #           ${BYELLOW}ARCH LINUX            ${BMAGENTA}#
@@ -65,7 +65,7 @@ read -r
 
 if [ ! -r /sys/firmware/efi/efivars ]; then
 	clear
-	echo "\
+	echo -e "${BRED}\
 X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
 X                                 X
 X    It seems that boot mode      X
@@ -73,24 +73,24 @@ X      is not set to UEFI         X
 X    therefore Joe's script is    X
 X        forced to abort          X
 X                                 X
-X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo "Thank you for using Joe's Arch Linux UEFI install script."
+	echo "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
-	echo "Aborting..."
+	echo "${BRED}Aborting...${END}"
 	sleep 3
 	clear
 	exit
 fi
 clear
-echo "Verifying that your are connected to the Internet, please wait..."
+echo "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
 
 wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
 if [ $tmpret -ne 0 ]; then
 	clear
-	echo "\
+	echo "${BRED}\
 X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
 X                                 X
 X       It seems that your        X
@@ -99,19 +99,19 @@ X    connected to the Internet    X
 X    therefore Joe's script is    X
 X        forced to abort          X
 X                                 X
-X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X"
+X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo "Thank you for using Joe's Arch Linux UEFI install script."
+	echo "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
-	echo "Aborting..."
+	echo "${BRED}Aborting...${END}"
 	sleep 3
 	clear
 	exit
 else
-	echo "Success!"
+	echo "${BGREEN}Success!${END}"
 	echo
-	echo "Press [retrun] key to continue"
+	echo "${BMAGENTA}Press [retrun] key to continue${END}"
 	read -r
 fi
 
