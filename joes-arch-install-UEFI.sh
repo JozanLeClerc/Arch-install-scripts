@@ -50,11 +50,11 @@ clear
 echo -e "${BMAGENTA}\
 #============ WELCOME ============#
 #                                 #
-#        ${BBLUE}Welcome to Joe's         ${BMAGENTA}#
-#           ${BBLUE}ARCH LINUX            ${BMAGENTA}#
-#      ${BBLUE}UEFI INSTALL SCRIPT        ${BMAGENTA}#
+#        Welcome to Joe's         #
+#           ARCH LINUX            #
+#      UEFI INSTALL SCRIPT        #
 #                                 #
-#  ${BBLUE}(press [return] to begin...)   ${BMAGENTA}#
+#  (press [return] to begin...)   #
 #                                 #
 #=================================#${END}"
 read -r
@@ -84,7 +84,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	exit
 fi
 clear
-echo -e "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
+echo -e "${BMAGENTA}Verifying that your are connected to the Internet, please wait...${END}"
 
 wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
@@ -124,21 +124,21 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	swps=""
 	rts=""
 	clear
-	echo "\
+	echo "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
 #      Please choose wisely       #
 #                                 #
 #      1. Drive to be used        #
 #                                 #
-#=================================#"
+#=================================#${END}"
 	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep -c disk) || $drvnm -le 0 ]]; do
 		echo && echo
 		dn=$(lsblk | grep -c disk)
 		id=1
-		lsblk | grep disk | awk '{print "DISK", "", "", "SIZE"}{print "----", "", "", "----"}{print $1 " ->", $4}'
+		lsblk | grep disk | awk '{print "${BBLUE}DISK", "", "", "SIZE${END}"}{print "----", "", "", "----"}{print "${BCYAN}$1" " ->", "${BYELLOW}$4"}'
 		echo && echo
-		echo "Please choose the drive on which Arch Linux shoud be installed:"
+		echo "${BMAGENTA}Please choose the drive on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
 			echo "$id. $(lsblk | grep disk | awk '{print $1}' | sed -n "$id"p)"
 			((dn--))
