@@ -50,11 +50,11 @@ clear
 echo -e "${BMAGENTA}\
 #============ WELCOME ============#
 #                                 #
-#        ${BYELLOW}Welcome to Joe's         ${BMAGENTA}#
-#           ${BYELLOW}ARCH LINUX            ${BMAGENTA}#
-#      ${BYELLOW}UEFI INSTALL SCRIPT        ${BMAGENTA}#
+#        ${BBLUE}Welcome to Joe's         ${BMAGENTA}#
+#           ${BBLUE}ARCH LINUX            ${BMAGENTA}#
+#      ${BBLUE}UEFI INSTALL SCRIPT        ${BMAGENTA}#
 #                                 #
-#  ${BYELLOW}(press [return] to begin...)   ${BMAGENTA}#
+#  ${BBLUE}(press [return] to begin...)   ${BMAGENTA}#
 #                                 #
 #=================================#${END}"
 read -r
@@ -76,21 +76,21 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
-	echo "${BRED}Aborting...${END}"
+	echo -e "${BRED}Aborting...${END}"
 	sleep 3
 	clear
 	exit
 fi
 clear
-echo "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
+echo -e "${BBLUE}Verifying that your are connected to the Internet, please wait...${END}"
 
 wget -q --spider https://archlinux.org > /dev/null
 tmpret=$?
 if [ $tmpret -ne 0 ]; then
 	clear
-	echo "${BRED}\
+	echo -e "${BRED}\
 X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
 X                                 X
 X       It seems that your        X
@@ -102,16 +102,16 @@ X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
 	echo && echo
-	echo "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	echo -e "${BMAGENTA}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
-	echo "${BRED}Aborting...${END}"
+	echo -e "${BRED}Aborting...${END}"
 	sleep 3
 	clear
 	exit
 else
-	echo "${BGREEN}Success!${END}"
+	echo -e "${BGREEN}Success!${END}"
 	echo
-	echo "${BMAGENTA}Press [retrun] key to continue${END}"
+	echo -e "${BMAGENTA}Press [retrun] key to continue${END}"
 	read -r
 fi
 
