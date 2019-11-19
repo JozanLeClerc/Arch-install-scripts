@@ -368,7 +368,6 @@ read -r answr
 if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO ]]; then
 	ltskern=0
 fi
-clear
 answr=""
 echo && echo
 echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst-plugins ${BCYAN}as well? [y/N]"
