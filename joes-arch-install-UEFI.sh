@@ -370,7 +370,7 @@ if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO
 fi
 answr=""
 echo && echo
-echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst-plugins ${BCYAN}as well? [y/N]"
+echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst-plugins ${BCYAN}as well? [${BGREEN}Y${BCYAN}/${BRED}n${BCYAN}]"
 echo -n -e "${BYELLOW}> "
 read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
@@ -403,7 +403,7 @@ sleep 2
 #================================================================#
 
 clear
-echo "${BMAGENTA}\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #        2. Partitionning         #
