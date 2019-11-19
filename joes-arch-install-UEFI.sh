@@ -907,6 +907,7 @@ else
 	mkinitcpio -p linux-lts
 ARCH_CHROOT_CMDS
 fi
+echo -e "${BBLUE}"
 sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
