@@ -484,9 +484,37 @@ echo "\
 #=================================#"
 pacstrap /mnt/arch base base-devel pacman-contrib
 echo && echo
-echo "Base packages installed."
+echo -e "${BGREEN}Base packages installed."
 sleep 1
 clear
+echo -e "\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#     4.5. Installing useful      #
+#            packages             #
+#                                 #
+#=================================#"
+pacstrap /mnt/arch zip
+pacstrap /mnt/arch unzip
+pacstrap /mnt/arch p7zip
+pacstrap /mnt/arch vim
+pacstrap /mnt/arch mc
+pacstrap /mnt/arch alsa-utils
+pacstrap /mnt/arch syslog-ng
+pacstrap /mnt/arch mtools
+pacstrap /mnt/arch lsb-release
+pacstrap /mnt/arch ntfs-3g
+pacstrap /mnt/arch exfat-utils
+pacstrap /mnt/arch git
+pacstrap /mnt/arch zsh
+pacstrap /mnt/arch ntp
+pacstrap /mnt/arch cronie
+pacstrap /mnt/arch grub
+pacstrap /mnt/arch os-prober
+pacstrap /mnt/arch efibootmgr
+sleep 1
+clear
+echo -e "${BGREEN}Extra packages installed."
 echo "\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
@@ -496,12 +524,13 @@ echo "\
 genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #====== V. CONFIGURING LINUX =====#
 #                                 #
 #      1. Now changing root       #
 #                                 #
-#=================================#"
+#=================================#${END}"
+echo -e "${BBLUE}"
 sleep 2
 arch-chroot /mnt/arch << ARCH_CHROOT
 	clear
@@ -567,7 +596,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#     7. Setting up network       #
 	#                                 #
 	#=================================#
-	pacman -S networkmanager grub os-prober efibootmgr
+	pacman -S networkmanager
 	Y
 ARCH_CHROOT
 arch-chroot /mnt/arch << ARCH_CHROOT
@@ -584,13 +613,6 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	sleep 2
 ARCH_CHROOT
 arch-chroot /mnt/arch << ARCH_CHROOT
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#   9. Installing useful packages #
-	#                                 #
-	#=================================#
-	pacman -S zip unzip p7zip vim mc alsa-utils syslog-ng mtools dostools lsb-release ntfs-3g exfat-utils git zsh ntp cronie
 	sleep 2
 ARCH_CHROOT
 if [[ $somemore == "true" ]]; then
@@ -702,7 +724,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 ARCH_CHROOT
 echo && echo
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #========= WORK COMPLETE =========#
 #                                 #
 #     Your system should now      #
@@ -713,7 +735,7 @@ echo "\
 #                                 #
 #   Your system will now reboot   #
 #                                 #
-#=================================#"
+#=================================#${END}"
 echo && echo
 sleep 10
 umount -R /mnt/arch
