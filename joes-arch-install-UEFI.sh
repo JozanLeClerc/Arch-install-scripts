@@ -17,28 +17,29 @@ isusr="false"
 somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
+ltskern=1
 
 #==================================================================================================#
 #--------------------------------------- COLORS DECLARATION ---------------------------------------#
 #==================================================================================================#
 
-NBLACK="\033[0;30m"
-NRED="\033[0;31m"
-NGREEN="\033[0;32m"
-NYELLOW="\033[0;33m"
-NBLUE="\033[0;34m"
-NMAGENTA="\033[0;35m"
-NCYAN="\033[0;36m"
-NWHITE="\033[0;37m"
+#NBLACK="\033[0;30m"
+#NRED="\033[0;31m"
+#NGREEN="\033[0;32m"
+#NYELLOW="\033[0;33m"
+#NBLUE="\033[0;34m"
+#NMAGENTA="\033[0;35m"
+#NCYAN="\033[0;36m"
+#NWHITE="\033[0;37m"
 
-BBLACK="\033[1;30m"
+#BBLACK="\033[1;30m"
 BRED="\033[1;31m"
 BGREEN="\033[1;32m"
 BYELLOW="\033[1;33m"
 BBLUE="\033[1;34m"
 BMAGENTA="\033[1;35m"
 BCYAN="\033[1;36m"
-BWHITE="\033[1;37m"
+#BWHITE="\033[1;37m"
 
 END="\033[0;0m"
 
@@ -54,7 +55,7 @@ echo -e "${BMAGENTA}\
 #           ARCH LINUX            #
 #      UEFI INSTALL SCRIPT        #
 #                                 #
-#  (press [return] to begin...)   #
+#  (press ${BYELLOW}[return] ${BMAGENTA}to begin...)   #
 #                                 #
 #=================================#${END}"
 read -r
@@ -78,7 +79,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	echo && echo
 	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 	sleep 1
-	echo -e "${BRED}Aborting...${END}"
+	echo -e "${BCYAN}Aborting...${END}"
 	sleep 3
 	clear
 	exit
@@ -111,7 +112,7 @@ X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 else
 	echo -e "${BGREEN}Success!${END}"
 	echo
-	echo -e "${BCYAN}Press [retrun] key to continue${END}"
+	echo -e "${BCYAN}Press ${BYELLOW}[retrun] ${BCYAN}key to continue${END}"
 	read -r
 fi
 
@@ -138,7 +139,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		id=1
 		lsblk | grep disk | awk '{print "\033[1;34mDISK", " | ", "SIZE""\033[0m";}{print "\033[1;34m------+------\033[0m";}{print "\033[1;36m"$1 "\033[1;34m   | ", "\033[1;33m"$4;}'
 		echo && echo
-		echo -e "${BCYAN}Please choose the drive on which Arch Linux shoud be installed:${END}"
+		echo -e "${BCYAN}Please choose the ${BYELLOW}drive ${BCYAN}on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
 			echo -e "${BYELLOW}$id. $(lsblk | grep disk | awk '{print "\033[1;36m"$1"\033[0m";}' | sed -n "$id"p)"
 			((dn--))
@@ -176,9 +177,9 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	while [[ $swps == "" ]]; do
 		echo && echo
 		echo -e "${BCYAN}\
-Please enter your swap partition disired size:
+Please enter your ${BYELLOW}swap partition ${BCYAN}disired size:
 _G"
-		echo -n -e "> "
+		echo -n -e "${BYELLOW}> "
 		read -r swps
 		if [[ $swps == "" ]]; then
 			echo && echo
@@ -197,9 +198,9 @@ _G"
 	while [[ $rts == "" ]]; do
 		echo && echo
 		echo -e "${BCYAN}\
-Please enter your root partition disired size:
+Please enter your ${BYELLOW}root partition ${BCYAN}disired size:
 __G"
-		echo -n -e "${BCYAN}> "
+		echo -n -e "${BYELLOW}> "
 		read -r rts
 		if [[ $rts == "" ]]; then
 			echo && echo
@@ -222,14 +223,14 @@ __G"
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
-	echo -e "${BCYAN}Is that correct? [y/N]"
-	echo -n -e "${BCYAN}> "
+	echo -e "${BCYAN}Is that correct? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
+	echo -n -e "${BYELLOW}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
-		echo "Retrying..."
+		echo -e "${BCYAN}Retrying..."
 		echo
-		echo "Press [retrun] key to continue"
+		echo -e "Press ${BYELLOW}[retrun] ${BCYAN}key to continue${END}"
 		read -r
 	fi
 done
@@ -237,14 +238,14 @@ done
 answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
 	echo && echo
-	echo -e "${BRED}Disk $drv will be whiped. Are you sure you want to continue? [y/N]${END}"
+	echo -e "${BRED}Disk $drv will be whiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}${END}"
 	echo -n -e "${BRED}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
 		echo && echo
 		echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
 		sleep 1
-		echo -e "${BRED}Aborting...${END}"
+		echo -e "${BCYAN}Aborting...${END}"
 		sleep 3
 		clear
 		exit
@@ -265,11 +266,11 @@ while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
 #                                 #
 #=================================#${END}"
 	echo && echo
-	echo -e "${BCYAN}Enter your disired root password (can't be empty):"
-	echo -n -e "${BCYAN}> "
+	echo -e "${BCYAN}Enter your disired ${BYELLOW}root password ${BCYAN}(can't be empty):"
+	echo -n -e "${BYELLOW}> "
 	read -r -s rtpwd
 	echo && echo
-	echo -e "${BCYAN}Confirm root password:"
+	echo -e "${BCYAN}Confirm ${BYELLOW}root password${BCYAN}:"
 	echo -n -e "${BCYAN}> "
 	read -r -s rtrtpwd
 	if [[ $rtrtpwd != "$rtpwd" ]]; then
@@ -285,118 +286,105 @@ while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
 done
 
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #======= II. USERS SETUP =========#
 #                                 #
 #          2. User add            #
 #                                 #
-#=================================#"
+#=================================#${END}"
 echo && echo
-echo "Would you like to add a user to the system? [y/N]"
-echo -n "> " 
+echo -e "${BCYAN}Would you like to add a user to the system? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
+echo -n -e "${BYELLOW}> " 
 read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 	echo && echo
-	echo "Enter your desired username:"
-	echo -n "> "
+	echo -e "${BCYAN}Enter your desired ${BYELLOW}username:"
+	echo -n -e "> "
 	read -r usr
 	isusr="true"
 	usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
 	echo && echo
 	while [[ $usrusrpwd != "$usrpwd" || $usrpwd == "" ]]; do
-		echo "Enter your disired password for $usr (can't be empty):"
-		echo -n "> "
+		echo -e "${BCYAN}Enter your disired ${BYELLOW}password ${BCYAN}for ${BYELLOW}$usr${BCYAN} (can't be empty):"
+		echo -n -e "> "
 		read -r -s usrpwd
 		echo && echo
-		echo "Confirm user password:"
-		echo -n "> "
+		echo -e "${BCYAN}Confirm ${BYELLOW}user ${BCYAN}password:"
+		echo -n -e "> "
 		read -r -s usrusrpwd
 		if [[ $usrusrpwd != "$usrpwd" ]]; then
 			echo && echo
-			echo "Password mismatch, retrying..."
+			echo "${BRED}Password mismatch, retrying...${END}"
 			sleep 2
 		fi
 		if [[ $usrpwd == "" ]]; then
 			echo && echo
-			echo "Password is empty, retrying..."
+			echo "${BRED}Password is empty, retrying...${END}"
 			sleep 2
 		fi
 	done
 fi
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #======= II. USERS SETUP =========#
 #                                 #
 #          3. hostname            #
 #                                 #
-#=================================#"
+#=================================#${END}"
 while [[ $hstnm == "" ]]; do
 	echo && echo
-	echo "Enter your disired hostname for this terminal (can't be empty):"
-	echo -n "> "
+	echo -e "${BCYAN}Enter your disired ${BYELLOW}hostname ${BCYAN}for this terminal (can't be empty):"
+	echo -n -e "> "
 	read -r hstnm
 	if [[ $hstnm == "" ]]; then
 		echo && echo
-		echo "Hostname is empty, retrying..."
+		echo -e "${BRED}Hostname is empty, retrying...${END}"
 		sleep 2
 	fi
 done
 answr="n"
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #====== III. EXTRAS SETUP ========#
 #                                 #
 #            1. More              #
 #                                 #
-#=================================#"
+#=================================#${END}"
 echo && echo
-echo "Do you wish to install Xorg and gst-plugins as well? [y/N]"
-echo -n "> "
+echo -e "${BCYAN}Do you wish to install an ${BYELLOW}LTS Kernel${BCYAN}? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
+echo -n -e "${BYELLOW}> "
+read -r answr
+if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO ]]; then
+	ltskern=0
+fi
+clear
+answr=""
+echo && echo
+echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst-plugins ${BCYAN}as well? [y/N]"
+echo -n -e "${BYELLOW}> "
 read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 	somemore="true"
 fi
 clear
 answr=""
-lscpu | grep -q Intel
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
-	intelamdcpu="intel"
-fi
-lscpu | grep -q AMD
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
-	intelamdcpu="amd"
-fi
-lspci | grep -q Intel
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
-	intelamdgpu="intel"
-fi
-lspci | grep -q AMD
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
-	intelamdgpu="amd"
-fi
 
 #==================================================================================================#
 #-------------------------------------- THE ACTUAL INSTALL ----------------------------------------#
 #==================================================================================================#
 
-
 #================================================================#
 #--------------------------- NTP DATE ---------------------------#
 #================================================================#
 
-
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #        1. Setting date          #
 #             via ntp             #
 #                                 #
-#=================================#"
+#=================================#${END}"
 timedatectl set-ntp true > /dev/null
 sleep 2
 
@@ -405,19 +393,18 @@ sleep 2
 #================================================================#
 
 clear
-echo "\
+echo "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #        2. Partitionning         #
 #          disk $drv          #
 #                                 #
-#=================================#"
+#=================================#${END}"
 echo && echo
+echo -e "${BCYAN}Whiping disk. This step may take a while.${END}"
 basepartc=$(lsblk "$drv" | grep -c part)
 if [ "$basepartc" -ge 1 ]; then
 	i=1
-	echo "Whiping disk. This step may take a while."
-	echo && echo
 	while [[ $i -le $basepartc ]]; do
 		towhipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
 		dd if=/dev/zero of="$drv$towhipe" bs=1M status=progress > /dev/null 2>&1
@@ -426,7 +413,7 @@ if [ "$basepartc" -ge 1 ]; then
 fi
 dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
-echo "Whiping complete."
+echo -e "${BGREEN}Whiping complete.${END}"
 fdisk "$drv" << FDISK_INPUT
 g
 n
@@ -456,12 +443,12 @@ mkfs.ext4 "$drv""3" > /dev/null
 mkfs.ext4 "$drv""4" > /dev/null
 sleep 2
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #     3. Mounting partitions      #
 #                                 #
-#=================================#"
+#=================================#${END}"
 swapon "$drv""2" > /dev/null
 mkdir /mnt/arch > /dev/null
 mount "$drv""3" /mnt/arch > /dev/null
@@ -472,7 +459,7 @@ mkdir /mnt/arch/home > /dev/null
 mount "$drv""4" /mnt/arch/home > /dev/null
 sleep 2
 clear
-echo "\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #  4. Downloading base packages   #
@@ -481,19 +468,19 @@ echo "\
 #       Please be patient,        #
 #      this may take a while      #
 #                                 #
-#=================================#"
+#=================================#${END}"
 pacstrap /mnt/arch base base-devel pacman-contrib
 echo && echo
 echo -e "${BGREEN}Base packages installed."
 sleep 1
 clear
-echo -e "\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #     4.5. Installing useful      #
 #            packages             #
 #                                 #
-#=================================#"
+#=================================#${END}"
 pacstrap /mnt/arch zip
 pacstrap /mnt/arch unzip
 pacstrap /mnt/arch p7zip
@@ -513,18 +500,23 @@ pacstrap /mnt/arch cronie
 pacstrap /mnt/arch grub
 pacstrap /mnt/arch os-prober
 pacstrap /mnt/arch efibootmgr
-pacstrap /mnt/arch mkinitcpio
-pacstrap /mnt/arch linux-lts
-pacstrap /mnt/arch linux-lts-headers
+if [ $ltskern -eq 1 ]; then
+	pacstrap /mnt/arch linux-lts
+	pacstrap /mnt/arch linux-lts-headers
+else
+	pacstrap /mnt/arch mkinitcpio
+	pacstrap /mnt/arch linux
+	pacstrap /mnt/arch linux-headers
+fi
 sleep 1
 clear
 echo -e "${BGREEN}Extra packages installed."
-echo "\
+echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #       5. Generating fstab       #
 #                                 #
-#=================================#"
+#=================================#${END}"
 genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
 sleep 2
 clear
@@ -536,7 +528,7 @@ echo -e "${BMAGENTA}\
 #=================================#${END}"
 echo -e "${BBLUE}"
 sleep 2
-arch-chroot /mnt/arch << ARCH_CHROOT
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -602,8 +594,8 @@ $rtpwd
 	#=================================#
 	pacman -S networkmanager
 	Y
-ARCH_CHROOT
-arch-chroot /mnt/arch << ARCH_CHROOT
+ARCH_CHROOT_CMDS
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	systemctl enable NetworkManager
 	sleep 2
@@ -615,12 +607,9 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#=================================#
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	sleep 2
-ARCH_CHROOT
-arch-chroot /mnt/arch << ARCH_CHROOT
-	sleep 2
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 if [[ $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -631,10 +620,30 @@ if [[ $somemore == "true" ]]; then
 	#=================================#
 	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa xf86-video-vesa
 	Y
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
+fi
+lscpu | grep -q Intel
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
+	intelamdcpu="intel"
+fi
+lscpu | grep -q AMD
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
+	intelamdcpu="amd"
+fi
+lspci | grep -q Intel
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
+	intelamdgpu="intel"
+fi
+lspci | grep -q AMD
+tmpret=$?
+if [ $tmpret -eq 0 ]; then
+	intelamdgpu="amd"
 fi
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -646,11 +655,11 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-intel
 	Y
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 fi
 sleep 2
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -662,10 +671,10 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	#=================================#
 	pacman -S xf86-video-amdgpu
 	Y
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 fi
 if [[ $isusr = "true" ]]; then
-arch-chroot /mnt/arch << ARCH_CHROOT
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -680,10 +689,10 @@ $usrpwd
 	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 	sleep 2
 	exit
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 fi
 if [[ $intelamdcpu == "intel" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -693,10 +702,10 @@ if [[ $intelamdcpu == "intel" ]]; then
 	#=================================#
 	pacman -S intel-ucode
 	Y
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 fi
 if [[ $intelamdcpu == "amd" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
@@ -706,10 +715,22 @@ if [[ $intelamdcpu == "amd" ]]; then
 	#=================================#
 	pacman -S amd-ucode
 	Y
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 fi
 sleep 2
-arch-chroot /mnt/arch << ARCH_CHROOT
+if [ $ltskern -eq 0 ]; then
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	clear
+	#===== VI. CONFIGURING BOOT ======#
+	#                                 #
+	#       1. Configuring GRUB       #
+	#                                 #
+	#=================================#
+	mkinitcpio -p linux
+ARCH_CHROOT_CMDS
+fi
+sleep 2
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
@@ -725,7 +746,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	echo "exit" >> /boot/efi/startup.nsh
 	sleep 4
 	exit
-ARCH_CHROOT
+ARCH_CHROOT_CMDS
 echo && echo
 clear
 echo -e "${BMAGENTA}\
