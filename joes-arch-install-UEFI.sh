@@ -179,7 +179,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo && echo
 		echo -e "${BCYAN}\
 Please enter your ${BYELLOW}swap partition ${BCYAN}disired size:
-_G"
+__G"
 		echo -n -e "${BYELLOW}> "
 		read -r swps
 		if [[ $swps == "" ]]; then
@@ -228,7 +228,7 @@ if [ $rts -ge 100 ]; then
 else
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#"
 fi
-"#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
+echo -e "#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
