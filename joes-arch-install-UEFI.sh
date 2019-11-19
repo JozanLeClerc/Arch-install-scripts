@@ -249,7 +249,7 @@ done
 answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
 	echo && echo
-	echo -e "${BRED}Disk $drv will be wiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}${END}"
+	echo -e "${BRED}Disk ${BYELLOW}$drv ${BRED}will be wiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}]${END}"
 	echo -n -e "${BRED}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
