@@ -5,7 +5,7 @@ My original script meant to automate your Arch Linux installation process. The s
 
 /Note:/ while the script simplifies the whole installation process, this is not made for new users. It is meant for users that already performed *Arch Linux* installations and more or less understand what's going on. It's always best to learn Arch by yourself.
 
-/Note:/  the script does not install too many bloatware other than some utils. You will be prompted to choose whether or not you want ~Xorg~ and other classic desktop user extras.
+/Note:/  the script does not install too many bloatware other than some utils. You will be prompted to choose whether or not you want ~Xorg~ and other classic desktop user experience extras.
 
 /Note:/ only *UEFI-type installation* is supported at the moment. *BIOS version* soon to come.
 
