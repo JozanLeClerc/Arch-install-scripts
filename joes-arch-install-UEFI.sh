@@ -502,6 +502,7 @@ pacstrap /mnt/arch mc
 pacstrap /mnt/arch alsa-utils
 pacstrap /mnt/arch syslog-ng
 pacstrap /mnt/arch mtools
+pacstrap /mnt/arch dostools
 pacstrap /mnt/arch lsb-release
 pacstrap /mnt/arch ntfs-3g
 pacstrap /mnt/arch exfat-utils
@@ -512,6 +513,9 @@ pacstrap /mnt/arch cronie
 pacstrap /mnt/arch grub
 pacstrap /mnt/arch os-prober
 pacstrap /mnt/arch efibootmgr
+pacstrap /mnt/arch mkinitcpio
+pacstrap /mnt/arch linux-lts
+pacstrap /mnt/arch linux-lts-headers
 sleep 1
 clear
 echo -e "${BGREEN}Extra packages installed."
@@ -587,8 +591,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT
 	#                                 #
 	#=================================#
 	passwd
-"$rtpwd"
-"$rtpwd"
+$rtpwd
+$rtpwd
 	sleep 2
 	clear
 	#===== IV. CONFIGURING LINUX =====#
