@@ -18,7 +18,7 @@ Secondly, you will require a working internet connection. To *try your connectio
 ping -c4 archlinux.org
 #+END_SRC
 
-If it fails, refer to [[https://wiki.archlinux.org/index.php/Installation_guide#Connect_to_the_internet][the Arch Wiki installation guide]] to get an internet connection working.
+If this fails, refer to [[https://wiki.archlinux.org/index.php/Installation_guide#Connect_to_the_internet][the Arch Wiki installation guide]] to get an internet connection working.
 
 Now you are ready to run the script. Run *the following commands* to begin setup and installation:
 
