@@ -473,7 +473,6 @@ echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #  4. Downloading base packages   #
-#          (about 300M)           #
 #                                 #
 #       Please be patient,        #
 #      this may take a while      #
