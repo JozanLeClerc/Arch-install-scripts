@@ -318,17 +318,17 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 		echo -n -e "> "
 		read -r -s usrpwd
 		echo && echo
-		echo -e "${BCYAN}Confirm ${BYELLOW}user ${BCYAN}password:"
+		echo -e "${BCYAN}Confirm ${BYELLOW}user password:${BCYAN}"
 		echo -n -e "> "
 		read -r -s usrusrpwd
 		if [[ $usrusrpwd != "$usrpwd" ]]; then
 			echo && echo
-			echo "${BRED}Password mismatch, retrying...${END}"
+			echo -e "${BRED}Password mismatch, retrying...${END}"
 			sleep 2
 		fi
 		if [[ $usrpwd == "" ]]; then
 			echo && echo
-			echo "${BRED}Password is empty, retrying...${END}"
+			echo -e "${BRED}Password is empty, retrying...${END}"
 			sleep 2
 		fi
 	done
