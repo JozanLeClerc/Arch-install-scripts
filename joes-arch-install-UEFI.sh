@@ -351,7 +351,7 @@ echo -e "${BMAGENTA}\
 #                                 #
 #=================================#${END}"
 echo && echo
-echo -e "${BCYAN}Do you wish to install an ${BYELLOW}LTS Kernel${BCYAN}? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
+echo -e "${BCYAN}Do you wish to install an ${BYELLOW}LTS Kernel${BCYAN}? [${BGREEN}Y${BCYAN}/${BRED}n${BCYAN}]"
 echo -n -e "${BYELLOW}> "
 read -r answr
 if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO ]]; then
