@@ -137,7 +137,8 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		echo && echo
 		dn=$(lsblk | grep -c disk)
 		id=1
-		lsblk | grep disk | awk '{print "\033[1;34mDISK", " | ", "SIZE""\033[0m";}{print "\033[1;34m------+------\033[0m";}{print "\033[1;36m"$1 "\033[1;34m   | ", "\033[1;33m"$4;}'
+		echo "${BBLUE}DISK  |  SIZE\n------+--------${END}"
+		lsblk | grep disk | awk '{print "\033[1;36m"$1 "\033[1;34m   | ", "\033[1;33m"$4;}'
 		echo && echo
 		echo -e "${BCYAN}Please choose the ${BYELLOW}drive ${BCYAN}on which Arch Linux shoud be installed:${END}"
 		while [[ $dn != 0 ]]; do
