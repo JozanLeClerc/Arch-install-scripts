@@ -249,7 +249,7 @@ done
 answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
 	echo && echo
-	echo -e "${BRED}Disk $drv will be whiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}${END}"
+	echo -e "${BRED}Disk $drv will be wiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}${END}"
 	echo -n -e "${BRED}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
@@ -411,19 +411,19 @@ echo -e "${BMAGENTA}\
 #                                 #
 #=================================#${END}"
 echo && echo
-echo -e "${BCYAN}Whiping disk. This step may take a while.${END}"
+echo -e "${BCYAN}Wiping disk. This step may take a while.${END}"
 basepartc=$(lsblk "$drv" | grep -c part)
 if [ "$basepartc" -ge 1 ]; then
 	i=1
 	while [[ $i -le $basepartc ]]; do
-		towhipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
-		dd if=/dev/zero of="$drv$towhipe" bs=1M status=progress > /dev/null 2>&1
+		towipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
+		dd if=/dev/zero of="$drv$towipe" bs=1M status=progress > /dev/null 2>&1
 		((i++))
 	done
 fi
 dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
-echo -e "${BGREEN}Whiping complete.${END}"
+echo -e "${BGREEN}Wiping complete.${END}"
 fdisk "$drv" << FDISK_INPUT
 g
 n
