@@ -304,7 +304,7 @@ echo -e "${BMAGENTA}\
 #                                 #
 #=================================#${END}"
 echo && echo
-echo -e "${BCYAN}Would you like to add a user to the system? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
+echo -e "${BCYAN}Would you like to add a user to the system? (will automatically receive sudo rights) [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
 echo -n -e "${BYELLOW}> " 
 read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
