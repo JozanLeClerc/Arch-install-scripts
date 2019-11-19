@@ -23,7 +23,7 @@ If it fails, refer to [[https://wiki.archlinux.org/index.php/Installation_guide#
 Now you are ready to run the script. Run *the following commands* to begin setup and installation:
 
 #+BEGIN_SRC shell
-wget https://raw.githubusercontenent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install-UEFI.sh
+wget https://raw.githubusercontent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install-UEFI.sh
 chmod +x joes-arch-install-UEFI.sh
 ./joes-arch-install-UEFI.sh
 #+END_SRC
