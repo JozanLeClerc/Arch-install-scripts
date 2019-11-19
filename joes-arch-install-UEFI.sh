@@ -258,28 +258,28 @@ answr="n"
 
 while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
 	clear
-	echo "\
+	echo -e "${BMAGENTA}\
 #======= II. USERS SETUP =========#
 #                                 #
 #        1. root password         #
 #                                 #
-#=================================#"
+#=================================#${END}"
 	echo && echo
-	echo "Enter your disired root password (can't be empty):"
-	echo -n "> "
+	echo -e "${BCYAN}Enter your disired root password (can't be empty):"
+	echo -n -e "${BCYAN}> "
 	read -r -s rtpwd
 	echo && echo
-	echo "Confirm root password:"
-	echo -n "> "
+	echo -e "${BCYAN}Confirm root password:"
+	echo -n -e "${BCYAN}> "
 	read -r -s rtrtpwd
 	if [[ $rtrtpwd != "$rtpwd" ]]; then
 		echo && echo
-		echo "Password mismatch, retrying..."
+		echo -e "${BRED}Password mismatch, retrying...${END}"
 		sleep 2
 	fi
 	if [[ $rtpwd = "" ]]; then
 		echo && echo
-		echo "Password is empty, retrying..."
+		echo -e "${BRED}Password is empty, retrying...${END}"
 		sleep 2
 	fi
 done
