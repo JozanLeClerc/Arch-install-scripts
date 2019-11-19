@@ -218,12 +218,12 @@ __G"
 #                DRIVE TO USE: ${BCYAN}$drv               ${BMAGENTA}#
 #                                                     #
 #  /boot/efi > BOOT partition size: ${BYELLOW}$btsze              ${BMAGENTA}#"
-if [ $swps -ge 10 ]; then
+if [ "$swps" -ge 10 ]; then
 	echo -e "#              SWAP partition size: ${BYELLOW}$swpsze               ${BMAGENTA}#"
 else
 	echo -e "#              SWAP partition size: ${BYELLOW}$swpsze                ${BMAGENTA}#"
 fi
-if [ $rts -ge 100 ]; then
+if [ "$rts" -ge 100 ]; then
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze              ${BMAGENTA}#"
 else
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#"
