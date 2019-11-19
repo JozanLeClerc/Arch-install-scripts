@@ -215,10 +215,10 @@ __G"
 #                                                     #
 #                DRIVE TO USE: ${BCYAN}$drv               ${BMAGENTA}#
 #                                                     #
-#  /boot/efi > BOOT partition size: ${BCYAN}$btsze              ${BMAGENTA}#
-#              SWAP partition size: ${BCYAN}$swpsze                ${BMAGENTA}#
-#  /         > ROOT partition size: ${BCYAN}$rtsze               ${BMAGENTA}#
-#  /home     > HOME partition size: ${BCYAN}all that remains  ${BMAGENTA}#
+#  /boot/efi > BOOT partition size: ${BYELLOW}$btsze              ${BMAGENTA}#
+#              SWAP partition size: ${BYELLOW}$swpsze                ${BMAGENTA}#
+#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#
+#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
 #                                                     #
 #=====================================================#${END}"
 	echo && echo
