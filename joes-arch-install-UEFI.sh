@@ -510,11 +510,11 @@ pacstrap /mnt/arch cronie
 pacstrap /mnt/arch grub
 pacstrap /mnt/arch os-prober
 pacstrap /mnt/arch efibootmgr
+pacstrap /mnt/arch mkinitcpio
 if [ $ltskern -eq 1 ]; then
 	pacstrap /mnt/arch linux-lts
 	pacstrap /mnt/arch linux-lts-headers
 else
-	pacstrap /mnt/arch mkinitcpio
 	pacstrap /mnt/arch linux
 	pacstrap /mnt/arch linux-headers
 fi
@@ -729,14 +729,24 @@ ARCH_CHROOT_CMDS
 fi
 sleep 2
 if [ $ltskern -eq 0 ]; then
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
-	#       1. Configuring GRUB       #
+	#    1. Configuring the Kernel    #
 	#                                 #
 	#=================================#
 	mkinitcpio -p linux
+ARCH_CHROOT_CMDS
+else
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	clear
+	#===== VI. CONFIGURING BOOT ======#
+	#                                 #
+	#    1. Configuring the Kernel    #
+	#                                 #
+	#=================================#
+	mkinitcpio -p linux-lts
 ARCH_CHROOT_CMDS
 fi
 sleep 2
@@ -744,7 +754,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
-	#       1. Configuring GRUB       #
+	#       2. Configuring GRUB       #
 	#                                 #
 	#=================================#
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
