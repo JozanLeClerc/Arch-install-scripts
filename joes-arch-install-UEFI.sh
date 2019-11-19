@@ -225,7 +225,7 @@ else
 fi
 if [ "$rts" -ge 100 ]; then
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze              ${BMAGENTA}#"
-else if [ "$rts" -ge 10 ]; then
+elif [ "$rts" -ge 10 ]; then
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#"
 else
 	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze                ${BMAGENTA}#"
