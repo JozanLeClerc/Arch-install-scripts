@@ -750,7 +750,7 @@ ARCH_CHROOT_CMDS
 echo && echo
 clear
 echo -e "${BMAGENTA}\
-#========= WORK COMPLETE =========#
+#========= ${BGREEN}WORK COMPLETE ${BMAGENTA}=========#
 #                                 #
 #     Your system should now      #
 #         be installed.           #
