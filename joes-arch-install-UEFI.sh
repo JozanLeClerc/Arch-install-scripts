@@ -482,8 +482,11 @@ echo -e "${BMAGENTA}\
 echo && echo
 echo -e "${BCYAN}Installing ${BYELLOW}base packages${END}"
 pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null
+tmpretq=$?
 echo && echo
-echo -e "${BGREEN}Base packages installed${END}"
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}Base packages installed${END}"
+fi
 sleep 1
 clear
 #================================================================#
@@ -499,100 +502,172 @@ echo -e "${BMAGENTA}\
 echo && echo
 echo -e "${BCYAN}Installing ${BYELLOW}zip${END}"
 pacstrap /mnt/arch zip > /dev/null
-echo -e "${BGREEN}zip installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}zip installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}unzip${END}"
 pacstrap /mnt/arch unzip > /dev/null
-echo -e "${BGREEN}unzip installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}unzip installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}p7zip${END}"
 pacstrap /mnt/arch p7zip > /dev/null
-echo -e "${BGREEN}p7zip installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}p7zip installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}vim${END}"
 pacstrap /mnt/arch vim > /dev/null
-echo -e "${BGREEN}vim installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}vim installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mc${END}"
 pacstrap /mnt/arch mc > /dev/null
-echo -e "${BGREEN}mc installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}mc installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}alsa-utils${END}"
 pacstrap /mnt/arch alsa-utils > /dev/null
-echo -e "${BGREEN}alsa-utils installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}alsa-utils installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
 pacstrap /mnt/arch syslog-ng > /dev/null
-echo -e "${BGREEN}syslog-ng installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}syslog-ng installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mtools${END}"
 pacstrap /mnt/arch mtools > /dev/null
-echo -e "${BGREEN}mtools installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}mtools installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}dostools${END}"
 pacstrap /mnt/arch dostools > /dev/null
-echo -e "${BGREEN}dostools installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}dostools installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}lsb-release${END}"
 pacstrap /mnt/arch lsb-release > /dev/null
-echo -e "${BGREEN}lsb-release installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}lsb-release installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}ntfs-3g${END}"
 pacstrap /mnt/arch ntfs-3g > /dev/null
-echo -e "${BGREEN}ntfs-3g installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}ntfs-3g installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}exfat-utils${END}"
 pacstrap /mnt/arch exfat-utils > /dev/null
-echo -e "${BGREEN}exfat-utils installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}exfat-utils installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}git${END}"
 pacstrap /mnt/arch git > /dev/null
-echo -e "${BGREEN}git installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}git installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}zsh${END}"
 pacstrap /mnt/arch zsh > /dev/null
-echo -e "${BGREEN}zsh installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}zsh installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}ntp${END}"
 pacstrap /mnt/arch ntp > /dev/null
-echo -e "${BGREEN}ntp installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}ntp installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}cronie${END}"
 pacstrap /mnt/arch cronie > /dev/null
-echo -e "${BGREEN}cronie installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}cronie installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}grub${END}"
 pacstrap /mnt/arch grub > /dev/null
-echo -e "${BGREEN}grub installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}grub installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}os-prober${END}"
 pacstrap /mnt/arch os-prober > /dev/null
-echo -e "${BGREEN}os-prober installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}os-prober installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}efibootmgr${END}"
 pacstrap /mnt/arch efibootmgr > /dev/null
-echo -e "${BGREEN}efibootmgr installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}efibootmgr installed${END}"
+fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mkinitcpio${END}"
 pacstrap /mnt/arch mkinitcpio > /dev/null
-echo -e "${BGREEN}mkinitcpio installed${END}"
+tmpretq=$?
+if [ $tmpretq -eq 0 ]; then
+	echo -e "${BGREEN}mkinitcpio installed${END}"
+fi
 echo
 if [ $ltskern -eq 1 ]; then
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts${END}"
 	pacstrap /mnt/arch linux-lts > /dev/null
-	echo -e "${BGREEN}linux-lts installed${END}"
+	tmpretq=$?
+	if [ $tmpretq -eq 0 ]; then
+		echo -e "${BGREEN}linux-lts installed${END}"
+	fi
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts-headers${END}"
 	echo
 	pacstrap /mnt/arch linux-lts-headers > /dev/null
-	echo -e "${BGREEN}linux-lts-headers installed${END}"
+	tmpretq=$?
+	if [ $tmpretq -eq 0 ]; then
+		echo -e "${BGREEN}linux-lts-headers installed${END}"
+	fi
 else
 	echo -e "${BCYAN}Installing ${BYELLOW}linux${END}"
 	pacstrap /mnt/arch linux > /dev/null
-	echo -e "${BGREEN}linux installed${END}"
+	tmpretq=$?
+	if [ $tmpretq -eq 0 ]; then
+		echo -e "${BGREEN}linux installed${END}"
+	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-headers${END}"
 	pacstrap /mnt/arch linux-headers > /dev/null
-	echo -e "${BGREEN}linux-headers installed${END}"
+	tmpretq=$?
+	if [ $tmpretq -eq 0 ]; then
+		echo -e "${BGREEN}linux-headers installed${END}"
+	fi
 fi
 echo && echo
 echo -e "${BGREEN}Extra packages installed.${END}"
