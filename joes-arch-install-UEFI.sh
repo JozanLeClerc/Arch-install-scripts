@@ -86,7 +86,7 @@ fi
 clear
 echo -e "${BCYAN}Verifying that your are connected to the Internet, please wait...${END}"
 
-wget -q --spider https://archlinux.org > /dev/null
+wget -q --spider https://www.archlinux.org > /dev/null
 tmpret=$?
 if [ $tmpret -ne 0 ]; then
 	clear
