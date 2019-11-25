@@ -496,8 +496,8 @@ clear
 echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
-#      5. Installing useful       #
-#            packages             #
+#  5. Installing useful packages  #
+#      so you don't have to       #
 #                                 #
 #=================================#${END}"
 echo && echo
