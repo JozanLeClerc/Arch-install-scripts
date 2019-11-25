@@ -494,7 +494,7 @@ clear
 echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
-#     4.5. Installing useful      #
+#      5. Installing useful       #
 #            packages             #
 #                                 #
 #=================================#${END}"
@@ -654,13 +654,155 @@ echo && echo
 echo -e "${BGREEN}Extra packages installed.${END}"
 sleep 4
 #================================================================#
+#------------------------ EXTRA DOWNLOAD ------------------------#
+#================================================================#
+if [[ $somemore == "true" ]]; then
+	clear
+	echo -e "${BMAGENTA}\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#         5.5 Installing          #
+#        some more utils          #
+#     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
+#                                 #
+#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}gst-plugins-{base,good,bad,ugly}${END}"
+	pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}gst-plugins-{base,good,bad,ugly} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}gst-libav xorg-{server,xinit,apps}${END}"
+	pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}gst-libav xorg-{server,xinit,apps} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-input-{mouse,keyboard}${END}"
+	pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-input-{mouse,keyboard} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xdg-user-dirs${END}"
+	pacstrap /mnt/arch xdg-user-dirs > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xdg-user-dirs installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}mesa${END}"
+	pacstrap /mnt/arch mesa > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}mesa installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-vesa${END}"
+	pacstrap /mnt/arch xf86-video-vesa > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-vesa installed${END}"
+	fi
+	sleep 2
+fi
+lscpu | grep -q Intel
+if [ $? -eq 0 ]; then
+	intelamdcpu="intel"
+fi
+lscpu | grep -q AMD
+if [ $? -eq 0 ]; then
+	intelamdcpu="amd"
+fi
+lspci | grep -q Intel
+if [ $? -eq 0 ]; then
+	intelamdgpu="intel"
+fi
+lspci | grep -q AMD
+if [ $? -eq 0 ]; then
+	intelamdgpu="amd"
+fi
+#================================================================#
+#--------------------- GPU DRIVERS DOWNLOAD ---------------------#
+#================================================================#
+if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
+	clear
+	echo -e "${BMAGENTA}\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#        5.5 Installing           #
+#        some more utils          #
+#         (${BYELLOW}xf86-video${BMAGENTA})            #
+#                                 #
+#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-intel${END}"
+	pacstrap /mnt/arch xf86-video-intel > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-intel installed${END}"
+	fi
+fi
+sleep 2
+if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
+	sleep 2
+	clear
+	echo -e "${BMAGENTA}\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#        5.5 Installing           #
+#        some more utils          #
+#         (${BYELLOW}xf86-video${BMAGENTA})            #
+#                                 #
+#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu ${END}"
+	pacstrap /mnt/arch xf86-video-amdgpu > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
+	fi
+fi
+#================================================================#
+#-------------------- CPU MICROCODE DOWNLOAD --------------------#
+#================================================================#
+if [[ $intelamdcpu == "intel" ]]; then
+	clear
+	echo -e "${BMAGENTA}\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#       6. Installing CPU         #
+#           microcode             #
+#                                 #
+#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}intel-ucode${END}"
+	pacstrap /mnt/arch intel-ucode > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}intel-ucode${END}"
+	fi
+fi
+if [[ $intelamdcpu == "amd" ]]; then
+	clear
+	echo -e "${BMAGENTA}\
+#====== IV. INSTALLING LINUX =====#
+#                                 #
+#       6. Installing CPU         #
+#           microcode             #
+#                                 #
+#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}amd-ucode${END}"
+	pacstrap /mnt/arch amd-ucode > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}amd-ucode${END}"
+	fi
+fi
+sleep 2
+#================================================================#
 #------------------------ FSTAB CONFIG  -------------------------#
 #================================================================#
 clear
 echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
-#       5. Generating fstab       #
+#       7. Generating fstab       #
 #                                 #
 #=================================#${END}"
 genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
@@ -745,106 +887,6 @@ $rtpwd
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	sleep 2
 ARCH_CHROOT_CMDS
-if [[ $somemore == "true" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#         8. Installing           #
-	#        some more utils          #
-	#     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
-	#                                 #
-	#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}gst-plugins-{base,good,bad,ugly}${END}"
-	pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}gst-plugins-{base,good,bad,ugly} installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}gst-libav xorg-{server,xinit,apps}${END}"
-	pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}gst-libav xorg-{server,xinit,apps} installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-input-{mouse,keyboard}${END}"
-	pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}xf86-input-{mouse,keyboard} installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xdg-user-dirs${END}"
-	pacstrap /mnt/arch xdg-user-dirs > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}xdg-user-dirs installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}mesa${END}"
-	pacstrap /mnt/arch mesa > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}mesa installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-vesa${END}"
-	pacstrap /mnt/arch xf86-video-vesa > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}xf86-video-vesa installed${END}"
-	fi
-	sleep 2
-fi
-lscpu | grep -q Intel
-if [ $? -eq 0 ]; then
-	intelamdcpu="intel"
-fi
-lscpu | grep -q AMD
-if [ $? -eq 0 ]; then
-	intelamdcpu="amd"
-fi
-lspci | grep -q Intel
-if [ $? -eq 0 ]; then
-	intelamdgpu="intel"
-fi
-lspci | grep -q AMD
-if [ $? -eq 0 ]; then
-	intelamdgpu="amd"
-fi
-if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#        8.5 Installing           #
-	#        some more utils          #
-	#         (xf86-video)            #
-	#                                 #
-	#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-intel${END}"
-	pacstrap /mnt/arch xf86-video-intel > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}xf86-video-intel installed${END}"
-	fi
-fi
-sleep 2
-if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	sleep 2
-	clear
-	echo -e "${BMAGENTA}\
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#        8.5 Installing           #
-	#        some more utils          #
-	#         (xf86-video)            #
-	#                                 #
-	#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu ${END}"
-	pacstrap /mnt/arch xf86-video-amdgpu > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
-	fi
-fi
 if [[ $isusr = "true" ]]; then
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
@@ -863,39 +905,6 @@ $usrpwd
 	exit
 ARCH_CHROOT_CMDS
 fi
-if [[ $intelamdcpu == "intel" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#      10. Installing CPU         #
-	#           microcode             #
-	#                                 #
-	#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}intel-ucode${END}"
-	pacstrap /mnt/arch intel-ucode > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}intel-ucode${END}"
-	fi
-fi
-if [[ $intelamdcpu == "amd" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#      11. Installing CPU         #
-	#           microcode             #
-	#                                 #
-	#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}amd-ucode${END}"
-	pacstrap /mnt/arch amd-ucode > /dev/null
-	if [ $? -eq 0 ]; then
-		echo -e "${BGREEN}amd-ucode${END}"
-	fi
-fi
-sleep 2
 if [ $ltskern -eq 0 ]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
