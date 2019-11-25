@@ -409,10 +409,12 @@ if [ "$basepartc" -ge 1 ]; then
 	i=1
 	while [[ $i -le $basepartc ]]; do
 		towipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
+		echo -e "${BCYAN}Wiping $drv$towipe...${END}"
 		dd if=/dev/zero of="$drv$towipe" bs=1M status=progress > /dev/null 2>&1
 		((i++))
 	done
 fi
+echo -e "${BCYAN}Wiping $drv...${END}"
 dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
 echo -e "${BGREEN}Wiping complete.${END}"
