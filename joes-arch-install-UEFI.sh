@@ -719,7 +719,7 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 #                                 #
 #=================================#${END}"
 	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu ${END}"
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu${END}"
 	if ! pacstrap /mnt/arch xf86-video-amdgpu > /dev/null; then
 		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
 	fi
