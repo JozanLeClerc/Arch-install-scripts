@@ -475,7 +475,7 @@ clear
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
-if [ ! pacstrap /mnt/arch syslog-ng > /dev/null ]; then
+if [ ! "$(pacstrap /mnt/arch syslog-ng > /dev/null)" ]; then
 	echo -e "${BGREEN}syslog-ng installed${END}"
 fi
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
