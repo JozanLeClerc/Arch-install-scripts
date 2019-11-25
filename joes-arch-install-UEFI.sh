@@ -470,6 +470,17 @@ mkdir /mnt/arch/home > /dev/null
 mount "$drv""4" /mnt/arch/home > /dev/null
 sleep 2
 clear
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+#------------------------ DELETE THIS ---------------------------#
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+echo
+echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
+if [ ! pacstrap /mnt/arch syslog-ng > /dev/null ]; then
+	echo -e "${BGREEN}syslog-ng installed${END}"
+fi
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+#------------------------ DELETE THIS ---------------------------#
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
 #================================================================#
 #------------------------ BASE DOWNLOAD -------------------------#
 #================================================================#
