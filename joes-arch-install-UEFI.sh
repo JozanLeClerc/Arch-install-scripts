@@ -417,6 +417,7 @@ fi
 echo -e "${BCYAN}Wiping $drv...${END}"
 dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
+echo && echo
 echo -e "${BGREEN}Wiping complete.${END}"
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
@@ -627,7 +628,7 @@ else
 	fi
 fi
 echo && echo
-echo -e "${BGREEN}Extra packages installed.${END}"
+echo -e "${BGREEN}Utils installed.${END}"
 sleep 4
 #================================================================#
 #------------------------ EXTRA DOWNLOAD ------------------------#
@@ -672,7 +673,9 @@ if [[ $somemore == "true" ]]; then
 	if ! pacstrap /mnt/arch xf86-video-vesa > /dev/null; then
 		echo -e "${BGREEN}xf86-video-vesa installed${END}"
 	fi
-	sleep 2
+	echo && echo
+	echo -e "${BGREEN}Extra packages installed.${END}"
+	sleep 4
 fi
 if ! lscpu | grep -q Intel; then
 	intelamdcpu="intel"
