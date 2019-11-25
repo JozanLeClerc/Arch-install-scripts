@@ -482,11 +482,10 @@ echo -e "${BMAGENTA}\
 echo && echo
 echo -e "${BCYAN}Installing ${BYELLOW}base packages${END}"
 pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null
-tmpretq=$?
-echo && echo
-if [ $tmpretq -eq 0 ]; then
+if [ $? -eq 0 ]; then
 	echo -e "${BGREEN}Base packages installed${END}"
 fi
+echo && echo
 sleep 1
 clear
 #================================================================#
@@ -516,6 +515,12 @@ echo -e "${BCYAN}Installing ${BYELLOW}p7zip${END}"
 pacstrap /mnt/arch p7zip > /dev/null
 if [ $? -eq 0 ]; then
 	echo -e "${BGREEN}p7zip installed${END}"
+fi
+echo
+echo -e "${BCYAN}Installing ${BYELLOW}NetworkManager${END}"
+pacstrap /mnt/arch networkmanager > /dev/null
+if [ $? -eq 0 ]; then
+	echo -e "${BGREEN}NetworkManager installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}vim${END}"
@@ -729,18 +734,6 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	passwd
 $rtpwd
 $rtpwd
-	sleep 2
-	clear
-	#===== IV. CONFIGURING LINUX =====#
-	#                                 #
-	#     7. Setting up network       #
-	#                                 #
-	#=================================#
-	pacman -S networkmanager
-	Y
-ARCH_CHROOT_CMDS
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	sleep 2
 	systemctl enable NetworkManager
 	sleep 2
 	clear
@@ -753,69 +746,104 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 ARCH_CHROOT_CMDS
 if [[ $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
+	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#         9. Installing           #
 	#        some more utils          #
-	#     (gst plugins, Xorg...)      #
+	#     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
 	#                                 #
-	#=================================#
-	pacman -S gst-plugins-{base,good,bad,ugly} gst-libav xorg-{server,xinit,apps} xf86-input-{mouse,keyboard} xdg-user-dirs mesa xf86-video-vesa
-	Y
-ARCH_CHROOT_CMDS
+	#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}gst-plugins-{base,good,bad,ugly}${END}"
+	pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}gst-plugins-{base,good,bad,ugly} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}gst-libav xorg-{server,xinit,apps}${END}"
+	pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}gst-libav xorg-{server,xinit,apps} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-input-{mouse,keyboard}${END}"
+	pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-input-{mouse,keyboard} installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xdg-user-dirs${END}"
+	pacstrap /mnt/arch xdg-user-dirs > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xdg-user-dirs installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}mesa${END}"
+	pacstrap /mnt/arch mesa > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}mesa installed${END}"
+	fi
+	echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-vesa${END}"
+	pacstrap /mnt/arch xf86-video-vesa > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-vesa installed${END}"
+	fi
+	sleep 2
 fi
 lscpu | grep -q Intel
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
+if [ $? -eq 0 ]; then
 	intelamdcpu="intel"
 fi
 lscpu | grep -q AMD
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
+if [ $? -eq 0 ]; then
 	intelamdcpu="amd"
 fi
 lspci | grep -q Intel
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
+if [ $? -eq 0 ]; then
 	intelamdgpu="intel"
 fi
 lspci | grep -q AMD
-tmpret=$?
-if [ $tmpret -eq 0 ]; then
+if [ $? -eq 0 ]; then
 	intelamdgpu="amd"
 fi
 if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	sleep 2
 	clear
+	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#        9.5 Installing           #
 	#        some more utils          #
 	#         (xf86-video)            #
 	#                                 #
-	#=================================#
-	pacman -S xf86-video-intel
-	Y
-ARCH_CHROOT_CMDS
+	#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-intel${END}"
+	pacstrap /mnt/arch xf86-video-intel > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-intel installed${END}"
+	fi
 fi
 sleep 2
 if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
+	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#        9.5 Installing           #
 	#        some more utils          #
 	#         (xf86-video)            #
 	#                                 #
-	#=================================#
-	pacman -S xf86-video-amdgpu
-	Y
-ARCH_CHROOT_CMDS
+	#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu ${END}"
+	pacstrap /mnt/arch xf86-video-amdgpu > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
+	fi
 fi
 if [[ $isusr = "true" ]]; then
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
@@ -836,30 +864,36 @@ $usrpwd
 ARCH_CHROOT_CMDS
 fi
 if [[ $intelamdcpu == "intel" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
+	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#      11. Installing CPU         #
 	#           microcode             #
 	#                                 #
-	#=================================#
-	pacman -S intel-ucode
-	Y
-ARCH_CHROOT_CMDS
+	#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}intel-ucode${END}"
+	pacstrap /mnt/arch intel-ucode > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}intel-ucode${END}"
+	fi
 fi
 if [[ $intelamdcpu == "amd" ]]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
+	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
 	#      11. Installing CPU         #
 	#           microcode             #
 	#                                 #
-	#=================================#
-	pacman -S amd-ucode
-	Y
-ARCH_CHROOT_CMDS
+	#=================================#${END}"
+	echo && echo
+	echo -e "${BCYAN}Installing ${BYELLOW}amd-ucode${END}"
+	pacstrap /mnt/arch amd-ucode > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "${BGREEN}amd-ucode${END}"
+	fi
 fi
 sleep 2
 if [ $ltskern -eq 0 ]; then
