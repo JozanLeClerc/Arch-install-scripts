@@ -679,14 +679,12 @@ if [[ $somemore == "true" ]]; then
 fi
 if ! lscpu | grep -q Intel; then
 	intelamdcpu="intel"
-fi
-if ! lscpu | grep -q AMD; then
+elif ! lscpu | grep -q AMD; then
 	intelamdcpu="amd"
 fi
 if ! lspci | grep -q Intel; then
 	intelamdgpu="intel"
-fi
-if ! lspci | grep -q AMD; then
+elif ! lspci | grep -q AMD; then
 	intelamdgpu="amd"
 fi
 #================================================================#
