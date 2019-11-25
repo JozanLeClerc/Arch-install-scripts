@@ -739,7 +739,7 @@ $rtpwd
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#        8. journald stuff        #
+	#        7. journald stuff        #
 	#                                 #
 	#=================================#
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
@@ -750,7 +750,7 @@ if [[ $somemore == "true" ]]; then
 	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#         9. Installing           #
+	#         8. Installing           #
 	#        some more utils          #
 	#     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
 	#                                 #
@@ -814,7 +814,7 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#        9.5 Installing           #
+	#        8.5 Installing           #
 	#        some more utils          #
 	#         (xf86-video)            #
 	#                                 #
@@ -833,7 +833,7 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#        9.5 Installing           #
+	#        8.5 Installing           #
 	#        some more utils          #
 	#         (xf86-video)            #
 	#                                 #
@@ -851,7 +851,7 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      10. Generating user        #
+	#       9. Generating user        #
 	#                                 #
 	#=================================#
 	useradd -m -g wheel -s /bin/zsh $usr
@@ -868,7 +868,7 @@ if [[ $intelamdcpu == "intel" ]]; then
 	echo -e "${BMAGENTA}\
 	#===== V. CONFIGURING LINUX ======#
 	#                                 #
-	#      11. Installing CPU         #
+	#      10. Installing CPU         #
 	#           microcode             #
 	#                                 #
 	#=================================#${END}"
