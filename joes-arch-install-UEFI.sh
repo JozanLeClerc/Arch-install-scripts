@@ -422,7 +422,7 @@ echo -e "${BGREEN}Wiping complete.${END}"
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
-if [ $efimode = true ]; then
+if [ "$efimode" = true ]; then
 	fdisk "$drv" << FDISK_EFI_INPUT
 g
 n
@@ -466,14 +466,17 @@ p
 +$rtsze
 n
 p
-4
 
 
-
+w
 FDISK_BIOS_INPUT
 fi
+if [ "$efimode" = true ]; then
+	mkfs.fat -F32 "$drv""1" > /dev/null
+else
+	mkfs.ext2 "$drv""1" > /dev/null
+fi
 mkswap "$drv""2" > /dev/null
-mkfs.fat -F32 "$drv""1" > /dev/null
 mkfs.ext4 "$drv""3" > /dev/null
 mkfs.ext4 "$drv""4" > /dev/null
 sleep 2
@@ -487,12 +490,16 @@ echo -e "${BMAGENTA}\
 #     3. Mounting partitions      #
 #                                 #
 #=================================#${END}"
-swapon "$drv""2" > /dev/null
 mkdir /mnt/arch > /dev/null
+swapon "$drv""2" > /dev/null
 mount "$drv""3" /mnt/arch > /dev/null
 mkdir /mnt/arch/boot > /dev/null
 mkdir /mnt/arch/boot/efi > /dev/null
-mount "$drv""1" /mnt/arch/boot/efi > /dev/null
+if [ "$efimode" = true ]; then
+	mount "$drv""1" /mnt/arch/boot/efi > /dev/null
+else
+	mount "$drv""1" /mnt/arch/boot > /dev/null
+fi
 mkdir /mnt/arch/home > /dev/null
 mount "$drv""4" /mnt/arch/home > /dev/null
 sleep 2
@@ -918,6 +925,7 @@ ARCH_CHROOT_CMDS
 fi
 echo -e "${BBLUE}"
 sleep 2
+if [ "$efimode" = true ]; then
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
@@ -935,6 +943,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 4
 	exit
 ARCH_CHROOT_CMDS
+else
+fi
 echo && echo
 clear
 echo -e "${BMAGENTA}\
