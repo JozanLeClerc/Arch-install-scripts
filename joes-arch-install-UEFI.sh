@@ -12,7 +12,7 @@ rtrtpwd="walk"
 usrpwd=""
 usrusrpwd="fade"
 hstnm=""
-isusr="false"
+isusr=false
 somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
@@ -299,7 +299,7 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 	echo -e "${BCYAN}Enter your desired ${BYELLOW}username:"
 	echo -n -e "> "
 	read -r usr
-	isusr="true"
+	isusr=true
 	usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
 	echo && echo
 	while [[ $usrusrpwd != "$usrpwd" || $usrpwd == "" ]]; do
@@ -847,7 +847,7 @@ $rtpwd
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	sleep 2
 ARCH_CHROOT_CMDS
-if [[ $isusr = "true" ]]; then
+if [ "$isusr" = true ]; then
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
