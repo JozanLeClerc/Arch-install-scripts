@@ -523,13 +523,13 @@ echo -e "${BMAGENTA}\
 #      this may take a while      #
 #                                 #
 #=================================#${END}"
+echo
+jo_pacstrap base
+jo_pacstrap base-devel
+jo_pacstrap pacman-contrib
 echo && echo
-echo -e "${BCYAN}Installing ${BYELLOW}base packages${END}"
-if pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null; then
-	echo -e "${BGREEN}Base packages installed${END}"
-fi
-echo && echo
-sleep 1
+echo -e "${BGREEN}Base packages installed${END}"
+sleep 4
 clear
 #================================================================#
 #----------------------- UTILS DOWNLOAD -------------------------#
@@ -586,36 +586,13 @@ if [ "$somemore" = true ]; then
 #     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
 #                                 #
 #=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}gst-plugins-{base,good,bad,ugly}${END}"
-	if pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null; then
-		echo -e "${BGREEN}gst-plugins-{base,good,bad,ugly} installed${END}"
-	fi
 	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}gst-libav xorg-{server,xinit,apps}${END}"
-	if pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null; then
-		echo -e "${BGREEN}gst-libav xorg-{server,xinit,apps} installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-input-{mouse,keyboard}${END}"
-	if pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null; then
-		echo -e "${BGREEN}xf86-input-{mouse,keyboard} installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xdg-user-dirs${END}"
-	if pacstrap /mnt/arch xdg-user-dirs > /dev/null; then
-		echo -e "${BGREEN}xdg-user-dirs installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}mesa${END}"
-	if pacstrap /mnt/arch mesa > /dev/null; then
-		echo -e "${BGREEN}mesa installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-vesa${END}"
-	if pacstrap /mnt/arch xf86-video-vesa > /dev/null; then
-		echo -e "${BGREEN}xf86-video-vesa installed${END}"
-	fi
+	jo_pacstrap gst-plugins-{base,good,bad,ugly}
+	jo_pacstrap gst-libav
+	jo_pacstrap xorg-{server,xinit,apps}
+	jo_pacstrap xf86-input-{mouse,keyboard}
+	jo_pacstrap xdg-user-dirs
+	jo_pacstrap mesa
 	echo && echo
 	echo -e "${BGREEN}Extra packages installed.${END}"
 	sleep 4
@@ -643,11 +620,8 @@ if [[ $intelamdgpu == "intel" && "$somemore" = true ]]; then
 #         (${BYELLOW}xf86-video${BMAGENTA})            #
 #                                 #
 #=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-intel${END}"
-	if pacstrap /mnt/arch xf86-video-intel > /dev/null; then
-		echo -e "${BGREEN}xf86-video-intel installed${END}"
-	fi
+	echo
+	jo_pacstrap xf86-video-intel
 fi
 sleep 2
 if [[ $intelamdgpu == "amd" && "$somemore" = true ]]; then
@@ -661,11 +635,8 @@ if [[ $intelamdgpu == "amd" && "$somemore" = true ]]; then
 #         (${BYELLOW}xf86-video${BMAGENTA})            #
 #                                 #
 #=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu${END}"
-	if pacstrap /mnt/arch xf86-video-amdgpu > /dev/null; then
-		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
-	fi
+	echo
+	jo_pacstrap xf86-video-amdgpu
 fi
 #================================================================#
 #-------------------- CPU MICROCODE DOWNLOAD --------------------#
@@ -679,11 +650,8 @@ if [[ $intelamdcpu == "intel" ]]; then
 #           microcode             #
 #                                 #
 #=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}intel-ucode${END}"
-	if pacstrap /mnt/arch intel-ucode > /dev/null; then
-		echo -e "${BGREEN}intel-ucode${END}"
-	fi
+	echo
+	jo_pacstrap intel-ucode
 fi
 if [[ $intelamdcpu == "amd" ]]; then
 	clear
@@ -694,11 +662,8 @@ if [[ $intelamdcpu == "amd" ]]; then
 #           microcode             #
 #                                 #
 #=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Installing ${BYELLOW}amd-ucode${END}"
-	if pacstrap /mnt/arch amd-ucode > /dev/null; then
-		echo -e "${BGREEN}amd-ucode${END}"
-	fi
+	echo
+	jo_pacstrap amd-ucode
 fi
 sleep 2
 #================================================================#
