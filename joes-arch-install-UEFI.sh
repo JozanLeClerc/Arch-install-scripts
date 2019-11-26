@@ -257,7 +257,7 @@ while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
 	read -r -s rtpwd
 	echo && echo
 	echo -e "${BCYAN}Confirm ${BYELLOW}root password${BCYAN}:"
-	echo -n -e "${BCYAN}> "
+	echo -n -e "${BYELLOW}> "
 	read -r -s rtrtpwd
 	if [[ $rtrtpwd != "$rtpwd" ]]; then
 		echo && echo
@@ -285,18 +285,18 @@ read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
 	echo && echo
 	echo -e "${BCYAN}Enter your desired ${BYELLOW}username:"
-	echo -n -e "> "
+	echo -n -e "${BYELLOW}> "
 	read -r usr
 	isusr=true
 	usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
 	echo && echo
 	while [[ $usrusrpwd != "$usrpwd" || $usrpwd == "" ]]; do
 		echo -e "${BCYAN}Enter your disired ${BYELLOW}password ${BCYAN}for ${BYELLOW}$usr${BCYAN} (can't be empty):"
-		echo -n -e "> "
+		echo -n -e "${BYELLOW}> "
 		read -r -s usrpwd
 		echo && echo
 		echo -e "${BCYAN}Confirm ${BYELLOW}user password:${BCYAN}"
-		echo -n -e "> "
+		echo -n -e "${BYELLOW}> "
 		read -r -s usrusrpwd
 		if [[ $usrusrpwd != "$usrpwd" ]]; then
 			echo && echo
@@ -323,7 +323,7 @@ echo -e "${BMAGENTA}\
 while [[ $hstnm == "" ]]; do
 	echo && echo
 	echo -e "${BCYAN}Enter your disired ${BYELLOW}hostname ${BCYAN}for this terminal (can't be empty):"
-	echo -n -e "> "
+	echo -n -e "${BYELLOW}> "
 	read -r hstnm
 	if [[ $hstnm == "" ]]; then
 		echo && echo
