@@ -13,7 +13,7 @@ usrpwd=""
 usrusrpwd="fade"
 hstnm=""
 isusr=false
-somemore="false"
+somemore=false
 intelamdcpu="none"
 intelamdgpu="none"
 ltskern=true
@@ -367,7 +367,7 @@ echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst
 echo -n -e "${BYELLOW}> "
 read -r answr
 if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
-	somemore="true"
+	somemore=true
 fi
 clear
 answr=""
@@ -630,7 +630,7 @@ sleep 4
 #================================================================#
 #------------------------ EXTRA DOWNLOAD ------------------------#
 #================================================================#
-if [[ $somemore == "true" ]]; then
+if [ "$somemore" = true ]; then
 	clear
 	echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
@@ -687,7 +687,7 @@ fi
 #================================================================#
 #--------------------- GPU DRIVERS DOWNLOAD ---------------------#
 #================================================================#
-if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
+if [[ $intelamdgpu == "intel" && "$somemore" = true ]]; then
 	clear
 	echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
@@ -704,7 +704,7 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 	fi
 fi
 sleep 2
-if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
+if [[ $intelamdgpu == "amd" && "$somemore" = true ]]; then
 	sleep 2
 	clear
 	echo -e "${BMAGENTA}\
