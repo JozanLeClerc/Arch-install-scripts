@@ -470,17 +470,6 @@ mkdir /mnt/arch/home > /dev/null
 mount "$drv""4" /mnt/arch/home > /dev/null
 sleep 2
 clear
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
-#------------------------ DELETE THIS ---------------------------#
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
-if [ ! "$(pacstrap /mnt/arch syslog-ng > /dev/null)" ]; then
-	echo -e "${BGREEN}syslog-ng installed${END}"
-fi
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
-#------------------------ DELETE THIS ---------------------------#
-#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
 #================================================================#
 #------------------------ BASE DOWNLOAD -------------------------#
 #================================================================#
@@ -495,7 +484,7 @@ echo -e "${BMAGENTA}\
 #=================================#${END}"
 echo && echo
 echo -e "${BCYAN}Installing ${BYELLOW}base packages${END}"
-if ! pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null; then
+if pacstrap /mnt/arch base base-devel pacman-contrib > /dev/null; then
 	echo -e "${BGREEN}Base packages installed${END}"
 fi
 echo && echo
@@ -513,128 +502,128 @@ echo -e "${BMAGENTA}\
 #=================================#${END}"
 echo && echo
 echo -e "${BCYAN}Installing ${BYELLOW}zip${END}"
-if ! pacstrap /mnt/arch zip > /dev/null; then
+if pacstrap /mnt/arch zip > /dev/null; then
 	echo -e "${BGREEN}zip installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}unzip${END}"
-if ! pacstrap /mnt/arch unzip > /dev/null; then
+if pacstrap /mnt/arch unzip > /dev/null; then
 	echo -e "${BGREEN}unzip installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}p7zip${END}"
-if ! pacstrap /mnt/arch p7zip > /dev/null; then
+if pacstrap /mnt/arch p7zip > /dev/null; then
 	echo -e "${BGREEN}p7zip installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}NetworkManager${END}"
-if ! pacstrap /mnt/arch networkmanager > /dev/null; then
+if pacstrap /mnt/arch rkmanager > /dev/null; then
 	echo -e "${BGREEN}NetworkManager installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}vim${END}"
-if ! pacstrap /mnt/arch vim > /dev/null; then
+if pacstrap /mnt/arch vim > /dev/null; then
 	echo -e "${BGREEN}vim installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mc${END}"
-if ! pacstrap /mnt/arch mc > /dev/null; then
+if pacstrap /mnt/arch mc > /dev/null; then
 	echo -e "${BGREEN}mc installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}alsa-utils${END}"
-if ! pacstrap /mnt/arch alsa-utils > /dev/null; then
+if pacstrap /mnt/arch alsa-utils > /dev/null; then
 	echo -e "${BGREEN}alsa-utils installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
-if ! pacstrap /mnt/arch syslog-ng > /dev/null; then
+if pacstrap /mnt/arch syslog-ng > /dev/null; then
 	echo -e "${BGREEN}syslog-ng installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mtools${END}"
-if ! pacstrap /mnt/arch mtools > /dev/null; then
+if pacstrap /mnt/arch mtools > /dev/null; then
 	echo -e "${BGREEN}mtools installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}dostools${END}"
-if ! pacstrap /mnt/arch dostools > /dev/null; then
+if pacstrap /mnt/arch dostools > /dev/null; then
 	echo -e "${BGREEN}dostools installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}lsb-release${END}"
-if ! pacstrap /mnt/arch lsb-release > /dev/null; then
+if pacstrap /mnt/arch lsb-release > /dev/null; then
 	echo -e "${BGREEN}lsb-release installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}ntfs-3g${END}"
-if ! pacstrap /mnt/arch ntfs-3g > /dev/null; then
+if pacstrap /mnt/arch ntfs-3g > /dev/null; then
 	echo -e "${BGREEN}ntfs-3g installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}exfat-utils${END}"
-if ! pacstrap /mnt/arch exfat-utils > /dev/null; then
+if pacstrap /mnt/arch exfat-utils > /dev/null; then
 	echo -e "${BGREEN}exfat-utils installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}git${END}"
-if ! pacstrap /mnt/arch git > /dev/null; then
+if pacstrap /mnt/arch git > /dev/null; then
 	echo -e "${BGREEN}git installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}zsh${END}"
-if ! pacstrap /mnt/arch zsh > /dev/null; then
+if pacstrap /mnt/arch zsh > /dev/null; then
 	echo -e "${BGREEN}zsh installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}ntp${END}"
-if ! pacstrap /mnt/arch ntp > /dev/null; then
+if pacstrap /mnt/arch ntp > /dev/null; then
 	echo -e "${BGREEN}ntp installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}cronie${END}"
-if ! pacstrap /mnt/arch cronie > /dev/null; then
+if pacstrap /mnt/arch cronie > /dev/null; then
 	echo -e "${BGREEN}cronie installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}grub${END}"
-if ! pacstrap /mnt/arch grub > /dev/null; then
+if pacstrap /mnt/arch grub > /dev/null; then
 	echo -e "${BGREEN}grub installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}os-prober${END}"
-if ! pacstrap /mnt/arch os-prober > /dev/null; then
+if pacstrap /mnt/arch os-prober > /dev/null; then
 	echo -e "${BGREEN}os-prober installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}efibootmgr${END}"
-if ! pacstrap /mnt/arch efibootmgr > /dev/null; then
+if pacstrap /mnt/arch efibootmgr > /dev/null; then
 	echo -e "${BGREEN}efibootmgr installed${END}"
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}mkinitcpio${END}"
-if ! pacstrap /mnt/arch mkinitcpio > /dev/null; then
+if pacstrap /mnt/arch mkinitcpio > /dev/null; then
 	echo -e "${BGREEN}mkinitcpio installed${END}"
 fi
 echo
 if [ $ltskern -eq 1 ]; then
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts${END}"
-	if ! pacstrap /mnt/arch linux-lts > /dev/null; then
+	if pacstrap /mnt/arch linux-lts > /dev/null; then
 		echo -e "${BGREEN}linux-lts installed${END}"
 	fi
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts-headers${END}"
 	echo
-	if ! pacstrap /mnt/arch linux-lts-headers > /dev/null; then
+	if pacstrap /mnt/arch linux-lts-headers > /dev/null; then
 		echo -e "${BGREEN}linux-lts-headers installed${END}"
 	fi
 else
 	echo -e "${BCYAN}Installing ${BYELLOW}linux${END}"
-	if ! pacstrap /mnt/arch linux > /dev/null; then
+	if pacstrap /mnt/arch linux > /dev/null; then
 		echo -e "${BGREEN}linux installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-headers${END}"
-	if ! pacstrap /mnt/arch linux-headers > /dev/null; then
+	if pacstrap /mnt/arch linux-headers > /dev/null; then
 		echo -e "${BGREEN}linux-headers installed${END}"
 	fi
 fi
@@ -656,46 +645,46 @@ if [[ $somemore == "true" ]]; then
 #=================================#${END}"
 	echo && echo
 	echo -e "${BCYAN}Installing ${BYELLOW}gst-plugins-{base,good,bad,ugly}${END}"
-	if ! pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null; then
+	if pacstrap /mnt/arch gst-plugins-{base,good,bad,ugly} > /dev/null; then
 		echo -e "${BGREEN}gst-plugins-{base,good,bad,ugly} installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}gst-libav xorg-{server,xinit,apps}${END}"
-	if ! pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null; then
+	if pacstrap /mnt/arch gst-libav xorg-{server,xinit,apps} > /dev/null; then
 		echo -e "${BGREEN}gst-libav xorg-{server,xinit,apps} installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}xf86-input-{mouse,keyboard}${END}"
-	if ! pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null; then
+	if pacstrap /mnt/arch xf86-input-{mouse,keyboard} > /dev/null; then
 		echo -e "${BGREEN}xf86-input-{mouse,keyboard} installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}xdg-user-dirs${END}"
-	if ! pacstrap /mnt/arch xdg-user-dirs > /dev/null; then
+	if pacstrap /mnt/arch xdg-user-dirs > /dev/null; then
 		echo -e "${BGREEN}xdg-user-dirs installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}mesa${END}"
-	if ! pacstrap /mnt/arch mesa > /dev/null; then
+	if pacstrap /mnt/arch mesa > /dev/null; then
 		echo -e "${BGREEN}mesa installed${END}"
 	fi
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-vesa${END}"
-	if ! pacstrap /mnt/arch xf86-video-vesa > /dev/null; then
+	if pacstrap /mnt/arch xf86-video-vesa > /dev/null; then
 		echo -e "${BGREEN}xf86-video-vesa installed${END}"
 	fi
 	echo && echo
 	echo -e "${BGREEN}Extra packages installed.${END}"
 	sleep 4
 fi
-if ! lscpu | grep -q Intel; then
+if lscpu | grep -q Intel; then
 	intelamdcpu="intel"
-elif ! lscpu | grep -q AMD; then
+elif lscpu | grep -q AMD; then
 	intelamdcpu="amd"
 fi
-if ! lspci | grep -q Intel; then
+if lspci | grep -q Intel; then
 	intelamdgpu="intel"
-elif ! lspci | grep -q AMD; then
+elif lspci | grep -q AMD; then
 	intelamdgpu="amd"
 fi
 #================================================================#
@@ -713,7 +702,7 @@ if [[ $intelamdgpu == "intel" && $somemore == "true" ]]; then
 #=================================#${END}"
 	echo && echo
 	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-intel${END}"
-	if ! pacstrap /mnt/arch xf86-video-intel > /dev/null; then
+	if pacstrap /mnt/arch xf86-video-intel > /dev/null; then
 		echo -e "${BGREEN}xf86-video-intel installed${END}"
 	fi
 fi
@@ -731,7 +720,7 @@ if [[ $intelamdgpu == "amd" && $somemore == "true" ]]; then
 #=================================#${END}"
 	echo && echo
 	echo -e "${BCYAN}Installing ${BYELLOW}xf86-video-amdgpu${END}"
-	if ! pacstrap /mnt/arch xf86-video-amdgpu > /dev/null; then
+	if pacstrap /mnt/arch xf86-video-amdgpu > /dev/null; then
 		echo -e "${BGREEN}xf86-video-amdgpu installed${END}"
 	fi
 fi
@@ -749,7 +738,7 @@ if [[ $intelamdcpu == "intel" ]]; then
 #=================================#${END}"
 	echo && echo
 	echo -e "${BCYAN}Installing ${BYELLOW}intel-ucode${END}"
-	if ! pacstrap /mnt/arch intel-ucode > /dev/null; then
+	if pacstrap /mnt/arch intel-ucode > /dev/null; then
 		echo -e "${BGREEN}intel-ucode${END}"
 	fi
 fi
@@ -764,7 +753,7 @@ if [[ $intelamdcpu == "amd" ]]; then
 #=================================#${END}"
 	echo && echo
 	echo -e "${BCYAN}Installing ${BYELLOW}amd-ucode${END}"
-	if ! pacstrap /mnt/arch amd-ucode > /dev/null; then
+	if pacstrap /mnt/arch amd-ucode > /dev/null; then
 		echo -e "${BGREEN}amd-ucode${END}"
 	fi
 fi
