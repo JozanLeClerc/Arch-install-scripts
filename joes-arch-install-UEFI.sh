@@ -825,6 +825,8 @@ arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS
 	#       2. Configuring GRUB       #
 	#                                 #
 	#=================================#
+	grub-install --target=i386-pc $drv
+	grub-mkconfig -o /boot/grub/grub.cfg
 	sleep 4
 	exit
 ARCH_CHROOT_BIOS_GRUB_CMDS
