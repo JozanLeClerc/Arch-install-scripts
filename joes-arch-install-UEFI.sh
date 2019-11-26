@@ -16,8 +16,12 @@ isusr="false"
 somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
-ltskern=1
-bootmode=""
+ltskern=true
+if [ ! -r /sys/firmware/efi/efivars ]; then
+	efimode=false
+else
+	efimode=true
+fi
 #==================================================================================================#
 #--------------------------------------- COLORS DECLARATION ---------------------------------------#
 #==================================================================================================#
@@ -41,6 +45,18 @@ BCYAN="\033[1;36m"
 
 END="\033[0;0m"
 #==================================================================================================#
+#--------------------------------------- SOME FUNCTIONS -------------------------------------------#
+#==================================================================================================#
+jo_goodbye() {
+	echo && echo
+	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
+	sleep 1
+	echo -e "${BCYAN}Aborting...${END}"
+	sleep 3
+	clear
+	exit
+}
+#==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
 clear
@@ -58,27 +74,6 @@ read -r
 #==================================================================================================#
 #----------------------------------------- ERRORS CHECK -------------------------------------------#
 #==================================================================================================#
-if [ ! -r /sys/firmware/efi/efivars ]; then
-	bootmode="bios"
-	clear
-	echo -e "${BRED}\
-X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
-X                                 X
-X    It seems that boot mode      X
-X      is not set to UEFI         X
-X    therefore Joe's script is    X
-X        forced to abort          X
-X                                 X
-X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
-	sleep 6
-	echo && echo
-	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
-	sleep 1
-	echo -e "${BCYAN}Aborting...${END}"
-	sleep 3
-	clear
-	exit
-fi
 clear
 echo -e "${BCYAN}Verifying that your are connected to the Internet, please wait...${END}"
 
@@ -364,7 +359,7 @@ echo -e "${BCYAN}Do you wish to install an ${BYELLOW}LTS Kernel${BCYAN}? [${BGRE
 echo -n -e "${BYELLOW}> "
 read -r answr
 if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO ]]; then
-	ltskern=0
+	ltskern=false
 fi
 answr=""
 echo && echo
@@ -608,7 +603,7 @@ if pacstrap /mnt/arch mkinitcpio > /dev/null; then
 	echo -e "${BGREEN}mkinitcpio installed${END}"
 fi
 echo
-if [ $ltskern -eq 1 ]; then
+if [ "$ltskern" = true ]; then
 	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts${END}"
 	if pacstrap /mnt/arch linux-lts > /dev/null; then
 		echo -e "${BGREEN}linux-lts installed${END}"
@@ -870,7 +865,7 @@ $usrpwd
 	exit
 ARCH_CHROOT_CMDS
 fi
-if [ $ltskern -eq 0 ]; then
+if [ "$ltskern" = false ]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
