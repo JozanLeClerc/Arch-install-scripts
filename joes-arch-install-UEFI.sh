@@ -58,6 +58,13 @@ jo_goodbye() {
 	clear
 	exit
 }
+
+jo_pacstrap() {
+	echo -e "${BCYAN}Installing ${BYELLOW}$1${END}"
+	if pacstrap /mnt/arch $1 > /dev/null; then
+		echo -e "${BGREEN}$1 installed${END}"
+	fi
+}
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
@@ -534,132 +541,34 @@ echo -e "${BMAGENTA}\
 #      so you don't have to       #
 #                                 #
 #=================================#${END}"
-echo && echo
-echo -e "${BCYAN}Installing ${BYELLOW}zip${END}"
-if pacstrap /mnt/arch zip > /dev/null; then
-	echo -e "${BGREEN}zip installed${END}"
-fi
 echo
-echo -e "${BCYAN}Installing ${BYELLOW}unzip${END}"
-if pacstrap /mnt/arch unzip > /dev/null; then
-	echo -e "${BGREEN}unzip installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}p7zip${END}"
-if pacstrap /mnt/arch p7zip > /dev/null; then
-	echo -e "${BGREEN}p7zip installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}NetworkManager${END}"
-if pacstrap /mnt/arch networkmanager > /dev/null; then
-	echo -e "${BGREEN}NetworkManager installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}vim${END}"
-if pacstrap /mnt/arch vim > /dev/null; then
-	echo -e "${BGREEN}vim installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}mc${END}"
-if pacstrap /mnt/arch mc > /dev/null; then
-	echo -e "${BGREEN}mc installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}alsa-utils${END}"
-if pacstrap /mnt/arch alsa-utils > /dev/null; then
-	echo -e "${BGREEN}alsa-utils installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}syslog-ng${END}"
-if pacstrap /mnt/arch syslog-ng > /dev/null; then
-	echo -e "${BGREEN}syslog-ng installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}mtools${END}"
-if pacstrap /mnt/arch mtools > /dev/null; then
-	echo -e "${BGREEN}mtools installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}dostools${END}"
-if pacstrap /mnt/arch dostools > /dev/null; then
-	echo -e "${BGREEN}dostools installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}lsb-release${END}"
-if pacstrap /mnt/arch lsb-release > /dev/null; then
-	echo -e "${BGREEN}lsb-release installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}ntfs-3g${END}"
-if pacstrap /mnt/arch ntfs-3g > /dev/null; then
-	echo -e "${BGREEN}ntfs-3g installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}exfat-utils${END}"
-if pacstrap /mnt/arch exfat-utils > /dev/null; then
-	echo -e "${BGREEN}exfat-utils installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}git${END}"
-if pacstrap /mnt/arch git > /dev/null; then
-	echo -e "${BGREEN}git installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}zsh${END}"
-if pacstrap /mnt/arch zsh > /dev/null; then
-	echo -e "${BGREEN}zsh installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}ntp${END}"
-if pacstrap /mnt/arch ntp > /dev/null; then
-	echo -e "${BGREEN}ntp installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}cronie${END}"
-if pacstrap /mnt/arch cronie > /dev/null; then
-	echo -e "${BGREEN}cronie installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}grub${END}"
-if pacstrap /mnt/arch grub > /dev/null; then
-	echo -e "${BGREEN}grub installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}os-prober${END}"
-if pacstrap /mnt/arch os-prober > /dev/null; then
-	echo -e "${BGREEN}os-prober installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}efibootmgr${END}"
-if pacstrap /mnt/arch efibootmgr > /dev/null; then
-	echo -e "${BGREEN}efibootmgr installed${END}"
-fi
-echo
-echo -e "${BCYAN}Installing ${BYELLOW}mkinitcpio${END}"
-if pacstrap /mnt/arch mkinitcpio > /dev/null; then
-	echo -e "${BGREEN}mkinitcpio installed${END}"
-fi
-echo
+jo_pacstrap zip
+jo_pacstrap unzip
+jo_pacstrap p7zip
+jo_pacstrap networkmanager
+jo_pacstrap vim
+jo_pacstrap mc
+jo_pacstrap alsa-utils
+jo_pacstrap syslog-ng
+jo_pacstrap mtools
+jo_pacstrap dostools
+jo_pacstrap lsb-release
+jo_pacstrap ntfs-3g
+jo_pacstrap exfat-utils
+jo_pacstrap git
+jo_pacstrap zsh
+jo_pacstrap ntp
+jo_pacstrap cronie
+jo_pacstrap grub
+jo_pacstrap os-prober
+jo_pacstrap efibootmgr
+jo_pacstrap mkinitcpio
 if [ "$ltskern" = true ]; then
-	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts${END}"
-	if pacstrap /mnt/arch linux-lts > /dev/null; then
-		echo -e "${BGREEN}linux-lts installed${END}"
-	fi
-	echo -e "${BCYAN}Installing ${BYELLOW}linux-lts-headers${END}"
-	echo
-	if pacstrap /mnt/arch linux-lts-headers > /dev/null; then
-		echo -e "${BGREEN}linux-lts-headers installed${END}"
-	fi
+	jo_pacstrap linux-lts
+	jo_pacstrap linux-lts-headers
 else
-	echo -e "${BCYAN}Installing ${BYELLOW}linux${END}"
-	if pacstrap /mnt/arch linux > /dev/null; then
-		echo -e "${BGREEN}linux installed${END}"
-	fi
-	echo
-	echo -e "${BCYAN}Installing ${BYELLOW}linux-headers${END}"
-	if pacstrap /mnt/arch linux-headers > /dev/null; then
-		echo -e "${BGREEN}linux-headers installed${END}"
-	fi
+	jo_pacstrap linux
+	linux-headers
 fi
 echo && echo
 echo -e "${BGREEN}Utils installed.${END}"
