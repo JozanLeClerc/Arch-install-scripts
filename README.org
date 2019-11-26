@@ -1,7 +1,7 @@
 * Joe's Arch Linux installation script
 
 ** Introduction
-My original script meant to automate your Arch Linux installation process. It is compatible with both *BIOS Legacy* as well as *UEFI* boot modes.
+My original script meant to automate your Arch Linux installation process. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
 
 The script was tested on virtual machine only at the moment.
 
