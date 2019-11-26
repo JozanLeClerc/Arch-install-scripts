@@ -408,7 +408,8 @@ echo -e "${BGREEN}Wiping complete.${END}"
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
-fdisk "$drv" << FDISK_INPUT
+if [ $efimode = true ]; then
+	fdisk "$drv" << FDISK_EFI_INPUT
 g
 n
 1
@@ -430,7 +431,12 @@ t
 2
 19
 w
-FDISK_INPUT
+FDISK_EFI_INPUT
+else
+	fdisk "$drv" << FDISK_BIOS_INPUT
+
+FDISK_BIOS_INPUT
+fi
 mkswap "$drv""2" > /dev/null
 mkfs.fat -F32 "$drv""1" > /dev/null
 mkfs.ext4 "$drv""3" > /dev/null
