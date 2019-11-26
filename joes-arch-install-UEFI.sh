@@ -86,10 +86,7 @@ read -r
 #==================================================================================================#
 clear
 echo -e "${BCYAN}Verifying that your are connected to the Internet, please wait...${END}"
-
-wget -q --spider https://www.archlinux.org > /dev/null
-tmpret=$?
-if [ $tmpret -ne 0 ]; then
+if ! wget -q --spider https://www.archlinux.org/; then
 	clear
 	echo -e "${BRED}\
 X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
