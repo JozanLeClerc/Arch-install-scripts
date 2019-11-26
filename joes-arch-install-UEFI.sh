@@ -202,6 +202,7 @@ __G"
 		fi
 		gogo=true
 	done
+	gogo=false
 	btsze="128M"
 	rtsze=$rts"G"
 	swpsze=$swps"G"
