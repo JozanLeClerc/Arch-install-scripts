@@ -18,7 +18,7 @@ intelamdcpu="none"
 intelamdgpu="none"
 ltskern=true
 numregex='^[0-9]+$'
-gogo=false
+gogogo=false
 if [ ! -r /sys/firmware/efi/efivars ]; then
 	efimode=false
 else
@@ -156,7 +156,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 #      2. swap partion size       #
 #                                 #
 #=================================#${END}"
-	while [ "$gogo" = false ]; do
+	while [ "$gogogo" = false ]; do
 		echo && echo
 		echo -e "${BCYAN}\
 Please enter your ${BYELLOW}swap partition ${BCYAN}disired size:
@@ -166,16 +166,16 @@ __G"
 		if [[ $swps == "" ]]; then
 			echo && echo
 			echo -e "${BRED}Can't be empty, retrying...${END}"
-			gogo=false
+			gogogo=false
 		elif ! [[ $swps =~ $numregex ]]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-			gogo=false
+			gogogo=false
 		else
-			gogo=true
+			gogogo=true
 		fi
 	done
-	gogo=false
+	gogogo=false
 	clear
 	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
@@ -185,7 +185,7 @@ __G"
 #      3. root partion size       #
 #                                 #
 #=================================#"
-	while [ "$gogo" = false ]; do
+	while [ "$gogogo" = false ]; do
 		echo && echo
 		echo -e "${BCYAN}\
 Please enter your ${BYELLOW}root partition ${BCYAN}disired size:
@@ -195,16 +195,16 @@ __G"
 		if [[ $rts == "" ]]; then
 			echo && echo
 			echo -e "${BRED}Can't be empty, retrying...${END}"
-			gogo=false
-		elif ! [[ $swps =~ $numregex ]]; then
+			gogogo=false
+		elif ! [[ $rts =~ $numregex ]]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-			gogo=false
+			gogogo=false
 		else
-			gogo=true
+			gogogo=true
 		fi
 	done
-	gogo=false
+	gogogo=false
 	btsze="128M"
 	rtsze=$rts"G"
 	swpsze=$swps"G"
