@@ -138,7 +138,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		elif ! [[ $drvnm =~ $numregex ]]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		elif [ "$drvnm" -gt $(lsblk | grep -c disk) ]; then
+		elif [ "$drvnm" -gt "$(lsblk | grep -c disk)" ]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		elif [ "$drvnm" -le 0 ]; then
@@ -171,8 +171,9 @@ __G"
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 			gogo=false
+		else
+			gogo=true
 		fi
-		gogo=true
 	done
 	gogo=false
 	clear
@@ -199,8 +200,9 @@ __G"
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 			gogo=false
+		else
+			gogo=true
 		fi
-		gogo=true
 	done
 	gogo=false
 	btsze="128M"
