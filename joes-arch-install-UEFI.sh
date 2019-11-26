@@ -398,9 +398,10 @@ if [ "$basepartc" -ge 1 ]; then
 		dd if=/dev/zero of="$drv$towipe" bs=1M status=progress > /dev/null 2>&1
 		((i++))
 	done
+else
+	echo -e "${BCYAN}Wiping $drv...${END}"
+	dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 fi
-echo -e "${BCYAN}Wiping $drv...${END}"
-dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
 wipefs --all --force "$drv"
 echo && echo
 echo -e "${BGREEN}Wiping complete.${END}"
