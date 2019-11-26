@@ -60,6 +60,7 @@ jo_goodbye() {
 }
 
 jo_pacstrap() {
+	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}$1${END}"
 	if pacstrap /mnt/arch $1 > /dev/null; then
 		echo -e "${BGREEN}$1 installed${END}"
