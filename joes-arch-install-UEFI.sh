@@ -92,13 +92,7 @@ X        forced to abort          X
 X                                 X
 X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
 	sleep 6
-	echo && echo
-	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
-	sleep 1
-	echo -e "${BRED}Aborting...${END}"
-	sleep 3
-	clear
-	exit
+	jo_goodbye
 else
 	echo -e "${BGREEN}Success!${END}"
 	echo
@@ -241,13 +235,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	echo -n -e "${BRED}> "
 	read -r answr
 	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
-		echo && echo
-		echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
-		sleep 1
-		echo -e "${BCYAN}Aborting...${END}"
-		sleep 3
-		clear
-		exit
+		jo_goodbye
 	fi
 done
 #==================================================================================================#
