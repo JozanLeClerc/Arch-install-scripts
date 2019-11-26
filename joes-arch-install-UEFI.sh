@@ -17,6 +17,7 @@ somemore=false
 intelamdcpu="none"
 intelamdgpu="none"
 ltskern=true
+numregex='^[0-9]+$'
 if [ ! -r /sys/firmware/efi/efivars ]; then
 	efimode=false
 else
@@ -130,19 +131,16 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 		done
 		echo -n -e "${BYELLOW}> "
 		read -r drvnm
-		if [[ $drvnm == "" ]]; then
+		if [ "$drvnm" = "" ]; then
 			echo && echo
 			echo -e "${BRED}Can't be empty, retrying...${END}"
-		fi
-		if [[ $drvnm -gt $(lsblk | grep -c disk) ]]; then
+		elif ! [[ $drvnm =~ $numregex ]]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		fi
-		if [[ $drvnm -lt 0 ]]; then
+		elif [ "$drvnm" -gt $(lsblk | grep -c disk) ]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		fi
-		if [[ $drvnm == 0 ]]; then
+		elif [ "$drvnm" -le 0 ]; then
 			echo && echo
 			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
@@ -167,6 +165,9 @@ __G"
 		if [[ $swps == "" ]]; then
 			echo && echo
 			echo -e "${BRED}Can't be empty, retrying...${END}"
+		elif ! [[ $swps =~ $numregex ]]; then
+			echo && echo
+			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
 	done
 	clear
@@ -188,6 +189,9 @@ __G"
 		if [[ $rts == "" ]]; then
 			echo && echo
 			echo -e "${BRED}Can't be empty, retrying...${END}"
+		elif ! [[ $swps =~ $numregex ]]; then
+			echo && echo
+			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
 		fi
 	done
 	btsze="128M"
@@ -434,6 +438,8 @@ w
 FDISK_EFI_INPUT
 else
 	fdisk "$drv" << FDISK_BIOS_INPUT
+o
+n
 
 FDISK_BIOS_INPUT
 fi
