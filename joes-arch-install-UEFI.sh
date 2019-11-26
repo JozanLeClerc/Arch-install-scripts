@@ -17,6 +17,7 @@ somemore="false"
 intelamdcpu="none"
 intelamdgpu="none"
 ltskern=1
+bootmode=""
 #==================================================================================================#
 #--------------------------------------- COLORS DECLARATION ---------------------------------------#
 #==================================================================================================#
@@ -58,6 +59,7 @@ read -r
 #----------------------------------------- ERRORS CHECK -------------------------------------------#
 #==================================================================================================#
 if [ ! -r /sys/firmware/efi/efivars ]; then
+	bootmode="bios"
 	clear
 	echo -e "${BRED}\
 X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
@@ -517,7 +519,7 @@ if pacstrap /mnt/arch p7zip > /dev/null; then
 fi
 echo
 echo -e "${BCYAN}Installing ${BYELLOW}NetworkManager${END}"
-if pacstrap /mnt/arch rkmanager > /dev/null; then
+if pacstrap /mnt/arch networkmanager > /dev/null; then
 	echo -e "${BGREEN}NetworkManager installed${END}"
 fi
 echo
