@@ -926,7 +926,7 @@ fi
 echo -e "${BBLUE}"
 sleep 2
 if [ "$efimode" = true ]; then
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS
 	clear
 	#===== VI. CONFIGURING BOOT ======#
 	#                                 #
@@ -942,8 +942,18 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	echo "exit" >> /boot/efi/startup.nsh
 	sleep 4
 	exit
-ARCH_CHROOT_CMDS
+ARCH_CHROOT_EFI_GRUB_CMDS
 else
+arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS
+	clear
+	#===== VI. CONFIGURING BOOT ======#
+	#                                 #
+	#       2. Configuring GRUB       #
+	#                                 #
+	#=================================#
+	sleep 4
+	exit
+ARCH_CHROOT_BIOS_GRUB_CMDS
 fi
 echo && echo
 clear
