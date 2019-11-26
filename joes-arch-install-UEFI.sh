@@ -450,6 +450,25 @@ else
 	fdisk "$drv" << FDISK_BIOS_INPUT
 o
 n
+p
+1
+
++$btsze
+n
+p
+2
+
++$swpsze
+n
+p
+3
+
++$rtsze
+n
+p
+4
+
+
 
 FDISK_BIOS_INPUT
 fi
