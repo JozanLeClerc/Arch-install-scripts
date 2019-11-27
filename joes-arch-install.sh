@@ -123,6 +123,29 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
 	drv=$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
 }
 
+jo_get_swap_size() {
+	while [ "$gogogo" = false ]; do
+		swps=$(dialog\
+				   --nocancel --title "$1"\
+				   --inputbox "Please enter your swap partition disired size: (__G)"\
+				   7 65\
+				   3>&1 1>&2 2>&3 3>&-)
+		if [ "$swps" = "" ]; then
+			dialog --msgbox "Can't be empty. Retrying..." 5 32
+			gogogo=false
+		elif ! [[ $swps =~ $numregex ]]; then
+			dialog --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
+			gogogo=false
+		else
+			gogogo=true
+		fi
+	done
+}
+
+jo_get_root_size() {
+	
+}
+
 jo_get_continue() {
 	if dialog --yesno "$1" $2 $3; then
 		answr=true
@@ -164,35 +187,8 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	swps=""
 	rts=""
 	jo_get_disk "II. DISK SETUP"
-	echo -e "${BMAGENTA}\
-#========= I. DISK SETUP =========#
-#                                 #
-#      Please choose wisely       #
-#                                 #
-#      2. swap partion size       #
-#                                 #
-#=================================#${END}"
-	while [ "$gogogo" = false ]; do
-		echo && echo
-		echo -e "${BCYAN}\
-Please enter your ${BYELLOW}swap partition ${BCYAN}disired size:
-__G"
-		echo -n -e "${BYELLOW}> "
-		read -r swps
-		if [[ $swps == "" ]]; then
-			echo && echo
-			echo -e "${BRED}Can't be empty, retrying...${END}"
-			gogogo=false
-		elif ! [[ $swps =~ $numregex ]]; then
-			echo && echo
-			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-			gogogo=false
-		else
-			gogogo=true
-		fi
-	done
-	gogogo=false
-	clear
+	jo_get_swap_size "II. DISK SETUP"
+	jo_get_root_size "II. DISK SETUP"
 	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
