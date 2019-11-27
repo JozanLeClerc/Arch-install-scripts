@@ -106,7 +106,7 @@ components to install:" 10 50 3 \
 }
 
 jo_get_disk() {
-	rm -f blkfile
+	rm -f blkfile > /dev/null
 	dn=$(lsblk | grep -c disk)
 	id=1
 	while [[ $dn != 0 ]]; do
@@ -120,7 +120,7 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
 				 $(cat blkfile)\
 				 3>&1 1>&2 2>&3 3>&-)
 	drv=$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
-	rm -f blkfile
+	rm -f blkfile > /dev/null
 }
 
 jo_get_swap_size() {
