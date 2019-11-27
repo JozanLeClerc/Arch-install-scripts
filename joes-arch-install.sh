@@ -58,6 +58,37 @@ jo_goodbye() {
 	exit
 }
 
+jo_chk_internet() {
+	clear
+	dialog --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
+	sleep 2
+	if ! wget -q --spider https://www.archlinux.org/; then
+		dialog --title "ERROR"\
+			   --msgbox "Critical error:\n\nIt seems that you are not connected to the internet,\
+therefore Joe's installer is forced to abort.\nPlease connect to the Internet and retry."\
+			   12 30
+		jo_goodbye
+	else
+		dialog --msgbox "Success\!" 5 12
+	fi
+}
+
+jo_set_hstnm() {
+	while [ $hstnm = "" ]; do
+		hstnm=$(dialog\
+					--nocancel --title "$1"\
+					--inputbox "Please choose a hostname for this machine.\
+\n\nIf you are running on a managed network,\
+please ask your network administrator for an appropriate name."\
+					12 55\
+					3>&1 1>&2 2>&3 3>&-)
+		if [ "$hstnm" = "" ]; then
+			dialog --infobox "Hostname is empty, retrying..." 3 34
+			sleep 2
+		fi
+	done
+}
+
 jo_pacstrap() {
 	echo
 	echo -e "${BCYAN}Installing ${BYELLOW}$1${END}"
@@ -65,6 +96,7 @@ jo_pacstrap() {
 		echo -e "${BGREEN}$1 installed${END}"
 	fi
 }
+
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
@@ -72,33 +104,11 @@ dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation util
 #==================================================================================================#
 #--------------------------------------- INTERNET CHECK -------------------------------------------#
 #==================================================================================================#
-clear
-dialog --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
-if ! wget -q --spider https://www.archlinux.org/; then
-	dialog --title "ERROR"\
-		   --msgbox "Critical error:\n\nIt seems that you are not connected to the internet,\
-therefore Joe's installer is forced to abort.\nPlease connect to the Internet and retry."\
-		   12 30
-	jo_goodbye
-else
-	dialog --msgbox "Success\!" 5 12
-fi
+jo_chk_internet
 #==================================================================================================#
 #---------------------------------------- HOSTNAME SETUP ------------------------------------------#
 #==================================================================================================#
-while [ $hstnm = "" ]; do
-	hstnm=$(dialog\
-				--nocancel --title "I. CORE SETUP"\
-				--inputbox "Please choose a hostname for this machine.\
-\n\nIf you are running on a managed network,\
-please ask your network administrator for an appropriate name."\
-				12 55\
-				3>&1 1>&2 2>&3 3>&-)
-	if [ "$hstnm" = "" ]; then
-		dialog --infobox "Hostname is empty, retrying..." 3 34
-		sleep 2
-	fi
-done
+jo_set_hstnm "I. CORE SETUP"
 answr="n"
 clear
 #==================================================================================================#
