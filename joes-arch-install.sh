@@ -6,7 +6,6 @@
 ltskern=false
 utils=false
 extras=false
-answr="n"
 rts=""
 swps=""
 rtpwd=""
@@ -165,20 +164,44 @@ jo_get_root_size() {
 	done
 }
 
-jo_get_confim_disk() {
-	if [ "$efimode" = true ]; then
-		bootpart="/boot/efi"
-	else
-		bootpart="/boot"
-	fi
-	dialog --title "Confirm this is correct"\
-		   --yesno "\
-\tDrive to use:\t$drv\n\
+jo_get_disk_config() {
+	while [ "$answr" = false ]; do
+		answr=false
+		btsze="128M"
+		swps=""
+		rts=""
+		jo_get_disk "$1"
+		jo_get_swap_size "$1"
+		jo_get_root_size "$1"
+		rtsze=$rts"G"
+		swpsze=$swps"G"
+		drv1="$drv""1"
+		drv2="$drv""2"
+		drv3="$drv""3"
+		drv4="$drv""4"
+		if dialog --title "Confirm this is correct"\
+				  --yesno "\
+Drive to use:$drv\n\
 \n\
-boot partition [$drv1] ($bootpart) - \t\t$bootsze\n\
-swap partition [$drv2] (swap) - \t\t$swpsze\n\
-root partition [$drv3] (/) - \t\t\t$rtsze\n\
-home partition [$drv4] (/home) - \t\tAll that remains" 10 70
+boot partition ($drv1) - $btsze\n\
+swap partition ($drv2) - $swpsze\n\
+root partition ($drv3) - $rtsze\n\
+home partition ($drv4) - All that remains"\
+				  10 50; then
+			answr=true
+		else
+			answr=false
+		fi
+	done
+}
+
+jo_warn_wiping() {
+		if ! dialog --title "WARNING"\
+				  --yesno "Warning: disk $drv will be wiped. \
+Are you sure you wish to continue?"\
+				  6 45; then
+			jo_goodbye
+		fi
 }
 
 jo_pacstrap() {
@@ -210,61 +233,8 @@ jo_get_options "I. CORE SETUP"
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
 #==================================================================================================#
-while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
-	btsze="128M"
-	swps=""
-	rts=""
-	jo_get_disk "II. DISK SETUP"
-	jo_get_swap_size "II. DISK SETUP"
-	jo_get_root_size "II. DISK SETUP"
-	rtsze=$rts"G"
-	swpsze=$swps"G"
-	jo_get_confim_disk
-	clear
-	echo -e "${BMAGENTA}\
-#============= CONFIRM THIS IS CORRECT ===============#
-#                                                     #
-#                DRIVE TO USE: ${BCYAN}$drv               ${BMAGENTA}#
-#                                                     #
-#  /boot/efi > BOOT partition size: ${BYELLOW}$btsze              ${BMAGENTA}#"
-if [ "$swps" -ge 10 ]; then
-	echo -e "#              SWAP partition size: ${BYELLOW}$swpsze               ${BMAGENTA}#"
-else
-	echo -e "#              SWAP partition size: ${BYELLOW}$swpsze                ${BMAGENTA}#"
-fi
-if [ "$rts" -ge 100 ]; then
-	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze              ${BMAGENTA}#"
-elif [ "$rts" -ge 10 ]; then
-	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze               ${BMAGENTA}#"
-else
-	echo -e "#  /         > ROOT partition size: ${BYELLOW}$rtsze                ${BMAGENTA}#"
-fi
-echo -e "#  /home     > HOME partition size: ${BYELLOW}all that remains  ${BMAGENTA}#
-#                                                     #
-#=====================================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Is that correct? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
-	echo -n -e "${BYELLOW}> "
-	read -r answr
-	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
-		echo && echo
-		echo -e "${BCYAN}Retrying..."
-		echo
-		echo -e "Press ${BYELLOW}[retrun] ${BCYAN}key to continue${END}"
-		read -r
-	fi
-done
-
-answr="n"
-while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
-	echo && echo
-	echo -e "${BRED}Disk ${BYELLOW}$drv ${BRED}will be wiped. Are you sure you want to continue? [${BGREEN}y${BRED}/${BRED}N${BRED}]${END}"
-	echo -n -e "${BRED}> "
-	read -r answr
-	if [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; then
-		jo_goodbye
-	fi
-done
+jo_get_disk_config "II. DISK SETUP"
+jo_warn_wiping
 #==================================================================================================#
 #------------------------------------ USERS AND ROOT SETUP ----------------------------------------#
 #==================================================================================================#
