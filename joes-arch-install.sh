@@ -219,6 +219,7 @@ while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr 
 	jo_get_root_size "II. DISK SETUP"
 	rtsze=$rts"G"
 	swpsze=$swps"G"
+	jo_get_confim_disk
 	clear
 	echo -e "${BMAGENTA}\
 #============= CONFIRM THIS IS CORRECT ===============#
