@@ -67,7 +67,7 @@ therefore Joe's installer is forced to abort.\nPlease connect to the Internet an
 			   12 30
 		jo_goodbye
 	else
-		dialog --msgbox "Success\!" 5 12
+		dialog --msgbox "Success!" 5 12
 	fi
 }
 
@@ -178,7 +178,7 @@ jo_pacstrap() {
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
 clear
-dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility\!" 6 35
+dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility!" 6 35
 #==================================================================================================#
 #--------------------------------------- INTERNET CHECK -------------------------------------------#
 #==================================================================================================#
