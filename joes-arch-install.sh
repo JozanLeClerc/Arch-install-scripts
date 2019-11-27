@@ -105,21 +105,21 @@ components to install:" 10 50 3 \
 }
 
 jo_get_disk() {
-	rm -f blkfile > /dev/null
+	rm -f blkline > /dev/null
 	dn=$(lsblk | grep -c disk)
 	id=1
 	while [[ $dn != 0 ]]; do
 		echo -n "$id $(lsblk | grep disk | \
-awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
+awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkline
 		((dn--))
 		((id++))
 	done
 	sel=$(dialog --nocancel --title "$1"\
 				 --menu "Choose the drive on which Arch Linux should be installed:" 12 55 4\
-				 $(cat blkfile)\
+				 $(cat blkline)\
 				 3>&1 1>&2 2>&3 3>&-)
 	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
-	rm -f blkfile > /dev/null
+	rm -f blkline > /dev/null
 }
 
 jo_get_swap_size() {
