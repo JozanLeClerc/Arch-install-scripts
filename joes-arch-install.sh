@@ -165,6 +165,22 @@ jo_get_root_size() {
 	done
 }
 
+jo_get_confim_disk() {
+	if [ "$efimode" = true ]; then
+		bootpart="/boot/efi"
+	else
+		bootpart="/boot"
+	fi
+	dialog --title "Confirm this is correct"\
+		   --yesno "\
+\tDrive to use:\t$drv\n\
+\n\
+boot partition [$drv1] ($bootpart) - \t\t$bootsze\n\
+swap partition [$drv2] (swap) - \t\t$swpsze\n\
+root partition [$drv3] (/) - \t\t\t$rtsze\n\
+home partition [$drv4] (/home) - \t\tAll that remains" 10 70
+}
+
 jo_pacstrap() {
 	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
