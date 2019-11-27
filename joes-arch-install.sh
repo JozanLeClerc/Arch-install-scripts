@@ -50,11 +50,10 @@ END="\033[0;0m"
 #--------------------------------------- SOME FUNCTIONS -------------------------------------------#
 #==================================================================================================#
 jo_goodbye() {
-	echo && echo
-	echo -e "${BCYAN}Thank you for using Joe's Arch Linux UEFI install script.${END}"
-	sleep 1
-	echo -e "${BCYAN}Aborting...${END}"
-	sleep 3
+	dialog --title "Aborting"\
+		   --infobox "Thank you for using Joe's Arch Linux installer.\nAborting..."\
+		   5 30
+	sleep 4
 	clear
 	exit
 }
@@ -69,32 +68,39 @@ jo_pacstrap() {
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
-dialog --title 'Welcome' --msgbox "Welcome to Joe's Arch Linux installation utility\!" 6 35
+dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility\!" 6 35
 #==================================================================================================#
-#----------------------------------------- ERRORS CHECK -------------------------------------------#
+#--------------------------------------- INTERNET CHECK -------------------------------------------#
 #==================================================================================================#
 clear
-echo -e "${BCYAN}Verifying that your are connected to the Internet, please wait...${END}"
+dialog --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
 if ! wget -q --spider https://www.archlinux.org/; then
-	clear
-	echo -e "${BRED}\
-X=X=X=X=X=X=X ERROR X=X=X=X=X=X=X=X
-X                                 X
-X       It seems that your        X
-X         terminal is not         X
-X    connected to the Internet    X
-X    therefore Joe's script is    X
-X        forced to abort          X
-X                                 X
-X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X${END}"
-	sleep 6
+	dialog --title "ERROR"\
+		   --msgbox "Critical error:\n\nIt seems that you are not connected to the internet,\
+therefore Joe's installer is forced to abort.\nPlease connect to the Internet and retry."\
+		   12 30
 	jo_goodbye
 else
-	echo -e "${BGREEN}Success!${END}"
-	echo
-	echo -e "${BCYAN}Press ${BYELLOW}[retrun] ${BCYAN}key to continue${END}"
-	read -r
+	dialog --msgbox "Success\!" 5 12
 fi
+#==================================================================================================#
+#---------------------------------------- HOSTNAME SETUP ------------------------------------------#
+#==================================================================================================#
+while [ $hstnm = "" ]; do
+	hstnm=$(dialog\
+				--nocancel --title "I. CORE SETUP"\
+				--inputbox "Please choose a hostname for this machine.\
+\n\nIf you are running on a managed network,\
+please ask your network administrator for an appropriate name."\
+				12 55\
+				3>&1 1>&2 2>&3 3>&-)
+	if [ "$hstnm" = "" ]; then
+		dialog --infobox "Hostname is empty, retrying..." 3 34
+		sleep 2
+	fi
+done
+answr="n"
+clear
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
 #==================================================================================================#
@@ -319,28 +325,6 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 		fi
 	done
 fi
-clear
-#==================================================================================================#
-#---------------------------------------- HOSTNAME SETUP ------------------------------------------#
-#==================================================================================================#
-echo -e "${BMAGENTA}\
-#======= II. USERS SETUP =========#
-#                                 #
-#          3. hostname            #
-#                                 #
-#=================================#${END}"
-while [[ $hstnm == "" ]]; do
-	echo && echo
-	echo -e "${BCYAN}Enter your disired ${BYELLOW}hostname ${BCYAN}for this terminal (can't be empty):"
-	echo -n -e "${BYELLOW}> "
-	read -r hstnm
-	if [[ $hstnm == "" ]]; then
-		echo && echo
-		echo -e "${BRED}Hostname is empty, retrying...${END}"
-		sleep 2
-	fi
-done
-answr="n"
 clear
 #==================================================================================================#
 #------------------------------------ LTS AND XORG SETUP ------------------------------------------#
