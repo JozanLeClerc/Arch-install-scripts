@@ -119,7 +119,7 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
 				 --menu "Choose the drive on which Arch Linux should be installed:" 12 55 4\
 				 $(cat blkfile)\
 				 3>&1 1>&2 2>&3 3>&-)
-	drv=$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
+	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
 	rm -f blkfile > /dev/null
 }
 
