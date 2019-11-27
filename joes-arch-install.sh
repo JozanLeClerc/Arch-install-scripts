@@ -3,6 +3,9 @@
 #==================================================================================================#
 #------------------------------------ VARIABLES DECLARATION ---------------------------------------#
 #==================================================================================================#
+ltskern=false
+utils=false
+extras=false
 answr=""
 drvnm=""
 rts=""
@@ -13,10 +16,8 @@ usrpwd=""
 usrusrpwd="fade"
 hstnm=""
 isusr=false
-somemore=false
 intelamdcpu="none"
 intelamdgpu="none"
-ltskern=true
 numregex='^[0-9]+$'
 gogogo=false
 if [ ! -r /sys/firmware/efi/efivars ]; then
@@ -88,6 +89,24 @@ please ask your network administrator for an appropriate name."\
 	done
 }
 
+jo_get_options() {
+	sel=$(dialog --nocancel --title "$1" --checklist "Choose optional system \
+components to install:" 10 50 3 \
+				   linux-lts "LTS Kernel" on \
+				   utils "Utils (zip, vim, git...)" on \
+				   extras "Extras (Xorg, gst-plugins...)" off \
+				   3>&1 1>&2 2>&3 3>&-)
+	if echo -n "$sel" | grep -q linux-lts; then
+		$ltskern=true
+	fi
+	if echo -n "$sel" | grep -q utils; then
+		$utils=true
+	fi
+	if echo -n "$sel" | grep -q extras; then
+		$extras=true
+	fi
+}
+
 jo_pacstrap() {
 	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
@@ -110,11 +129,14 @@ jo_chk_internet
 #---------------------------------------- HOSTNAME SETUP ------------------------------------------#
 #==================================================================================================#
 jo_get_hstnm "I. CORE SETUP"
-answr="n"
-clear
+#==================================================================================================#
+#------------------------------------ LTS AND XORG SETUP ------------------------------------------#
+#==================================================================================================#
+jo_get_options "I. CORE SETUP"
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
 #==================================================================================================#
+answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
 	drvnm=""
 	swps=""
@@ -337,30 +359,6 @@ if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == 
 	done
 fi
 clear
-#==================================================================================================#
-#------------------------------------ LTS AND XORG SETUP ------------------------------------------#
-#==================================================================================================#
-echo -e "${BMAGENTA}\
-#====== III. EXTRAS SETUP ========#
-#                                 #
-#            1. More              #
-#                                 #
-#=================================#${END}"
-echo && echo
-echo -e "${BCYAN}Do you wish to install an ${BYELLOW}LTS Kernel${BCYAN}? [${BGREEN}Y${BCYAN}/${BRED}n${BCYAN}]"
-echo -n -e "${BYELLOW}> "
-read -r answr
-if [[ $answr == n || $answr == N || $answr == no || $answr == No || $answr == NO ]]; then
-	ltskern=false
-fi
-answr=""
-echo && echo
-echo -e "${BCYAN}Do you wish to install ${BYELLOW}Xorg ${BCYAN}and ${BYELLOW}gst-plugins ${BCYAN}as well? [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
-echo -n -e "${BYELLOW}> "
-read -r answr
-if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
-	somemore=true
-fi
 clear
 answr=""
 #==================================================================================================#
@@ -509,6 +507,21 @@ echo
 jo_pacstrap base
 jo_pacstrap base-devel
 jo_pacstrap pacman-contrib
+jo_pacstrap networkmanager
+jo_pacstrap zsh
+jo_pacstrap os-prober
+if [ "$efimode" = true ]; then
+	jo_pacstrap efibootmgr
+fi
+jo_pacstrap grub
+jo_pacstrap mkinitcpio
+if [ "$ltskern" = true ]; then
+	jo_pacstrap linux-lts
+	jo_pacstrap linux-lts-headers
+else
+	jo_pacstrap linux
+	linux-headers
+fi
 echo && echo
 echo -e "${BGREEN}Base packages installed${END}"
 sleep 4
@@ -527,7 +540,6 @@ echo
 jo_pacstrap zip
 jo_pacstrap unzip
 jo_pacstrap p7zip
-jo_pacstrap networkmanager
 jo_pacstrap vim
 jo_pacstrap mc
 jo_pacstrap alsa-utils
@@ -538,27 +550,15 @@ jo_pacstrap lsb-release
 jo_pacstrap ntfs-3g
 jo_pacstrap exfat-utils
 jo_pacstrap git
-jo_pacstrap zsh
 jo_pacstrap ntp
 jo_pacstrap cronie
-jo_pacstrap grub
-jo_pacstrap os-prober
-jo_pacstrap efibootmgr
-jo_pacstrap mkinitcpio
-if [ "$ltskern" = true ]; then
-	jo_pacstrap linux-lts
-	jo_pacstrap linux-lts-headers
-else
-	jo_pacstrap linux
-	linux-headers
-fi
 echo && echo
 echo -e "${BGREEN}Utils installed.${END}"
 sleep 4
 #================================================================#
 #------------------------ EXTRA DOWNLOAD ------------------------#
 #================================================================#
-if [ "$somemore" = true ]; then
+if [ "$extras" = true ]; then
 	clear
 	echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
@@ -592,7 +592,7 @@ fi
 #================================================================#
 #--------------------- GPU DRIVERS DOWNLOAD ---------------------#
 #================================================================#
-if [[ $intelamdgpu == "intel" && "$somemore" = true ]]; then
+if [[ $intelamdgpu == "intel" && "$extras" = true ]]; then
 	clear
 	echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
@@ -606,7 +606,7 @@ if [[ $intelamdgpu == "intel" && "$somemore" = true ]]; then
 	jo_pacstrap xf86-video-intel
 fi
 sleep 2
-if [[ $intelamdgpu == "amd" && "$somemore" = true ]]; then
+if [[ $intelamdgpu == "amd" && "$extras" = true ]]; then
 	sleep 2
 	clear
 	echo -e "${BMAGENTA}\
