@@ -18,7 +18,6 @@ isusr=false
 intelamdcpu="none"
 intelamdgpu="none"
 numregex='^[0-9]+$'
-gogogo=false
 if [ ! -r /sys/firmware/efi/efivars ]; then
 	efimode=false
 else
@@ -121,14 +120,17 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
 				 $(cat blkfile)\
 				 3>&1 1>&2 2>&3 3>&-)
 	drv=$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
+	rm -f blkfile
 }
 
 jo_get_swap_size() {
+	gogogo=false
 	while [ "$gogogo" = false ]; do
 		swps=$(dialog\
 				   --nocancel --title "$1"\
 				   --inputbox "Please enter your swap partition disired size: (__G)"\
 				   7 65\
+				   "4"\
 				   3>&1 1>&2 2>&3 3>&-)
 		if [ "$swps" = "" ]; then
 			dialog --msgbox "Can't be empty. Retrying..." 5 32
@@ -143,7 +145,24 @@ jo_get_swap_size() {
 }
 
 jo_get_root_size() {
-	
+	gogogo=false
+	while [ "$gogogo" = false ]; do
+		rts=$(dialog\
+				   --nocancel --title "$1"\
+				   --inputbox "Please enter your swap partition disired size: (__G)"\
+				   7 65\
+				   "25"\
+				   3>&1 1>&2 2>&3 3>&-)
+		if [ "$rts" = "" ]; then
+			dialog --msgbox "Can't be empty. Retrying..." 5 32
+			gogogo=false
+		elif ! [[ $rts =~ $numregex ]]; then
+			dialog --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
+			gogogo=false
+		else
+			gogogo=true
+		fi
+	done
 }
 
 jo_get_continue() {
