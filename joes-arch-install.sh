@@ -59,9 +59,8 @@ jo_goodbye() {
 }
 
 jo_chk_internet() {
-	clear
 	dialog --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
-	sleep 2
+	sleep 1
 	if ! wget -q --spider https://www.archlinux.org/; then
 		dialog --title "ERROR"\
 			   --msgbox "Critical error:\n\nIt seems that you are not connected to the internet,\
@@ -78,9 +77,9 @@ jo_set_hstnm() {
 		hstnm=$(dialog\
 					--nocancel --title "$1"\
 					--inputbox "Please choose a hostname for this machine.\
-\n\nIf you are running on a managed network,\
+\n\nIf you are running on a managed network, \
 please ask your network administrator for an appropriate name."\
-					12 55\
+					12 53\
 					3>&1 1>&2 2>&3 3>&-)
 		if [ "$hstnm" = "" ]; then
 			dialog --infobox "Hostname is empty, retrying..." 3 34
@@ -91,15 +90,18 @@ please ask your network administrator for an appropriate name."\
 
 jo_pacstrap() {
 	echo
+	dialog --title "$1" --infobox "Installing $1" 3 50
 	echo -e "${BCYAN}Installing ${BYELLOW}$1${END}"
 	if pacstrap /mnt/arch "$1" > /dev/null; then
-		echo -e "${BGREEN}$1 installed${END}"
+		dialog --title "$1" --infobox "$1 installed" 3 50
+		sleep 2
 	fi
 }
 
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
+clear
 dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility\!" 6 35
 #==================================================================================================#
 #--------------------------------------- INTERNET CHECK -------------------------------------------#
