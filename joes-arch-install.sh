@@ -95,13 +95,13 @@ components to install:" 10 50 3 \
 				   extras "Extras (Xorg, gst-plugins...)" off \
 				   3>&1 1>&2 2>&3 3>&-)
 	if echo -n "$sel" | grep -q linux-lts; then
-		$ltskern=true
+		ltskern=true
 	fi
 	if echo -n "$sel" | grep -q utils; then
-		$utils=true
+		utils=true
 	fi
 	if echo -n "$sel" | grep -q extras; then
-		$extras=true
+		extras=true
 	fi
 }
 
@@ -165,14 +165,6 @@ jo_get_root_size() {
 	done
 }
 
-jo_get_continue() {
-	if dialog --yesno "$1" $2 $3; then
-		answr=true
-	else
-		answr=false
-	fi
-}
-
 jo_pacstrap() {
 	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
@@ -203,40 +195,12 @@ jo_get_options "I. CORE SETUP"
 #------------------------------------------ DISK SETUP --------------------------------------------#
 #==================================================================================================#
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
+	btsze="128M"
 	swps=""
 	rts=""
 	jo_get_disk "II. DISK SETUP"
 	jo_get_swap_size "II. DISK SETUP"
 	jo_get_root_size "II. DISK SETUP"
-	echo -e "${BMAGENTA}\
-#========= I. DISK SETUP =========#
-#                                 #
-#      Please choose wisely       #
-#                                 #
-#      3. root partion size       #
-#                                 #
-#=================================#"
-	while [ "$gogogo" = false ]; do
-		echo && echo
-		echo -e "${BCYAN}\
-Please enter your ${BYELLOW}root partition ${BCYAN}disired size:
-__G"
-		echo -n -e "${BYELLOW}> "
-		read -r rts
-		if [[ $rts == "" ]]; then
-			echo && echo
-			echo -e "${BRED}Can't be empty, retrying...${END}"
-			gogogo=false
-		elif ! [[ $rts =~ $numregex ]]; then
-			echo && echo
-			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-			gogogo=false
-		else
-			gogogo=true
-		fi
-	done
-	gogogo=false
-	btsze="128M"
 	rtsze=$rts"G"
 	swpsze=$swps"G"
 	clear
@@ -527,32 +491,34 @@ clear
 #================================================================#
 #----------------------- UTILS DOWNLOAD -------------------------#
 #================================================================#
-echo -e "${BMAGENTA}\
+if [ "$utils" = true ]; then
+	echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
 #  5. Installing useful packages  #
 #      so you don't have to       #
 #                                 #
 #=================================#${END}"
-echo
-jo_pacstrap zip
-jo_pacstrap unzip
-jo_pacstrap p7zip
-jo_pacstrap vim
-jo_pacstrap mc
-jo_pacstrap alsa-utils
-jo_pacstrap syslog-ng
-jo_pacstrap mtools
-jo_pacstrap dostools
-jo_pacstrap lsb-release
-jo_pacstrap ntfs-3g
-jo_pacstrap exfat-utils
-jo_pacstrap git
-jo_pacstrap ntp
-jo_pacstrap cronie
-echo && echo
-echo -e "${BGREEN}Utils installed.${END}"
-sleep 4
+	echo
+	jo_pacstrap zip
+	jo_pacstrap unzip
+	jo_pacstrap p7zip
+	jo_pacstrap vim
+	jo_pacstrap mc
+	jo_pacstrap alsa-utils
+	jo_pacstrap syslog-ng
+	jo_pacstrap mtools
+	jo_pacstrap dostools
+	jo_pacstrap lsb-release
+	jo_pacstrap ntfs-3g
+	jo_pacstrap exfat-utils
+	jo_pacstrap git
+	jo_pacstrap ntp
+	jo_pacstrap cronie
+	echo && echo
+	echo -e "${BGREEN}Utils installed.${END}"
+	sleep 4
+fi
 #================================================================#
 #------------------------ EXTRA DOWNLOAD ------------------------#
 #================================================================#
