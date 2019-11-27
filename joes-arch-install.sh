@@ -6,8 +6,7 @@
 ltskern=false
 utils=false
 extras=false
-answr=""
-drvnm=""
+answr="n"
 rts=""
 swps=""
 rtpwd=""
@@ -107,6 +106,31 @@ components to install:" 10 50 3 \
 	fi
 }
 
+jo_get_disk() {
+	rm -f blkfile
+	dn=$(lsblk | grep -c disk)
+	id=1
+	while [[ $dn != 0 ]]; do
+		echo -n "$id $(lsblk | grep disk | \
+awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkfile
+		((dn--))
+		((id++))
+	done
+	sel=$(dialog --nocancel --title "$1"\
+				 --menu "Choose the drive on which Arch Linux should be installed:" 12 55 4\
+				 $(cat blkfile)\
+				 3>&1 1>&2 2>&3 3>&-)
+	drv=$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
+}
+
+jo_get_continue() {
+	if dialog --yesno "$1" $2 $3; then
+		answr=true
+	else
+		answr=false
+	fi
+}
+
 jo_pacstrap() {
 	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
@@ -136,51 +160,10 @@ jo_get_options "I. CORE SETUP"
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
 #==================================================================================================#
-answr="n"
 while [[ $answr != y && $answr != Y && $answr != yes && $answr != Yes && $answr != YES ]]; do
-	drvnm=""
 	swps=""
 	rts=""
-	clear
-	echo -e "${BMAGENTA}\
-#========= I. DISK SETUP =========#
-#                                 #
-#      Please choose wisely       #
-#                                 #
-#      1. Drive to be used        #
-#                                 #
-#=================================#${END}"
-	while [[ $drvnm == "" || $drvnm -gt $(lsblk | grep -c disk) || $drvnm -le 0 ]]; do
-		echo && echo
-		dn=$(lsblk | grep -c disk)
-		id=1
-		echo -e "${BBLUE}DISK  |  SIZE\n------+--------${END}"
-		lsblk | grep disk | awk '{print "\033[1;36m"$1 "\033[1;34m   | ", "\033[1;33m"$4;}'
-		echo && echo
-		echo -e "${BCYAN}Please choose the ${BYELLOW}drive ${BCYAN}on which Arch Linux shoud be installed:${END}"
-		while [[ $dn != 0 ]]; do
-			echo -e "${BYELLOW}$id. $(lsblk | grep disk | awk '{print "\033[1;36m"$1"\033[0m";}' | sed -n "$id"p)"
-			((dn--))
-			((id++))
-		done
-		echo -n -e "${BYELLOW}> "
-		read -r drvnm
-		if [ "$drvnm" = "" ]; then
-			echo && echo
-			echo -e "${BRED}Can't be empty, retrying...${END}"
-		elif ! [[ $drvnm =~ $numregex ]]; then
-			echo && echo
-			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		elif [ "$drvnm" -gt "$(lsblk | grep -c disk)" ]; then
-			echo && echo
-			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		elif [ "$drvnm" -le 0 ]; then
-			echo && echo
-			echo -e "${BRED}Illegal value, please choose something reasonable. Retrying...${END}"
-		fi
-	done
-	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$drvnm"p)
-	clear
+	jo_get_disk "II. DISK SETUP"
 	echo -e "${BMAGENTA}\
 #========= I. DISK SETUP =========#
 #                                 #
