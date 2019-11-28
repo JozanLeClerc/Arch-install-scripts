@@ -516,7 +516,7 @@ jo_fstab "IV. INSTALLING LINUX"
 dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	hwclock --systohc
 	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -531,7 +531,6 @@ $rtpwd
 $rtpwd
 	systemctl enable NetworkManager
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-	exit
 ARCH_CHROOT_CMDS
 sleep 2
 if [ "$isusr" = true ]; then
@@ -539,21 +538,19 @@ if [ "$isusr" = true ]; then
 		   --infobox "Setting up the user"\
 		   3 30
 	if [ "$isusrsudo" = true ]; then
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	useradd -m -g wheel -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
 $usrpwd
 	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-	exit
 ARCH_CHROOT_CMDS
 	else
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	useradd -m -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
 $usrpwd
-	exit
 ARCH_CHROOT_CMDS
 	fi
 	sleep 2
@@ -562,14 +559,12 @@ dialog --title "$1"\
 	   --infobox "Generating kernel image"\
 	   3 30
 if [ "$ltskern" = false ]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	mkinitcpio -p linux
-	exit
 ARCH_CHROOT_CMDS
 else
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	mkinitcpio -p linux-lts
-	exit
 ARCH_CHROOT_CMDS
 fi
 sleep 2
@@ -577,7 +572,7 @@ dialog --title "$1"\
 	   --infobox "Configuring bootloader"\
 	   3 30
 if [ "$efimode" = true ]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null
+	arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
 	mkdir -p /boot/grub
 	grub-mkconfig -o /boot/grub/grub.cfg
@@ -585,13 +580,11 @@ if [ "$efimode" = true ]; then
 	cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
 	echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
 	echo "exit" >> /boot/efi/startup.nsh
-	exit
 ARCH_CHROOT_EFI_GRUB_CMDS
 else
-	arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null
+	arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS
 	grub-install --target=i386-pc $drv
 	grub-mkconfig -o /boot/grub/grub.cfg
-	exit
 ARCH_CHROOT_BIOS_GRUB_CMDS
 fi
 sleep 2
