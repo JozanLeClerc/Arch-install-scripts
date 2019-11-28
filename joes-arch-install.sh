@@ -448,7 +448,11 @@ jo_pacstrap base
 jo_pacstrap base-devel
 jo_pacstrap pacman-contrib
 jo_pacstrap networkmanager
-jo_pacstrap zsh
+if [ "$isusr" = true ]; then
+	if [ "$usrshell" = "zsh" ]; then
+		jo_pacstrap zsh
+	fi
+fi
 jo_pacstrap os-prober
 if [ "$efimode" = true ]; then
 	jo_pacstrap efibootmgr
