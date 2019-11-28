@@ -281,9 +281,7 @@ jo_get_usr_config() {
 }
 
 jo_pacstrap() {
-	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
-	echo -e "${BCYAN}Installing ${BYELLOW}$1${END}"
 	if pacstrap /mnt/arch "$1" > /dev/null; then
 		dialog --title "$1" --infobox "$1 installed" 3 50
 		sleep 2
