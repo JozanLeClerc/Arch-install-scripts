@@ -39,8 +39,8 @@ Now you are ready to run the script. Run *the following commands* to begin setup
 
 #+BEGIN_SRC shell
 wget https://raw.githubusercontent.com/JozanLeClerc/arch-installer/master/arch-installer.sh
-chmod +x joes-arch-install.sh
-./joes-arch-install.sh
+chmod +x arch-installer.sh
+./arch-installer.sh
 #+END_SRC
 
 ** Disclaimers
