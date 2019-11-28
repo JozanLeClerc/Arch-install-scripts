@@ -330,7 +330,6 @@ sleep 2
 #================================================================#
 #------------------------- WIPING DISK --------------------------#
 #================================================================#
-clear
 dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Partitioning filesystem"\
 	   3 28
@@ -402,13 +401,9 @@ sleep 2
 #================================================================#
 #---------------------- MOUNT PARTITIONS ------------------------#
 #================================================================#
-clear
-echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#     3. Mounting partitions      #
-#                                 #
-#=================================#${END}"
+dialog --title "IV. INSTALLING LINUX"\
+	   --infobox "Mounting partitions"\
+	   3 28
 mkdir /mnt/arch > /dev/null
 swapon "$drv""2" > /dev/null
 mount "$drv""3" /mnt/arch > /dev/null
@@ -426,15 +421,6 @@ clear
 #================================================================#
 #------------------------ BASE DOWNLOAD -------------------------#
 #================================================================#
-echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#  4. Downloading base packages   #
-#                                 #
-#       Please be patient,        #
-#      this may take a while      #
-#                                 #
-#=================================#${END}"
 echo
 jo_pacstrap base
 jo_pacstrap base-devel
