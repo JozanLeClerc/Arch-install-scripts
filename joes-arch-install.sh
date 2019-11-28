@@ -316,50 +316,6 @@ jo_warn_wiping
 #==================================================================================================#
 jo_get_root_config "III. USERS SETUP"
 jo_get_usr_config "III. USERS SETUP"
-
-answr="n"
-clear
-echo -e "${BMAGENTA}\
-#======= II. USERS SETUP =========#
-#                                 #
-#          2. User add            #
-#                                 #
-#=================================#${END}"
-echo && echo
-echo -e "${BCYAN}Would you like to add a user to the system? (will automatically receive sudo rights) [${BGREEN}y${BCYAN}/${BRED}N${BCYAN}]"
-echo -n -e "${BYELLOW}> " 
-read -r answr
-if [[ $answr == y || $answr == Y || $answr == yes || $answr == Yes || $answr == YES ]]; then
-	echo && echo
-	echo -e "${BCYAN}Enter your desired ${BYELLOW}username:"
-	echo -n -e "${BYELLOW}> "
-	read -r usr
-	isusr=true
-	usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
-	echo && echo
-	while [[ $usrusrpwd != "$usrpwd" || $usrpwd == "" ]]; do
-		echo -e "${BCYAN}Enter your disired ${BYELLOW}password ${BCYAN}for ${BYELLOW}$usr${BCYAN} (can't be empty):"
-		echo -n -e "${BYELLOW}> "
-		read -r -s usrpwd
-		echo && echo
-		echo -e "${BCYAN}Confirm ${BYELLOW}user password:${BCYAN}"
-		echo -n -e "${BYELLOW}> "
-		read -r -s usrusrpwd
-		if [[ $usrusrpwd != "$usrpwd" ]]; then
-			echo && echo
-			echo -e "${BRED}Password mismatch, retrying...${END}"
-			sleep 2
-		fi
-		if [[ $usrpwd == "" ]]; then
-			echo && echo
-			echo -e "${BRED}Password is empty, retrying...${END}"
-			sleep 2
-		fi
-	done
-fi
-clear
-clear
-answr=""
 #==================================================================================================#
 #-------------------------------------- THE ACTUAL INSTALL ----------------------------------------#
 #==================================================================================================#
@@ -387,29 +343,14 @@ echo -e "${BMAGENTA}\
 #          disk $drv          #
 #                                 #
 #=================================#${END}"
-echo && echo
-echo -e "${BCYAN}Wiping disk. This step may take a while.${END}"
-basepartc=$(lsblk "$drv" | grep -c part)
-if [ "$basepartc" -ge 1 ]; then
-	i=1
-	while [[ $i -le $basepartc ]]; do
-		towipe=$(lsblk "$drv" | grep part | awk '{print $1}' | rev | cut -c -1 | rev | awk "NR==$i")
-		echo -e "${BCYAN}Wiping $drv$towipe...${END}"
-		dd if=/dev/zero of="$drv$towipe" bs=1M status=progress > /dev/null 2>&1
-		((i++))
-	done
-else
-	echo -e "${BCYAN}Wiping $drv...${END}"
-	dd if=/dev/zero of="$drv" bs=1M status=progress > /dev/null 2>&1
-fi
-wipefs --all --force "$drv"
+wipefs --all --force "$drv" > /dev/null
 echo && echo
 echo -e "${BGREEN}Wiping complete.${END}"
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
 if [ "$efimode" = true ]; then
-	fdisk "$drv" << FDISK_EFI_INPUT
+	fdisk -W always "$drv" << FDISK_EFI_INPUT
 g
 n
 1
@@ -433,7 +374,7 @@ t
 w
 FDISK_EFI_INPUT
 else
-	fdisk "$drv" << FDISK_BIOS_INPUT
+	fdisk -W always "$drv" << FDISK_BIOS_INPUT
 o
 n
 p
