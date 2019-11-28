@@ -161,6 +161,7 @@ jo_get_root_size() {
 }
 
 jo_get_disk_config() {
+	answr=false
 	while [ "$answr" = false ]; do
 		answr=false
 		btsze="128M"
