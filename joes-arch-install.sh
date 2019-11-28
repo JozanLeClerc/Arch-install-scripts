@@ -325,7 +325,7 @@ jo_get_usr_config "III. USERS SETUP"
 dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Setting date via ntp"\
 	   3 28
-timedatectl set-ntp true > /dev/null
+timedatectl set-ntp true > /dev/null 2>&1
 sleep 2
 #================================================================#
 #------------------------- WIPING DISK --------------------------#
@@ -333,12 +333,12 @@ sleep 2
 dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Partitioning filesystem"\
 	   3 28
-wipefs --all --force "$drv" > /dev/null
+wipefs --all --force "$drv" > /dev/null 2>&1
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
 if [ "$efimode" = true ]; then
-	fdisk --wipe-partition always "$drv" << FDISK_EFI_INPUT > /dev/null
+	fdisk --wipe-partition always "$drv" << FDISK_EFI_INPUT > /dev/null 2>&1
 g
 n
 1
@@ -362,7 +362,7 @@ t
 w
 FDISK_EFI_INPUT
 else
-	fdisk --wipe-partition always "$drv" << FDISK_BIOS_INPUT > /dev/null
+	fdisk --wipe-partition always "$drv" << FDISK_BIOS_INPUT > /dev/null 2>&1
 o
 n
 p
@@ -390,13 +390,13 @@ dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Making filesystem"\
 	   3 28
 if [ "$efimode" = true ]; then
-	mkfs.fat -F32 "$drv""1" > /dev/null
+	mkfs.fat -F32 "$drv""1" > /dev/null 2>&1
 else
-	mkfs.ext2 "$drv""1" > /dev/null
+	mkfs.ext2 "$drv""1" > /dev/null 2>&1
 fi
-mkswap "$drv""2" > /dev/null
-mkfs.ext4 "$drv""3" > /dev/null
-mkfs.ext4 "$drv""4" > /dev/null
+mkswap "$drv""2" > /dev/null 2>&1
+mkfs.ext4 "$drv""3" > /dev/null 2>&1
+mkfs.ext4 "$drv""4" > /dev/null 2>&1
 sleep 2
 #================================================================#
 #---------------------- MOUNT PARTITIONS ------------------------#
@@ -404,18 +404,18 @@ sleep 2
 dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Mounting partitions"\
 	   3 28
-mkdir /mnt/arch > /dev/null
-swapon "$drv""2" > /dev/null
-mount "$drv""3" /mnt/arch > /dev/null
-mkdir /mnt/arch/boot > /dev/null
-mkdir /mnt/arch/boot/efi > /dev/null
+mkdir /mnt/arch > /dev/null 2>&1
+swapon "$drv""2" > /dev/null 2>&1
+mount "$drv""3" /mnt/arch > /dev/null 2>&1
+mkdir /mnt/arch/boot > /dev/null 2>&1
+mkdir /mnt/arch/boot/efi > /dev/null 2>&1
 if [ "$efimode" = true ]; then
-	mount "$drv""1" /mnt/arch/boot/efi > /dev/null
+	mount "$drv""1" /mnt/arch/boot/efi > /dev/null 2>&1
 else
-	mount "$drv""1" /mnt/arch/boot > /dev/null
+	mount "$drv""1" /mnt/arch/boot > /dev/null 2>&1
 fi
-mkdir /mnt/arch/home > /dev/null
-mount "$drv""4" /mnt/arch/home > /dev/null
+mkdir /mnt/arch/home > /dev/null 2>&1
+mount "$drv""4" /mnt/arch/home > /dev/null 2>&1
 sleep 2
 clear
 #================================================================#
