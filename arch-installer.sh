@@ -437,6 +437,12 @@ jo_pacstrap base
 jo_pacstrap base-devel
 jo_pacstrap pacman-contrib
 jo_pacstrap networkmanager
+jo_pacstrap syslog-ng
+jo_pacstrap mtools
+jo_pacstrap dostools
+jo_pacstrap lsb-release
+jo_pacstrap ntfs-3g
+jo_pacstrap exfat-utils
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh
@@ -476,12 +482,6 @@ if [ "$utils" = true ]; then
 	jo_pacstrap vim
 	jo_pacstrap mc
 	jo_pacstrap alsa-utils
-	jo_pacstrap syslog-ng
-	jo_pacstrap mtools
-	jo_pacstrap dostools
-	jo_pacstrap lsb-release
-	jo_pacstrap ntfs-3g
-	jo_pacstrap exfat-utils
 	jo_pacstrap git
 	jo_pacstrap ntp
 	jo_pacstrap cronie
