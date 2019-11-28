@@ -1,4 +1,4 @@
-* Joe's Arch Linux installer utility
+#+TITLE: Joe's Arch Linux installer utility
 #+OPTIONS: toc:2
 [TABLE-OF-CONTENTS]
 ** Introduction
