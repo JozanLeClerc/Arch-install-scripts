@@ -10,6 +10,7 @@ usrpwd=""
 usrusrpwd="fade"
 hstnm=""
 isusr=false
+isusrsudo=false
 intelamdcpu="none"
 intelamdgpu="none"
 numregex='^[0-9]+$'
@@ -193,15 +194,15 @@ home partition ($drv4) - All that remains"\
 }
 
 jo_warn_wiping() {
-		if ! dialog --title "WARNING"\
-				  --yesno "Warning: disk $drv will be wiped. \
+	if ! dialog --title "WARNING"\
+		 --yesno "Warning: disk $drv will be wiped. \
 Are you sure you wish to continue?"\
-				  6 45; then
-			jo_goodbye
-		fi
+		 6 45; then
+		jo_goodbye
+	fi
 }
 
-jo_get_root_passwd() {
+jo_get_root_config() {
 	gogogo=false
 	while [ "$gogogo" = false ]; do
 		rtpwd=$(dialog --title "$1"\
@@ -222,6 +223,45 @@ jo_get_root_passwd() {
 			gogogo=true
 		fi
 	done
+}
+
+jo_get_usr_config() {
+	if dialog --title "$1"\
+		 --yesno "Would you like to add a user to the system?"\
+		 6 45; then
+		usr=$(dialog\
+				  --nocancel --title "$1"\
+				  --inputbox "Enter your desired username:"\
+				  7 40\
+				  3>&1 1>&2 2>&3 3>&-)
+		usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
+		isusr=true
+		gogogo=false
+		while [ "$gogogo" = false ]; do
+			usrpwd=$(dialog --title "$1"\
+						   --passwordbox "Enter your desired password for $usr:"\
+						   7 50\
+						   3>&1 1>&2 2>&3 3>&-)
+			usrusrpwd=$(dialog --title "$1"\
+							 --passwordbox "Confirm $usr password:"\
+							 7 50\
+							 3>&1 1>&2 2>&3 3>&-)
+			if ! [ "$usrusrpwd" = "$usrpwd" ]; then
+				dialog --msgbox "Password mismatch" 5 22
+				gogogo=false
+			elif [ "$usrpwd" = "" ]; then
+				dialog --msgbox "Password can't be empty" 5 28
+				gogogo=false
+			else
+				gogogo=true
+			fi
+		done
+		if dialog --title "$1"\
+				  --yesno "Should $usr be sudo?"\
+				  6 45; then
+			isusrsudo=true
+		fi
+	fi
 }
 
 jo_pacstrap() {
@@ -258,10 +298,10 @@ jo_warn_wiping
 #==================================================================================================#
 #------------------------------------ USERS AND ROOT SETUP ----------------------------------------#
 #==================================================================================================#
-jo_get_root_passwd "III. USERS SETUP"
+jo_get_root_config "III. USERS SETUP"
+jo_get_usr_config "III. USERS SETUP"
+
 answr="n"
-
-
 clear
 echo -e "${BMAGENTA}\
 #======= II. USERS SETUP =========#
