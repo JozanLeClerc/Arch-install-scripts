@@ -442,7 +442,7 @@ if [ "$ltskern" = true ]; then
 	jo_pacstrap linux-lts-headers
 else
 	jo_pacstrap linux
-	linux-headers
+	jo_pacstrap linux-headers
 fi
 echo && echo
 echo -e "${BGREEN}Base packages installed${END}"
