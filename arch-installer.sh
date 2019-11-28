@@ -287,9 +287,10 @@ jo_get_usr_config() {
 	fi
 	usrshell=$(dialog --title "$1"\
 						--menu "Choose a shell for $usr:"\
-						10 40 3\
-						"zsh" "The z shell"\
-						"bash" "The bourne-against shell"\
+						11 40 4\
+						"zsh" "The Z Shell"\
+						"dash" "The Debian Almquist Shell"\
+						"bash" "The Bourne-again Shell"\
 						"sh" "The OG shell"\
 						3>&1 1>&2 2>&3 3>&-)
 }
@@ -427,7 +428,7 @@ jo_chroot_base() {
 	dialog --title "$1"\
 		   --infobox "Setting up the system"\
 		   4 35
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	hwclock --systohc
 	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -449,7 +450,22 @@ ARCH_CHROOT_CMDS
 }
 
 jo_chroot_set_usr() {
-	
+	if [ "$isusrsudo" = true ]; then
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+	useradd -m -g wheel -s /bin/$usrshell $usr
+	passwd $usr
+$usrpwd
+$usrpwd
+	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+ARCH_CHROOT_CMDS
+	else
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	useradd -m -s /bin/$usrshell $usr
+	passwd $usr
+$usrpwd
+$usrpwd
+ARCH_CHROOT_CMDS
+	fi
 }
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
@@ -484,6 +500,8 @@ jo_pacstrap networkmanager
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh
+	elif [ "$usrshell" = "dash" ]; then
+		jo_pacstrap dash
 	fi
 fi
 jo_pacstrap os-prober
@@ -560,43 +578,8 @@ jo_fstab "IV. INSTALLING LINUX"
 #------------------------- ARCH-CHROOT --------------------------#
 #================================================================#
 jo_chroot_base "V. CONFIGURING LINUX"
-jo_chroot_set_usr "V. CONFIGURING LINUX"
 if [ "$isusr" = true ]; then
-	if [ "$isusrsudo" = true ]; then
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#       9. Generating user        #
-	#                                 #
-	#=================================#
-	useradd -m -g wheel -s /bin/$usrshell $usr
-	passwd $usr
-$usrpwd
-$usrpwd
-	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-	sleep 2
-	exit
-ARCH_CHROOT_CMDS
-	else
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#       9. Generating user        #
-	#                                 #
-	#=================================#
-	useradd -m -s /bin/$usrshell $usr
-	passwd $usr
-$usrpwd
-$usrpwd
-	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-	sleep 2
-	exit
-ARCH_CHROOT_CMDS
-	fi
+	jo_chroot_set_usr "V. CONFIGURING LINUX"
 fi
 if [ "$ltskern" = false ]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
