@@ -726,7 +726,8 @@ $rtpwd
 	sleep 2
 ARCH_CHROOT_CMDS
 if [ "$isusr" = true ]; then
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	if [ "$isusrsudo" = true ]; then
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	sleep 2
 	clear
 	#===== V. CONFIGURING LINUX ======#
@@ -735,6 +736,23 @@ arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	#                                 #
 	#=================================#
 	useradd -m -g wheel -s /bin/zsh $usr
+	passwd $usr
+$usrpwd
+$usrpwd
+	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+	sleep 2
+	exit
+ARCH_CHROOT_CMDS
+	else
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	sleep 2
+	clear
+	#===== V. CONFIGURING LINUX ======#
+	#                                 #
+	#       9. Generating user        #
+	#                                 #
+	#=================================#
+	useradd -m -s /bin/zsh $usr
 	passwd $usr
 $usrpwd
 $usrpwd
