@@ -43,7 +43,7 @@ chmod +x arch-installer.sh
 ./arch-installer.sh
 #+END_SRC
 
-** Partition scheme used
+** Partition schemes
 Here are the partition schemes made by the installer:
 
 *** UEFI mode
