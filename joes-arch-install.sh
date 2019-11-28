@@ -286,7 +286,7 @@ jo_pacstrap() {
 	dialog --title "$1" --infobox "Installing $1" 3 "$diaglen"
 	if pacstrap /mnt/arch "$1" > /dev/null 2>&1; then
 		dialog --title "$1" --infobox "$1 installed" 3 "$diaglen"
-		sleep 2
+		sleep 1
 	fi
 }
 #==================================================================================================#
