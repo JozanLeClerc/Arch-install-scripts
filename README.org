@@ -1,18 +1,33 @@
-* Joe's Arch Linux installation script
-
+* Joe's Arch Linux installer utility
 ** Introduction
-My original script meant to automate your Arch Linux installation process. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
+My original script meant to automate your Arch Linux installation process using a FreeBSD installer inspired user interface. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
 
 The script was tested on virtual machine only at the moment.
 
-/Note:/ while the script simplifies the whole installation process, this is not made for new users. It is meant for users that already performed *Arch Linux* installations and more or less understand what's going on. It's always best to learn Arch by yourself!
+/Note:/ while the script simplifies the whole installation process, this is not made for new users. It is meant for users that already performed Arch Linux installations and more or less understand what's going on. It's always best to learn Arch by yourself!
 
 /Note:/ the script does not install too many bloatware other than some utils. You will be prompted to choose whether or not you want ~Xorg~ and other classic desktop user experience extras.
 
 ** How to use
-First make sure you are booted in a live /Arch ISO environment/, with the familiar prompt waiting for instructions.
+*** Getting in the live Arch Linux environment
+First, go to [[https://www.archlinux.org/download/][the Arch Linux download page]] and download the latest version of the Arch ISO.
 
-Secondly, you will require a working internet connection. To *try your connection* use:
+Write it to a USB media. To do so, you can use some of those tools:
+
+**** Windows
+- ~rufus~
+
+**** Linux
+- ~kindd~
+- ~unetbootin~
+- ~dd~ (expert mode)
+
+Plug in the USB and boot from it. You may have to change the boot order of your computer.
+
+*** Getting and running the installer
+Make sure you are booted in a live /Arch ISO environment/, with the familiar prompt waiting for instructions.
+
+Now, you will require a working internet connection. To *try your connection* use:
 
 #+BEGIN_SRC shell
 ping -c4 archlinux.org
@@ -23,7 +38,7 @@ If this fails, refer to [[https://wiki.archlinux.org/index.php/Installation_guid
 Now you are ready to run the script. Run *the following commands* to begin setup and installation:
 
 #+BEGIN_SRC shell
-wget https://raw.githubusercontent.com/JozanLeClerc/joes-arch-install/master/joes-arch-install.sh
+wget https://raw.githubusercontent.com/JozanLeClerc/arch-installer/master/arch-installer.sh
 chmod +x joes-arch-install.sh
 ./joes-arch-install.sh
 #+END_SRC
@@ -38,3 +53,5 @@ It does not handle *multiple disk partitionning*.
 
 ** More
 Don't hesitate to contact me or create a pull request in case of bugs, typos, cool suggestions...
+
+Gentoo version to come.
