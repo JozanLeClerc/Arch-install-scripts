@@ -516,7 +516,7 @@ jo_fstab "IV. INSTALLING LINUX"
 dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	hwclock --systohc
 	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -539,7 +539,7 @@ if [ "$isusr" = true ]; then
 		   --infobox "Setting up the user"\
 		   3 30
 	if [ "$isusrsudo" = true ]; then
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
 	useradd -m -g wheel -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
@@ -548,7 +548,7 @@ $usrpwd
 	exit
 ARCH_CHROOT_CMDS
 	else
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
 	useradd -m -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
@@ -562,12 +562,12 @@ dialog --title "$1"\
 	   --infobox "Generating kernel image"\
 	   3 30
 if [ "$ltskern" = false ]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
 	mkinitcpio -p linux
 	exit
 ARCH_CHROOT_CMDS
 else
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
 	mkinitcpio -p linux-lts
 	exit
 ARCH_CHROOT_CMDS
@@ -577,7 +577,7 @@ dialog --title "$1"\
 	   --infobox "Configuring bootloader"\
 	   3 30
 if [ "$efimode" = true ]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null 2>&1
+	arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
 	mkdir -p /boot/grub
 	grub-mkconfig -o /boot/grub/grub.cfg
@@ -588,7 +588,7 @@ if [ "$efimode" = true ]; then
 	exit
 ARCH_CHROOT_EFI_GRUB_CMDS
 else
-	arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null 2>&1
+	arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null
 	grub-install --target=i386-pc $drv
 	grub-mkconfig -o /boot/grub/grub.cfg
 	exit
