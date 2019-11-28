@@ -261,6 +261,13 @@ jo_get_usr_config() {
 				  6 45; then
 			isusrsudo=true
 		fi
+		usrshell=$(dialog --title "$1"\
+						  --menu "Choose a shell for this $usr:"\
+						  10 40 3\
+						  "zsh" "The z shell"\
+						  "bash" "The bourne-against shell"\
+						  "sh" "The OG shell"\
+						  3>&1 1>&2 2>&3 3>&-)
 	fi
 }
 
@@ -735,7 +742,7 @@ if [ "$isusr" = true ]; then
 	#       9. Generating user        #
 	#                                 #
 	#=================================#
-	useradd -m -g wheel -s /bin/zsh $usr
+	useradd -m -g wheel -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
 $usrpwd
@@ -752,7 +759,7 @@ ARCH_CHROOT_CMDS
 	#       9. Generating user        #
 	#                                 #
 	#=================================#
-	useradd -m -s /bin/zsh $usr
+	useradd -m -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
 $usrpwd
