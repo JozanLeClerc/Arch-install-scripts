@@ -438,18 +438,19 @@ jo_chroot_base() {
 	echo "127.0.0.1 localhost" > /etc/hosts
 	echo "::1 localhost" >> /etc/hosts
 	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
-	clear
 	passwd
 $rtpwd
 $rtpwd
 	systemctl enable NetworkManager
-	clear
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 ARCH_CHROOT_CMDS
 	sleep 2
 }
 
 jo_chroot_set_usr() {
+	dialog --title "$1"\
+		   --infobox "Setting up the user"\
+		   4 35
 	if [ "$isusrsudo" = true ]; then
 		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	useradd -m -g wheel -s /bin/$usrshell $usr
@@ -466,6 +467,46 @@ $usrpwd
 $usrpwd
 ARCH_CHROOT_CMDS
 	fi
+	sleep 2
+}
+
+jo_mkinitcpio() {
+	dialog --title "$1"\
+		   --infobox "Generating kernel image"\
+		   4 35
+	if [ "$ltskern" = false ]; then
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+	mkinitcpio -p linux
+ARCH_CHROOT_CMDS
+	else
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null 2>&1
+	mkinitcpio -p linux-lts
+ARCH_CHROOT_CMDS
+	fi
+	sleep 2
+}
+
+jo_grub() {
+	dialog --title "$1"\
+		   --infobox "Configuring bootloader"\
+		   4 35
+	if [ "$efimode" = true ]; then
+		arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null 2>&1
+	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
+	mkdir -p /boot/grub
+	grub-mkconfig -o /boot/grub/grub.cfg
+	mkdir -p /boot/efi/EFI/BOOT
+	cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
+	echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
+	echo "exit" >> /boot/efi/startup.nsh
+ARCH_CHROOT_EFI_GRUB_CMDS
+	else
+		arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null 2>&1
+	grub-install --target=i386-pc $drv
+	grub-mkconfig -o /boot/grub/grub.cfg
+ARCH_CHROOT_BIOS_GRUB_CMDS
+	fi
+	sleep 2
 }
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
@@ -581,76 +622,17 @@ jo_chroot_base "V. CONFIGURING LINUX"
 if [ "$isusr" = true ]; then
 	jo_chroot_set_usr "V. CONFIGURING LINUX"
 fi
-if [ "$ltskern" = false ]; then
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	clear
-	#===== VI. CONFIGURING BOOT ======#
-	#                                 #
-	#    1. Configuring the Kernel    #
-	#                                 #
-	#=================================#
-	mkinitcpio -p linux
-ARCH_CHROOT_CMDS
-else
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	clear
-	#===== VI. CONFIGURING BOOT ======#
-	#                                 #
-	#    1. Configuring the Kernel    #
-	#                                 #
-	#=================================#
-	mkinitcpio -p linux-lts
-ARCH_CHROOT_CMDS
-fi
-echo -e "${BBLUE}"
-sleep 2
-if [ "$efimode" = true ]; then
-arch-chroot /mnt/arch << ARCH_CHROOT_EFI_GRUB_CMDS
-	clear
-	#===== VI. CONFIGURING BOOT ======#
-	#                                 #
-	#       2. Configuring GRUB       #
-	#                                 #
-	#=================================#
-	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
-	mkdir -p /boot/grub
-	grub-mkconfig -o /boot/grub/grub.cfg
-	mkdir -p /boot/efi/EFI/BOOT
-	cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
-	echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
-	echo "exit" >> /boot/efi/startup.nsh
-	sleep 4
-	exit
-ARCH_CHROOT_EFI_GRUB_CMDS
-else
-arch-chroot /mnt/arch << ARCH_CHROOT_BIOS_GRUB_CMDS
-	clear
-	#===== VI. CONFIGURING BOOT ======#
-	#                                 #
-	#       2. Configuring GRUB       #
-	#                                 #
-	#=================================#
-	grub-install --target=i386-pc $drv
-	grub-mkconfig -o /boot/grub/grub.cfg
-	sleep 4
-	exit
-ARCH_CHROOT_BIOS_GRUB_CMDS
-fi
-echo && echo
-clear
-echo -e "${BMAGENTA}\
-#========= ${BGREEN}WORK COMPLETE ${BMAGENTA}=========#
-#                                 #
-#     Your system should now      #
-#         be installed.           #
-#   Thank your for using Joe's    #
-#           ARCH LINUX            #
-#      UEFI INSTALL UTILITY       #
-#                                 #
-#   Your system will now reboot   #
-#                                 #
-#=================================#${END}"
-echo && echo
-sleep 10
+jo_mkinitcpio "VI. CONFIGURING BOOT"
+jo_grub "VI. CONFIGURING BOOT"
+dialog --title "WORK COMPLETE"\
+	   --msgbox "\
+Arch Linux is now installed\n\
+on this terminal.\n\
+Thank you for using Joe's\n
+ARCH LINUX INSTALLER.\n\
+\n
+Your system will now reboot"\
+	   10 32
 umount -R /mnt/arch
+clear
 reboot
