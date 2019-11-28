@@ -1,6 +1,6 @@
 * Joe's Arch Linux installer utility
 ** Introduction
-My original script meant to automate your Arch Linux installation process using a FreeBSD installer inspired user interface. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
+My original script meant to automate your Arch Linux installation process using a FreeBSD installer-inspired user interface. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
 
 The script was tested on virtual machine only at the moment.
 
