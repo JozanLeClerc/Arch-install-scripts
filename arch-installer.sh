@@ -60,7 +60,8 @@ therefore Joe's installer is forced to abort.\nPlease connect to the Internet an
 #---------------------------------------- HOSTNAME SETUP ------------------------------------------#
 #==================================================================================================#
 jo_get_hstnm() {
-	while [ $hstnm = "" ]; do
+	gogogo=false
+	while [ "$gogogo" = false ]; do
 		hstnm=$(dialog\
 					--nocancel --title "$1"\
 					--inputbox "Please choose a hostname for this machine.\
@@ -71,6 +72,9 @@ please ask your network administrator for an appropriate name."\
 		if [ "$hstnm" = "" ]; then
 			dialog --infobox "Hostname is empty, retrying..." 3 34
 			sleep 2
+			gogogo=false
+		else
+			gogogo=true
 		fi
 	done
 }
@@ -517,6 +521,7 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
 sleep 1
+clear
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	sleep 1
