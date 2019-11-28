@@ -350,7 +350,7 @@ echo -e "${BGREEN}Wiping complete.${END}"
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
 if [ "$efimode" = true ]; then
-	fdisk -W always "$drv" << FDISK_EFI_INPUT
+	fdisk --wipe-partition always "$drv" << FDISK_EFI_INPUT > /dev/null
 g
 n
 1
@@ -374,7 +374,7 @@ t
 w
 FDISK_EFI_INPUT
 else
-	fdisk -W always "$drv" << FDISK_BIOS_INPUT
+	fdisk --wipe-partition always "$drv" << FDISK_BIOS_INPUT > /dev/null
 o
 n
 p
