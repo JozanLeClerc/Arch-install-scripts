@@ -1,5 +1,6 @@
 * Joe's Arch Linux installer utility
 #+OPTIONS: toc:2
+[TABLE-OF-CONTENTS]
 ** Introduction
 My original script meant to automate your Arch Linux installation process using a FreeBSD-inspired installer interface. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
 
