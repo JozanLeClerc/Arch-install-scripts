@@ -284,7 +284,7 @@ jo_pacstrap() {
 	paclen=$(echo -n "$1" | wc -c)
 	diaglen=$(echo "15 + $paclen" | bc)
 	dialog --title "$1" --infobox "Installing $1" 3 "$diaglen"
-	if pacstrap /mnt/arch "$1" > /dev/null; then
+	if pacstrap /mnt/arch "$1" > /dev/null 2>&1; then
 		dialog --title "$1" --infobox "$1 installed" 3 50
 		sleep 2
 	fi
