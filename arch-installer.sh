@@ -414,6 +414,43 @@ jo_pacstrap() {
 		sleep 0.5
 	fi
 }
+
+jo_fstab() {
+	dialog --title "$1"\
+		   --infobox "Generating fstab"\
+		   3 28
+	genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
+	sleep 2
+}
+
+jo_chroot_base() {
+	dialog --title "$1"\
+		   --infobox "Setting up the system"\
+		   4 35
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS > /dev/null
+	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+	hwclock --systohc
+	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+	locale-gen
+	echo "LANG=en_US.UTF-8" > /etc/locale.conf
+	echo "$hstnm" > /etc/hostname
+	echo "127.0.0.1 localhost" > /etc/hosts
+	echo "::1 localhost" >> /etc/hosts
+	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+	clear
+	passwd
+$rtpwd
+$rtpwd
+	systemctl enable NetworkManager
+	clear
+	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
+ARCH_CHROOT_CMDS
+	sleep 2
+}
+
+jo_chroot_set_usr() {
+	
+}
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
@@ -515,98 +552,15 @@ if [ "$extras" = true ]; then
 		   4 28
 	sleep 4
 fi
-#================================================================#
-#------------------------ FSTAB CONFIG  -------------------------#
-#================================================================#
-clear
-echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#       7. Generating fstab       #
-#                                 #
-#=================================#${END}"
-genfstab -U -p /mnt/arch > /mnt/arch/etc/fstab
-sleep 2
+#==================================================================================================#
+#------------------------------------------- FSTAB CONFIG  ----------------------------------------#
+#==================================================================================================#
+jo_fstab "IV. INSTALLING LINUX"
 #================================================================#
 #------------------------- ARCH-CHROOT --------------------------#
 #================================================================#
-clear
-echo -e "${BMAGENTA}\
-#====== V. CONFIGURING LINUX =====#
-#                                 #
-#      1. Now changing root       #
-#                                 #
-#=================================#${END}"
-echo -e "${BBLUE}"
-sleep 2
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#      2. Setting time zone       #
-	#        to Paris, France,        #
-	#    for this is my time zone.    #
-	#  Change this later accordingly  #
-	#      to your own time zone      #
-	#    (Joe didn't find a quick     #
-	#     and easy way to ask you     #
-	#      about your time zone,      #
-	# Joe hopes your can  understand) #
-	#                                 #
-	#=================================#
-	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-	sleep 8
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#    3. Setting hardware clock    #
-	#          and ntp again          #
-	#                                 #
-	#=================================#
-	hwclock --systohc
-	sleep 1
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#        4. Localization          #
-	#          (en_US.UTF-8)          #
-	#                                 #
-	#=================================#
-	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-	locale-gen
-	echo "LANG=en_US.UTF-8" > /etc/locale.conf
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#       5. Setting hostname       #
-	#                                 #
-	#=================================#
-	echo "$hstnm" > /etc/hostname
-	echo "127.0.0.1 localhost" > /etc/hosts
-	echo "::1 localhost" >> /etc/hosts
-	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#     6. Setting root password    #
-	#                                 #
-	#=================================#
-	passwd
-$rtpwd
-$rtpwd
-	systemctl enable NetworkManager
-	sleep 2
-	clear
-	#===== V. CONFIGURING LINUX ======#
-	#                                 #
-	#        7. journald stuff        #
-	#                                 #
-	#=================================#
-	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-	sleep 2
-ARCH_CHROOT_CMDS
+jo_chroot_base "V. CONFIGURING LINUX"
+jo_chroot_set_usr "V. CONFIGURING LINUX"
 if [ "$isusr" = true ]; then
 	if [ "$isusrsudo" = true ]; then
 		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
