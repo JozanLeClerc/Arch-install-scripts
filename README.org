@@ -44,7 +44,7 @@ chmod +x arch-installer.sh
 #+END_SRC
 
 ** Partition scheme used
-Here's the partition scheme by the installer
+Here are the partition schemes made by the installer:
 
 *** UEFI mode
 In UEFI boot mode, a *GPT* partition table is being used is this way:
