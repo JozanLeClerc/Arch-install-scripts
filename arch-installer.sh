@@ -516,20 +516,26 @@ jo_fstab "IV. INSTALLING LINUX"
 dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
+sleep 1
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+	sleep 1
 	hwclock --systohc
+	sleep 1
 	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 	locale-gen
+	sleep 1
 	echo "LANG=en_US.UTF-8" > /etc/locale.conf
 	echo "$hstnm" > /etc/hostname
 	echo "127.0.0.1 localhost" > /etc/hosts
 	echo "::1 localhost" >> /etc/hosts
 	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+	sleep 1
 	passwd
 $rtpwd
 $rtpwd
 	systemctl enable NetworkManager
+	sleep 1
 	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 ARCH_CHROOT_CMDS
 sleep 2
