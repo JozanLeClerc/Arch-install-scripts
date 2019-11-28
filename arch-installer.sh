@@ -443,6 +443,7 @@ jo_pacstrap dostools
 jo_pacstrap lsb-release
 jo_pacstrap ntfs-3g
 jo_pacstrap exfat-utils
+jo_pacstrap ntp
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh
@@ -483,7 +484,6 @@ if [ "$utils" = true ]; then
 	jo_pacstrap mc
 	jo_pacstrap alsa-utils
 	jo_pacstrap git
-	jo_pacstrap ntp
 	jo_pacstrap cronie
 	dialog --title "IV. INSTALLING LINUX"\
 		   --infobox "Utils installed"\
