@@ -603,5 +603,4 @@ ARCH LINUX INSTALLER.\n\
 Your system will now reboot"\
 	   10 32
 umount -R /mnt/arch
-clear
 reboot
