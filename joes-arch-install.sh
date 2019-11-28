@@ -444,22 +444,14 @@ else
 	jo_pacstrap linux
 	jo_pacstrap linux-headers
 fi
-echo && echo
-echo -e "${BGREEN}Base packages installed${END}"
+dialog --title "IV. INSTALLING LINUX"\
+	   --infobox "Base packages installed"\
+	   4 28
 sleep 4
-clear
 #================================================================#
 #----------------------- UTILS DOWNLOAD -------------------------#
 #================================================================#
 if [ "$utils" = true ]; then
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#  5. Installing useful packages  #
-#      so you don't have to       #
-#                                 #
-#=================================#${END}"
-	echo
 	jo_pacstrap zip
 	jo_pacstrap unzip
 	jo_pacstrap p7zip
