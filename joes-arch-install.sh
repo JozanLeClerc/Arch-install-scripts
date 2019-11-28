@@ -45,7 +45,7 @@ END="\033[0;0m"
 #--------------------------------------- SOME FUNCTIONS -------------------------------------------#
 #==================================================================================================#
 jo_goodbye() {
-	dialog --title "Aborting"\
+	whiptail --title "Aborting"\
 		   --infobox "Thank you for using Joe's Arch Linux installer.\nAborting..."\
 		   5 30
 	sleep 4
@@ -54,22 +54,22 @@ jo_goodbye() {
 }
 
 jo_chk_internet() {
-	dialog --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
+	whiptail --infobox "Verifying that you are connected to the Internet, please wait..." 4 40
 	sleep 1
 	if ! wget -q --spider https://www.archlinux.org/; then
-		dialog --title "ERROR"\
+		whiptail --title "ERROR"\
 			   --msgbox "Critical error:\n\nIt seems that you are not connected to the internet,\
 therefore Joe's installer is forced to abort.\nPlease connect to the Internet and retry."\
 			   12 30
 		jo_goodbye
 	else
-		dialog --msgbox "Success!" 5 12
+		whiptail --msgbox "Success!" 5 12
 	fi
 }
 
 jo_get_hstnm() {
 	while [ $hstnm = "" ]; do
-		hstnm=$(dialog\
+		hstnm=$(whiptail\
 					--nocancel --title "$1"\
 					--inputbox "Please choose a hostname for this machine.\
 \n\nIf you are running on a managed network, \
@@ -77,14 +77,14 @@ please ask your network administrator for an appropriate name."\
 					12 53\
 					3>&1 1>&2 2>&3 3>&-)
 		if [ "$hstnm" = "" ]; then
-			dialog --infobox "Hostname is empty, retrying..." 3 34
+			whiptail --infobox "Hostname is empty, retrying..." 3 34
 			sleep 2
 		fi
 	done
 }
 
 jo_get_options() {
-	sel=$(dialog --nocancel --title "$1" --checklist "Choose optional system \
+	sel=$(whiptail --nocancel --title "$1" --checklist "Choose optional system \
 components to install:" 10 50 3 \
 				   linux-lts "LTS Kernel" on \
 				   utils "Utils (zip, vim, git...)" on \
@@ -111,7 +111,7 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkline
 		((dn--))
 		((id++))
 	done
-	sel=$(dialog --nocancel --title "$1"\
+	sel=$(whiptail --nocancel --title "$1"\
 				 --menu "Choose the drive on which Arch Linux should be installed:" 12 55 4\
 				 $(cat blkline)\
 				 3>&1 1>&2 2>&3 3>&-)
@@ -122,17 +122,17 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkline
 jo_get_swap_size() {
 	gogogo=false
 	while [ "$gogogo" = false ]; do
-		swps=$(dialog\
+		swps=$(whiptail\
 				   --nocancel --title "$1"\
 				   --inputbox "Please enter your swap partition disired size: (__G)"\
 				   7 65\
 				   "4"\
 				   3>&1 1>&2 2>&3 3>&-)
 		if [ "$swps" = "" ]; then
-			dialog --msgbox "Can't be empty. Retrying..." 5 32
+			whiptail --msgbox "Can't be empty. Retrying..." 5 32
 			gogogo=false
 		elif ! [[ $swps =~ $numregex ]]; then
-			dialog --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
+			whiptail --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
 			gogogo=false
 		else
 			gogogo=true
@@ -143,17 +143,17 @@ jo_get_swap_size() {
 jo_get_root_size() {
 	gogogo=false
 	while [ "$gogogo" = false ]; do
-		rts=$(dialog\
+		rts=$(whiptail\
 				   --nocancel --title "$1"\
 				   --inputbox "Please enter your root partition disired size: (__G)"\
 				   7 65\
 				   "25"\
 				   3>&1 1>&2 2>&3 3>&-)
 		if [ "$rts" = "" ]; then
-			dialog --msgbox "Can't be empty. Retrying..." 5 32
+			whiptail --msgbox "Can't be empty. Retrying..." 5 32
 			gogogo=false
 		elif ! [[ $rts =~ $numregex ]]; then
-			dialog --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
+			whiptail --msgbox "Illegal value, please enter only numerical values. Retrying..." 6 38
 			gogogo=false
 		else
 			gogogo=true
@@ -177,7 +177,7 @@ jo_get_disk_config() {
 		drv2="$drv""2"
 		drv3="$drv""3"
 		drv4="$drv""4"
-		if dialog --title "Confirm this is correct"\
+		if whiptail --title "Confirm this is correct"\
 				  --yesno "\
 Drive to use:$drv\n\
 \n\
@@ -194,7 +194,7 @@ home partition ($drv4) - All that remains"\
 }
 
 jo_warn_wiping() {
-	if ! dialog --title "WARNING"\
+	if ! whiptail --title "WARNING"\
 		 --yesno "Warning: disk $drv will be wiped. \
 Are you sure you wish to continue?"\
 		 6 45; then
@@ -205,19 +205,19 @@ Are you sure you wish to continue?"\
 jo_get_root_config() {
 	gogogo=false
 	while [ "$gogogo" = false ]; do
-		rtpwd=$(dialog --title "$1"\
+		rtpwd=$(whiptail --title "$1"\
 					   --passwordbox "Enter your desired root password:"\
 					   7 40\
 					   3>&1 1>&2 2>&3 3>&-)
-		rtrtpwd=$(dialog --title "$1"\
+		rtrtpwd=$(whiptail --title "$1"\
 						 --passwordbox "Confirm root password:"\
 						 7 40\
 						 3>&1 1>&2 2>&3 3>&-)
 		if ! [ "$rtrtpwd" = "$rtpwd" ]; then
-			dialog --msgbox "Password mismatch" 5 22
+			whiptail --msgbox "Password mismatch" 5 22
 			gogogo=false
 		elif [ "$rtpwd" = "" ]; then
-			dialog --msgbox "Password can't be empty" 5 28
+			whiptail --msgbox "Password can't be empty" 5 28
 			gogogo=false
 		else
 			gogogo=true
@@ -226,18 +226,18 @@ jo_get_root_config() {
 }
 
 jo_get_usr_config() {
-	if dialog --title "$1"\
+	if whiptail --title "$1"\
 		 --yesno "Would you like to add a user to the system?"\
 		 6 45; then
 		gogogo=false
 		while [ "$gogogo" = false ]; do
-			usr=$(dialog\
+			usr=$(whiptail\
 					  --nocancel --title "$1"\
 					  --inputbox "Enter your desired username:"\
 					  7 40\
 					  3>&1 1>&2 2>&3 3>&-)
 			if [ "$usr" = "" ]; then
-				dialog --msgbox "Username can't be empty" 5 28
+				whiptail --msgbox "Username can't be empty" 5 28
 				gogogo=false
 			else
 				usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
@@ -247,30 +247,30 @@ jo_get_usr_config() {
 		isusr=true
 		gogogo=false
 		while [ "$gogogo" = false ]; do
-			usrpwd=$(dialog --title "$1"\
+			usrpwd=$(whiptail --title "$1"\
 						   --passwordbox "Enter your desired password for $usr:"\
 						   7 50\
 						   3>&1 1>&2 2>&3 3>&-)
-			usrusrpwd=$(dialog --title "$1"\
+			usrusrpwd=$(whiptail --title "$1"\
 							 --passwordbox "Confirm $usr password:"\
 							 7 50\
 							 3>&1 1>&2 2>&3 3>&-)
 			if ! [ "$usrusrpwd" = "$usrpwd" ]; then
-				dialog --msgbox "Password mismatch" 5 22
+				whiptail --msgbox "Password mismatch" 5 22
 				gogogo=false
 			elif [ "$usrpwd" = "" ]; then
-				dialog --msgbox "Password can't be empty" 5 28
+				whiptail --msgbox "Password can't be empty" 5 28
 				gogogo=false
 			else
 				gogogo=true
 			fi
 		done
-		if dialog --title "$1"\
+		if whiptail --title "$1"\
 				  --yesno "Should $usr be sudo?"\
 				  6 45; then
 			isusrsudo=true
 		fi
-		usrshell=$(dialog --title "$1"\
+		usrshell=$(whiptail --title "$1"\
 						  --menu "Choose a shell for $usr:"\
 						  10 40 3\
 						  "zsh" "The z shell"\
@@ -283,9 +283,9 @@ jo_get_usr_config() {
 jo_pacstrap() {
 	paclen=$(echo -n "$1" | wc -c)
 	diaglen=$(echo "15 + $paclen" | bc)
-	dialog --title "$1" --infobox "Installing $1" 3 "$diaglen"
+	whiptail --title "$1" --infobox "Installing $1" 3 "$diaglen"
 	if pacstrap /mnt/arch "$1" > /dev/null 2>&1; then
-		dialog --title "$1" --infobox "$1 installed" 3 "$diaglen"
+		whiptail --title "$1" --infobox "$1 installed" 3 "$diaglen"
 		sleep 0.5
 	fi
 }
@@ -293,7 +293,7 @@ jo_pacstrap() {
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
 clear
-dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility!" 6 35
+whiptail --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation utility!" 6 35
 #==================================================================================================#
 #--------------------------------------- INTERNET CHECK -------------------------------------------#
 #==================================================================================================#
@@ -322,7 +322,7 @@ jo_get_usr_config "III. USERS SETUP"
 #================================================================#
 #--------------------------- NTP DATE ---------------------------#
 #================================================================#
-dialog --title "IV. INSTALLING LINUX"\
+whiptail --title "IV. INSTALLING LINUX"\
 	   --infobox "Setting date via ntp"\
 	   3 28
 timedatectl set-ntp true > /dev/null 2>&1
@@ -330,7 +330,7 @@ sleep 2
 #================================================================#
 #------------------------- WIPING DISK --------------------------#
 #================================================================#
-dialog --title "IV. INSTALLING LINUX"\
+whiptail --title "IV. INSTALLING LINUX"\
 	   --infobox "Partitioning filesystem"\
 	   3 28
 wipefs --all --force "$drv" > /dev/null 2>&1
@@ -386,7 +386,7 @@ p
 w
 FDISK_BIOS_INPUT
 fi
-dialog --title "IV. INSTALLING LINUX"\
+whiptail --title "IV. INSTALLING LINUX"\
 	   --infobox "Making filesystem"\
 	   3 28
 if [ "$efimode" = true ]; then
@@ -401,7 +401,7 @@ sleep 2
 #================================================================#
 #---------------------- MOUNT PARTITIONS ------------------------#
 #================================================================#
-dialog --title "IV. INSTALLING LINUX"\
+whiptail --title "IV. INSTALLING LINUX"\
 	   --infobox "Mounting partitions"\
 	   3 28
 mkdir /mnt/arch > /dev/null 2>&1
@@ -444,7 +444,7 @@ else
 	jo_pacstrap linux
 	jo_pacstrap linux-headers
 fi
-dialog --title "IV. INSTALLING LINUX"\
+whiptail --title "IV. INSTALLING LINUX"\
 	   --infobox "Base packages installed"\
 	   4 28
 sleep 4
