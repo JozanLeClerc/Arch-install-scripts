@@ -373,17 +373,17 @@ jo_make_filesystem() {
 	dialog --title "$1"\
 		   --infobox "Mounting partitions"\
 		   3 28
-	mkdir /mnt/arch > /dev/null 2>&1
+	mkdir -f /mnt/arch > /dev/null 2>&1
 	swapon "$drv""2" > /dev/null 2>&1
 	mount "$drv""3" /mnt/arch > /dev/null 2>&1
-	mkdir /mnt/arch/boot > /dev/null 2>&1
-	mkdir /mnt/arch/boot/efi > /dev/null 2>&1
+	mkdir -f /mnt/arch/boot > /dev/null 2>&1
+	mkdir -f /mnt/arch/boot/efi > /dev/null 2>&1
 	if [ "$efimode" = true ]; then
 		mount "$drv""1" /mnt/arch/boot/efi > /dev/null 2>&1
 	else
 		mount "$drv""1" /mnt/arch/boot > /dev/null 2>&1
 	fi
-	mkdir /mnt/arch/home > /dev/null 2>&1
+	mkdir -f /mnt/arch/home > /dev/null 2>&1
 	mount "$drv""4" /mnt/arch/home > /dev/null 2>&1
 	sleep 2
 }
