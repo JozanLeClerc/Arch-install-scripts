@@ -281,7 +281,9 @@ jo_get_usr_config() {
 }
 
 jo_pacstrap() {
-	dialog --title "$1" --infobox "Installing $1" 3 50
+	paclen=$(echo -n "$1" | wc -c)
+	diaglen=$(echo "15 + $paclen" | bc)
+	dialog --title "$1" --infobox "Installing $1" 3 "$diaglen"
 	if pacstrap /mnt/arch "$1" > /dev/null; then
 		dialog --title "$1" --infobox "$1 installed" 3 50
 		sleep 2
@@ -320,30 +322,19 @@ jo_get_usr_config "III. USERS SETUP"
 #================================================================#
 #--------------------------- NTP DATE ---------------------------#
 #================================================================#
-clear
-echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#        1. Setting date          #
-#             via ntp             #
-#                                 #
-#=================================#${END}"
+dialog --title "IV. INSTALLING LINUX"\
+	   --infobox "Setting date via ntp"\
+	   3 28
 timedatectl set-ntp true > /dev/null
 sleep 2
 #================================================================#
 #------------------------- WIPING DISK --------------------------#
 #================================================================#
 clear
-echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#        2. Partitionning         #
-#          disk $drv          #
-#                                 #
-#=================================#${END}"
+dialog --title "IV. INSTALLING LINUX"\
+	   --infobox "Partitioning filesystem"\
+	   3 28
 wipefs --all --force "$drv" > /dev/null
-echo && echo
-echo -e "${BGREEN}Wiping complete.${END}"
 #================================================================#
 #--------------------- PARTITIONING DISK ------------------------#
 #================================================================#
@@ -396,6 +387,9 @@ p
 w
 FDISK_BIOS_INPUT
 fi
+dialog --title "IV. INSTALLING LINUX"\
+	   --infobox "Making filesystem"\
+	   3 28
 if [ "$efimode" = true ]; then
 	mkfs.fat -F32 "$drv""1" > /dev/null
 else
@@ -405,10 +399,10 @@ mkswap "$drv""2" > /dev/null
 mkfs.ext4 "$drv""3" > /dev/null
 mkfs.ext4 "$drv""4" > /dev/null
 sleep 2
-clear
 #================================================================#
 #---------------------- MOUNT PARTITIONS ------------------------#
 #================================================================#
+clear
 echo -e "${BMAGENTA}\
 #====== IV. INSTALLING LINUX =====#
 #                                 #
@@ -719,6 +713,7 @@ $usrpwd
 	sleep 2
 	exit
 ARCH_CHROOT_CMDS
+	fi
 fi
 if [ "$ltskern" = false ]; then
 	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
