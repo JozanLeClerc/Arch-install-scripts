@@ -521,7 +521,6 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
 sleep 1
-clear
 arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	hwclock --systohc
