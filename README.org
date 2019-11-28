@@ -66,6 +66,14 @@ In UEFI boot mode, a *DOS* partition table is being used is this way:
 | /dev/sdx3 | /          | ext4       | user defined |
 | /dev/sdx4 | /home      | ext4       | what remains |
 
+** Some screenshots
+Here are a handful of images of the installer in action:
+[[./img/screen1.png]]
+[[./img/screen2.png]]
+[[./img/screen3.png]]
+[[./img/screen4.png]]
+[[./img/screen5.png]]
+
 ** Disclaimers
 While there is some basic error managements, *do not* try to break the script by inputting deliberately harmful stuff when prompted. As an *Arch Linux* installation can be complex and sensitive, it will most certainly work. This is meant to ease your life, it is not a skill test.
 

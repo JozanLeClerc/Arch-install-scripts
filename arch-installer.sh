@@ -262,7 +262,7 @@ jo_get_usr_config() {
 	done
 	if dialog --title "$1"\
 				--yesno "Should $usr be sudo?"\
-				6 45; then
+				5 45; then
 		isusrsudo=true
 	fi
 	usrshell=$(dialog --title "$1"\
