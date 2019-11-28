@@ -539,7 +539,7 @@ $rtpwd
 ARCH_CHROOT_CMDS
 sleep 2
 if [ "$isusr" = true ]; then
-	dialog --title "$1"\
+	dialog --title "V. CONFIGURING LINUX"\
 		   --infobox "Setting up the user"\
 		   3 30
 	if [ "$isusrsudo" = true ]; then
@@ -560,7 +560,7 @@ ARCH_CHROOT_CMDS
 	fi
 	sleep 2
 fi
-dialog --title "$1"\
+dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Generating kernel image"\
 	   3 30
 if [ "$ltskern" = false ]; then
@@ -573,7 +573,7 @@ else
 ARCH_CHROOT_CMDS
 fi
 sleep 2
-dialog --title "$1"\
+dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Configuring bootloader"\
 	   3 30
 if [ "$efimode" = true ]; then
