@@ -271,7 +271,7 @@ jo_get_usr_config() {
 			isusrsudo=true
 		fi
 		usrshell=$(dialog --title "$1"\
-						  --menu "Choose a shell for this $usr:"\
+						  --menu "Choose a shell for $usr:"\
 						  10 40 3\
 						  "zsh" "The z shell"\
 						  "bash" "The bourne-against shell"\
