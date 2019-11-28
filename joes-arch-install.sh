@@ -226,58 +226,54 @@ jo_get_root_config() {
 }
 
 jo_get_usr_config() {
-	if whiptail --title "$1"\
-		 --yesno "Would you like to add a user to the system?"\
-		 6 45; then
-		gogogo=false
-		while [ "$gogogo" = false ]; do
-			usr=$(whiptail\
-					  --nocancel --title "$1"\
-					  --inputbox "Enter your desired username:"\
-					  7 40\
-					  3>&1 1>&2 2>&3 3>&-)
-			if [ "$usr" = "" ]; then
-				whiptail --msgbox "Username can't be empty" 5 28
-				gogogo=false
-			else
-				usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
-				gogogo=true
-			fi
-		done
-		isusr=true
-		gogogo=false
-		while [ "$gogogo" = false ]; do
-			usrpwd=$(whiptail --title "$1"\
-						   --passwordbox "Enter your desired password for $usr:"\
-						   7 50\
-						   3>&1 1>&2 2>&3 3>&-)
-			usrusrpwd=$(whiptail --title "$1"\
+	gogogo=false
+	while [ "$gogogo" = false ]; do
+		usr=$(whiptail\
+				  --nocancel --title "$1"\
+				  --inputbox "Enter your desired username:"\
+				  7 40\
+				  3>&1 1>&2 2>&3 3>&-)
+		if [ "$usr" = "" ]; then
+			whiptail --msgbox "Username can't be empty" 5 28
+			gogogo=false
+		else
+			usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
+			gogogo=true
+		fi
+	done
+	isusr=true
+	gogogo=false
+	while [ "$gogogo" = false ]; do
+		usrpwd=$(whiptail --title "$1"\
+						  --passwordbox "Enter your desired password for $usr:"\
+						  7 50\
+						  3>&1 1>&2 2>&3 3>&-)
+		usrusrpwd=$(whiptail --title "$1"\
 							 --passwordbox "Confirm $usr password:"\
 							 7 50\
 							 3>&1 1>&2 2>&3 3>&-)
-			if ! [ "$usrusrpwd" = "$usrpwd" ]; then
-				whiptail --msgbox "Password mismatch" 5 22
-				gogogo=false
-			elif [ "$usrpwd" = "" ]; then
-				whiptail --msgbox "Password can't be empty" 5 28
-				gogogo=false
-			else
-				gogogo=true
-			fi
-		done
-		if whiptail --title "$1"\
-				  --yesno "Should $usr be sudo?"\
-				  6 45; then
-			isusrsudo=true
+		if ! [ "$usrusrpwd" = "$usrpwd" ]; then
+			whiptail --msgbox "Password mismatch" 5 22
+			gogogo=false
+		elif [ "$usrpwd" = "" ]; then
+			whiptail --msgbox "Password can't be empty" 5 28
+			gogogo=false
+		else
+			gogogo=true
 		fi
-		usrshell=$(whiptail --title "$1"\
-						  --menu "Choose a shell for $usr:"\
-						  10 40 3\
-						  "zsh" "The z shell"\
-						  "bash" "The bourne-against shell"\
-						  "sh" "The OG shell"\
-						  3>&1 1>&2 2>&3 3>&-)
+	done
+	if whiptail --title "$1"\
+				--yesno "Should $usr be sudo?"\
+				6 45; then
+		isusrsudo=true
 	fi
+	usrshell=$(whiptail --title "$1"\
+						--menu "Choose a shell for $usr:"\
+						10 40 3\
+						"zsh" "The z shell"\
+						"bash" "The bourne-against shell"\
+						"sh" "The OG shell"\
+						3>&1 1>&2 2>&3 3>&-)
 }
 
 jo_pacstrap() {
@@ -315,7 +311,11 @@ jo_warn_wiping
 #------------------------------------ USERS AND ROOT SETUP ----------------------------------------#
 #==================================================================================================#
 jo_get_root_config "III. USERS SETUP"
-jo_get_usr_config "III. USERS SETUP"
+if whiptail --title "III. USERS SETUP"\
+			--yesno "Would you like to add a user to the system?"\
+			6 45; then
+	jo_get_usr_config "III. USERS SETUP"
+fi
 #==================================================================================================#
 #-------------------------------------- THE ACTUAL INSTALL ----------------------------------------#
 #==================================================================================================#
