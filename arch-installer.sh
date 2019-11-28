@@ -19,6 +19,16 @@ if [ ! -r /sys/firmware/efi/efivars ]; then
 else
 	efimode=true
 fi
+if lscpu | grep -q Intel; then
+	intelamdcpu="intel"
+elif lscpu | grep -q AMD; then
+	intelamdcpu="amd"
+fi
+if lspci | grep -q Intel; then
+	intelamdgpu="intel"
+elif lspci | grep -q AMD; then
+	intelamdgpu="amd"
+fi
 #==================================================================================================#
 #--------------------------------------- COLORS DECLARATION ---------------------------------------#
 #==================================================================================================#
@@ -361,6 +371,37 @@ FDISK_BIOS_INPUT
 	fi
 	sleep 2
 }
+
+jo_make_filesystem() {
+	dialog --title "$1"\
+		   --infobox "Making filesystem"\
+		   3 28
+	if [ "$efimode" = true ]; then
+		mkfs.fat -F32 "$drv""1" > /dev/null 2>&1
+	else
+		mkfs.ext2 "$drv""1" > /dev/null 2>&1
+	fi
+	mkswap "$drv""2" > /dev/null 2>&1
+	mkfs.ext4 "$drv""3" > /dev/null 2>&1
+	mkfs.ext4 "$drv""4" > /dev/null 2>&1
+	sleep 2
+	dialog --title "$1"\
+		   --infobox "Mounting partitions"\
+		   3 28
+	mkdir /mnt/arch > /dev/null 2>&1
+	swapon "$drv""2" > /dev/null 2>&1
+	mount "$drv""3" /mnt/arch > /dev/null 2>&1
+	mkdir /mnt/arch/boot > /dev/null 2>&1
+	mkdir /mnt/arch/boot/efi > /dev/null 2>&1
+	if [ "$efimode" = true ]; then
+		mount "$drv""1" /mnt/arch/boot/efi > /dev/null 2>&1
+	else
+		mount "$drv""1" /mnt/arch/boot > /dev/null 2>&1
+	fi
+	mkdir /mnt/arch/home > /dev/null 2>&1
+	mount "$drv""4" /mnt/arch/home > /dev/null 2>&1
+	sleep 2
+}
 #==================================================================================================#
 #-------------------------------------------- PACSTRAP --------------------------------------------#
 #==================================================================================================#
@@ -393,47 +434,12 @@ fi
 #-------------------------------------- THE ACTUAL INSTALL ----------------------------------------#
 #==================================================================================================#
 jo_set_timedate "IV. INSTALLING LINUX"
-#================================================================#
-#------------------------- WIPING DISK --------------------------#
-#================================================================#
 jo_wipefs "IV. INSTALLING LINUX"
-jo_set_disk "IV. INSTALLING LINUX"
-dialog --title "IV. INSTALLING LINUX"\
-	   --infobox "Making filesystem"\
-	   3 28
-if [ "$efimode" = true ]; then
-	mkfs.fat -F32 "$drv""1" > /dev/null 2>&1
-else
-	mkfs.ext2 "$drv""1" > /dev/null 2>&1
-fi
-mkswap "$drv""2" > /dev/null 2>&1
-mkfs.ext4 "$drv""3" > /dev/null 2>&1
-mkfs.ext4 "$drv""4" > /dev/null 2>&1
-sleep 2
-#================================================================#
-#---------------------- MOUNT PARTITIONS ------------------------#
-#================================================================#
-dialog --title "IV. INSTALLING LINUX"\
-	   --infobox "Mounting partitions"\
-	   3 28
-mkdir /mnt/arch > /dev/null 2>&1
-swapon "$drv""2" > /dev/null 2>&1
-mount "$drv""3" /mnt/arch > /dev/null 2>&1
-mkdir /mnt/arch/boot > /dev/null 2>&1
-mkdir /mnt/arch/boot/efi > /dev/null 2>&1
-if [ "$efimode" = true ]; then
-	mount "$drv""1" /mnt/arch/boot/efi > /dev/null 2>&1
-else
-	mount "$drv""1" /mnt/arch/boot > /dev/null 2>&1
-fi
-mkdir /mnt/arch/home > /dev/null 2>&1
-mount "$drv""4" /mnt/arch/home > /dev/null 2>&1
-sleep 2
-clear
-#================================================================#
-#------------------------ BASE DOWNLOAD -------------------------#
-#================================================================#
-echo
+jo_part_disk "IV. INSTALLING LINUX"
+jo_make_filesystem "IV. INSTALLING LINUX"
+#==================================================================================================#
+#-------------------------------------- BASE DOWNLOAD ---------------------------------------------#
+#==================================================================================================#
 jo_pacstrap base
 jo_pacstrap base-devel
 jo_pacstrap pacman-contrib
@@ -456,13 +462,18 @@ else
 	jo_pacstrap linux
 	jo_pacstrap linux-headers
 fi
+if [ "$intelamdcpu" = "intel" ]; then
+	jo_pacstrap intel-ucode
+elif [ "$intelamdcpu" = "amd" ]; then
+	jo_pacstrap amd-ucode
+fi
 dialog --title "IV. INSTALLING LINUX"\
 	   --infobox "Base packages installed"\
 	   4 28
 sleep 4
-#================================================================#
-#----------------------- UTILS DOWNLOAD -------------------------#
-#================================================================#
+#==================================================================================================#
+#--------------------------------------- UTILS DOWNLOAD -------------------------------------------#
+#==================================================================================================#
 if [ "$utils" = true ]; then
 	jo_pacstrap zip
 	jo_pacstrap unzip
@@ -479,103 +490,31 @@ if [ "$utils" = true ]; then
 	jo_pacstrap git
 	jo_pacstrap ntp
 	jo_pacstrap cronie
-	echo && echo
-	echo -e "${BGREEN}Utils installed.${END}"
+	dialog --title "IV. INSTALLING LINUX"\
+		   --infobox "Utils installed"\
+		   3 28
 	sleep 4
 fi
-#================================================================#
-#------------------------ EXTRA DOWNLOAD ------------------------#
-#================================================================#
+#==================================================================================================#
+#---------------------------------------- EXTRA DOWNLOAD ------------------------------------------#
+#==================================================================================================#
 if [ "$extras" = true ]; then
-	clear
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#         5.5 Installing          #
-#        some more utils          #
-#     (${BYELLOW}gst plugins${BMAGENTA}, ${BYELLOW}Xorg...)      ${BMAGENTA}#
-#                                 #
-#=================================#${END}"
-	echo
 	jo_pacstrap gst-plugins-{base,good,bad,ugly}
 	jo_pacstrap gst-libav
 	jo_pacstrap xorg-{server,xinit,apps}
 	jo_pacstrap xf86-input-{mouse,keyboard}
 	jo_pacstrap xdg-user-dirs
 	jo_pacstrap mesa
-	echo && echo
-	echo -e "${BGREEN}Extra packages installed.${END}"
+	if [ "$intelamdgpu" = "intel" ]; then
+		jo_pacstrap xf86-video-intel
+	elif [ "$intelamdgpu" = "amd" ]; then
+		jo_pacstrap xf86-video-amdgpu
+	fi
+	dialog --title "IV. INSTALLING LINUX"\
+		   --infobox "Extra packages installed"\
+		   4 28
 	sleep 4
 fi
-if lscpu | grep -q Intel; then
-	intelamdcpu="intel"
-elif lscpu | grep -q AMD; then
-	intelamdcpu="amd"
-fi
-if lspci | grep -q Intel; then
-	intelamdgpu="intel"
-elif lspci | grep -q AMD; then
-	intelamdgpu="amd"
-fi
-#================================================================#
-#--------------------- GPU DRIVERS DOWNLOAD ---------------------#
-#================================================================#
-if [[ $intelamdgpu == "intel" && "$extras" = true ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#        5.5 Installing           #
-#        some more utils          #
-#         (${BYELLOW}xf86-video${BMAGENTA})            #
-#                                 #
-#=================================#${END}"
-	echo
-	jo_pacstrap xf86-video-intel
-fi
-sleep 2
-if [[ $intelamdgpu == "amd" && "$extras" = true ]]; then
-	sleep 2
-	clear
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#        5.5 Installing           #
-#        some more utils          #
-#         (${BYELLOW}xf86-video${BMAGENTA})            #
-#                                 #
-#=================================#${END}"
-	echo
-	jo_pacstrap xf86-video-amdgpu
-fi
-#================================================================#
-#-------------------- CPU MICROCODE DOWNLOAD --------------------#
-#================================================================#
-if [[ $intelamdcpu == "intel" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#       6. Installing CPU         #
-#           microcode             #
-#                                 #
-#=================================#${END}"
-	echo
-	jo_pacstrap intel-ucode
-fi
-if [[ $intelamdcpu == "amd" ]]; then
-	clear
-	echo -e "${BMAGENTA}\
-#====== IV. INSTALLING LINUX =====#
-#                                 #
-#       6. Installing CPU         #
-#           microcode             #
-#                                 #
-#=================================#${END}"
-	echo
-	jo_pacstrap amd-ucode
-fi
-sleep 2
 #================================================================#
 #------------------------ FSTAB CONFIG  -------------------------#
 #================================================================#
