@@ -450,7 +450,7 @@ ARCH_CHROOT_CMDS
 	sleep 2
 }
 
-jo_mkinitcpio() {
+jo_chroot_mkinitcpio() {
 	dialog --title "$1"\
 		   --infobox "Generating kernel image"\
 		   4 35
@@ -466,7 +466,7 @@ ARCH_CHROOT_CMDS
 	sleep 2
 }
 
-jo_grub() {
+jo_chroot_grub() {
 	dialog --title "$1"\
 		   --infobox "Configuring bootloader"\
 		   4 35
@@ -595,15 +595,15 @@ fi
 #------------------------------------------- FSTAB CONFIG  ----------------------------------------#
 #==================================================================================================#
 jo_fstab "IV. INSTALLING LINUX"
-#================================================================#
-#------------------------- ARCH-CHROOT --------------------------#
-#================================================================#
+#==================================================================================================#
+#-------------------------------------------- ARCH-CHROOT -----------------------------------------#
+#==================================================================================================#
 jo_chroot_base "V. CONFIGURING LINUX"
 if [ "$isusr" = true ]; then
 	jo_chroot_set_usr "V. CONFIGURING LINUX"
 fi
-jo_mkinitcpio "VI. CONFIGURING BOOT"
-jo_grub "VI. CONFIGURING BOOT"
+jo_chroot_mkinitcpio "VI. CONFIGURING BOOT"
+jo_chroot_grub "VI. CONFIGURING BOOT"
 dialog --title "WORK COMPLETE"\
 	   --msgbox "\
 Arch Linux is now installed\n\
