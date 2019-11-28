@@ -229,12 +229,21 @@ jo_get_usr_config() {
 	if dialog --title "$1"\
 		 --yesno "Would you like to add a user to the system?"\
 		 6 45; then
-		usr=$(dialog\
-				  --nocancel --title "$1"\
-				  --inputbox "Enter your desired username:"\
-				  7 40\
-				  3>&1 1>&2 2>&3 3>&-)
-		usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
+		gogogo=false
+		while [ "$gogogo" = false ]; do
+			usr=$(dialog\
+					  --nocancel --title "$1"\
+					  --inputbox "Enter your desired username:"\
+					  7 40\
+					  3>&1 1>&2 2>&3 3>&-)
+			if [ "$usr" = "" ]; then
+				dialog --msgbox "Username can't be empty" 5 28
+				gogogo=false
+			else
+				usr=$(echo "$usr" | tr '[:upper:]' '[:lower:]')
+				gogogo=true
+			fi
+		done
 		isusr=true
 		gogogo=false
 		while [ "$gogogo" = false ]; do
