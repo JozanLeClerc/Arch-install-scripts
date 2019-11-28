@@ -521,7 +521,7 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
 sleep 1
-chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null > 2>&1
+chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 	hwclock --systohc
 	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -543,7 +543,7 @@ if [ "$isusr" = true ]; then
 		   --infobox "Setting up the user"\
 		   3 30
 	if [ "$isusrsudo" = true ]; then
-		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null > 2>&1
+		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	useradd -m -g wheel -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
@@ -551,7 +551,7 @@ $usrpwd
 	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 ARCH_CHROOT_CMDS
 	else
-		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null > 2>&1
+		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	useradd -m -s /bin/$usrshell $usr
 	passwd $usr
 $usrpwd
@@ -564,11 +564,11 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Generating kernel image"\
 	   3 30
 if [ "$ltskern" = false ]; then
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null > 2>&1
+	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	mkinitcpio -p linux
 ARCH_CHROOT_CMDS
 else
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null > 2>&1
+	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS > /dev/null 2>&1
 	mkinitcpio -p linux-lts
 ARCH_CHROOT_CMDS
 fi
@@ -577,7 +577,7 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Configuring bootloader"\
 	   3 30
 if [ "$efimode" = true ]; then
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null > 2>&1
+	chroot /mnt/arch /bin/bash << ARCH_CHROOT_EFI_GRUB_CMDS > /dev/null 2>&1
 	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
 	mkdir -p /boot/grub
 	grub-mkconfig -o /boot/grub/grub.cfg
@@ -587,7 +587,7 @@ if [ "$efimode" = true ]; then
 	echo "exit" >> /boot/efi/startup.nsh
 ARCH_CHROOT_EFI_GRUB_CMDS
 else
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null > 2>&1
+	chroot /mnt/arch /bin/bash << ARCH_CHROOT_BIOS_GRUB_CMDS > /dev/null 2>&1
 	grub-install --target=i386-pc $drv
 	grub-mkconfig -o /boot/grub/grub.cfg
 ARCH_CHROOT_BIOS_GRUB_CMDS
