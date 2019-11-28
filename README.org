@@ -1,5 +1,4 @@
 #+TITLE: Joe's Arch Linux installer utility
-#+TOC: healines 2
 ** Introduction
 My original script meant to automate your Arch Linux installation process using a FreeBSD-inspired installer interface. It is compatible with *BIOS Legacy* as well as *UEFI* boot modes.
 
