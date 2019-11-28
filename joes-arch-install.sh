@@ -6,10 +6,6 @@
 ltskern=false
 utils=false
 extras=false
-rts=""
-swps=""
-rtpwd=""
-rtrtpwd="walk"
 usrpwd=""
 usrusrpwd="fade"
 hstnm=""
@@ -204,6 +200,29 @@ Are you sure you wish to continue?"\
 		fi
 }
 
+jo_get_root_passwd() {
+	gogogo=false
+	while [ "$gogogo" = false ]; do
+		rtpwd=$(dialog --title "$1"\
+					   --passwordbox "Enter your desired root password:"\
+					   7 40\
+					   3>&1 1>&2 2>&3 3>&-)
+		rtrtpwd=$(dialog --title "$1"\
+						 --passwordbox "Confirm root password:"\
+						 7 40\
+						 3>&1 1>&2 2>&3 3>&-)
+		if ! [ "$rtrtpwd" = "$rtpwd" ]; then
+			dialog --msgbox "Password mismatch" 5 22
+			gogogo=false
+		elif [ "$rtpwd" = "" ]; then
+			dialog --msgbox "Password can't be empty" 5 28
+			gogogo=false
+		else
+			gogogo=true
+		fi
+	done
+}
+
 jo_pacstrap() {
 	echo
 	dialog --title "$1" --infobox "Installing $1" 3 50
@@ -238,35 +257,9 @@ jo_warn_wiping
 #==================================================================================================#
 #------------------------------------ USERS AND ROOT SETUP ----------------------------------------#
 #==================================================================================================#
+jo_get_root_passwd "III. USERS SETUP"
 answr="n"
 
-while [[ $rtrtpwd != "$rtpwd" || $rtpwd == "" ]]; do
-	clear
-	echo -e "${BMAGENTA}\
-#======= II. USERS SETUP =========#
-#                                 #
-#        1. root password         #
-#                                 #
-#=================================#${END}"
-	echo && echo
-	echo -e "${BCYAN}Enter your disired ${BYELLOW}root password ${BCYAN}(can't be empty):"
-	echo -n -e "${BYELLOW}> "
-	read -r -s rtpwd
-	echo && echo
-	echo -e "${BCYAN}Confirm ${BYELLOW}root password${BCYAN}:"
-	echo -n -e "${BYELLOW}> "
-	read -r -s rtrtpwd
-	if [[ $rtrtpwd != "$rtpwd" ]]; then
-		echo && echo
-		echo -e "${BRED}Password mismatch, retrying...${END}"
-		sleep 2
-	fi
-	if [[ $rtpwd = "" ]]; then
-		echo && echo
-		echo -e "${BRED}Password is empty, retrying...${END}"
-		sleep 2
-	fi
-done
 
 clear
 echo -e "${BMAGENTA}\
