@@ -203,11 +203,11 @@ Are you sure you wish to continue?"\
 jo_get_root_config() {
 	gogogo=false
 	while [ "$gogogo" = false ]; do
-		rtpwd=$(dialog --title "$1"\
+		rtpwd=$(dialog --nocancel --title "$1"\
 					   --passwordbox "Enter your desired root password:"\
 					   7 40\
 					   3>&1 1>&2 2>&3 3>&-)
-		rtrtpwd=$(dialog --title "$1"\
+		rtrtpwd=$(dialog --nocancel --title "$1"\
 						 --passwordbox "Confirm root password:"\
 						 7 40\
 						 3>&1 1>&2 2>&3 3>&-)
@@ -242,11 +242,11 @@ jo_get_usr_config() {
 	isusr=true
 	gogogo=false
 	while [ "$gogogo" = false ]; do
-		usrpwd=$(dialog --title "$1"\
+		usrpwd=$(dialog --nocancel --title "$1"\
 						  --passwordbox "Enter your desired password for $usr:"\
 						  7 50\
 						  3>&1 1>&2 2>&3 3>&-)
-		usrusrpwd=$(dialog --title "$1"\
+		usrusrpwd=$(dialog --nocancel --title "$1"\
 							 --passwordbox "Confirm $usr password:"\
 							 7 50\
 							 3>&1 1>&2 2>&3 3>&-)
