@@ -391,13 +391,8 @@ jo_make_filesystem() {
 #-------------------------------------------- PACSTRAP --------------------------------------------#
 #==================================================================================================#
 jo_pacstrap() {
-	paclen=$(echo -n "$1" | wc -c)
-	diaglen=$(echo "15 + $paclen" | bc)
-	dialog --title "$1" --infobox "Installing $1" 3 "$diaglen"
-	if pacstrap /mnt/arch "$1" > /dev/null 2>&1; then
-		dialog --title "$1" --infobox "$1 installed" 3 "$diaglen"
-		sleep 0.5
-	fi
+	echo "$2" | dialog --title "IV. INSTALLING LINUX" --gauge "Installing $1" 6 70 0
+	pacstrap /mnt/arch "$1" > /dev/null 2>&1
 }
 
 jo_fstab() {
@@ -480,82 +475,82 @@ jo_make_filesystem "IV. INSTALLING LINUX"
 #==================================================================================================#
 #-------------------------------------- BASE DOWNLOAD ---------------------------------------------#
 #==================================================================================================#
-jo_pacstrap base
-jo_pacstrap base-devel
-jo_pacstrap pacman-contrib
-jo_pacstrap networkmanager
-jo_pacstrap syslog-ng
-jo_pacstrap mtools
-jo_pacstrap dostools
-jo_pacstrap lsb-release
-jo_pacstrap ntfs-3g
-jo_pacstrap exfat-utils
-jo_pacstrap ntp
-if [ "$isusr" = true ]; then
-	if [ "$usrshell" = "zsh" ]; then
-		jo_pacstrap zsh
-	elif [ "$usrshell" = "dash" ]; then
-		jo_pacstrap dash
-	fi
-fi
-jo_pacstrap os-prober
+jo_pacstrap base 0
+jo_pacstrap base-devel 5
+jo_pacstrap pacman-contrib 10
+jo_pacstrap networkmanager 15
+jo_pacstrap syslog-ng 20
+jo_pacstrap mtools 25
+jo_pacstrap dostools 30
+jo_pacstrap lsb-release 35
+jo_pacstrap ntfs-3g 40
+jo_pacstrap exfat-utils 45
+jo_pacstrap ntp 50
+jo_pacstrap os-prober 55
 if [ "$efimode" = true ]; then
-	jo_pacstrap efibootmgr
+	jo_pacstrap efibootmgr 55
 fi
-jo_pacstrap grub
-jo_pacstrap mkinitcpio
+jo_pacstrap grub 60
+jo_pacstrap mkinitcpio 65
 if [ "$ltskern" = true ]; then
-	jo_pacstrap linux-lts
-	jo_pacstrap linux-lts-headers
+	jo_pacstrap linux-lts 70
+	jo_pacstrap linux-lts-headers 75
 else
-	jo_pacstrap linux
-	jo_pacstrap linux-headers
+	jo_pacstrap linux 70
+	jo_pacstrap linux-headers 75
 fi
 if [ "$intelamdcpu" = "intel" ]; then
-	jo_pacstrap intel-ucode
+	jo_pacstrap intel-ucode 80
 elif [ "$intelamdcpu" = "amd" ]; then
-	jo_pacstrap amd-ucode
+	jo_pacstrap amd-ucode 80
 fi
-dialog --title "IV. INSTALLING LINUX"\
-	   --infobox "Base packages installed"\
-	   3 28
+if [ "$isusr" = true ]; then
+	if [ "$usrshell" = "zsh" ]; then
+		jo_pacstrap zsh 95
+	elif [ "$usrshell" = "dash" ]; then
+		jo_pacstrap dash 95
+	fi
+fi
+echo 100 | dialog --title "IV. INSTALLING LINUX"\
+				  --gauge "Base packages installed"\
+				  6 70 0
 sleep 4
 #==================================================================================================#
 #--------------------------------------- UTILS DOWNLOAD -------------------------------------------#
 #==================================================================================================#
 if [ "$utils" = true ]; then
-	jo_pacstrap zip
-	jo_pacstrap unzip
-	jo_pacstrap p7zip
-	jo_pacstrap vim
-	jo_pacstrap mc
-	jo_pacstrap alsa-utils
-	jo_pacstrap git
-	jo_pacstrap cronie
-	jo_pacstrap man
-	dialog --title "IV. INSTALLING LINUX"\
-		   --infobox "Utils installed"\
-		   3 28
+	jo_pacstrap zip 0
+	jo_pacstrap unzip 11
+	jo_pacstrap p7zip 22
+	jo_pacstrap vim 33
+	jo_pacstrap mc 44
+	jo_pacstrap alsa-utils 55
+	jo_pacstrap git 66
+	jo_pacstrap cronie 77
+	jo_pacstrap man 88
+	echo 100 | dialog --title "IV. INSTALLING LINUX"\
+					  --gauge "Util packages installed"\
+					  6 70 0
 	sleep 4
 fi
 #==================================================================================================#
 #---------------------------------------- EXTRA DOWNLOAD ------------------------------------------#
 #==================================================================================================#
 if [ "$extras" = true ]; then
-	jo_pacstrap gst-plugins-{base,good,bad,ugly}
-	jo_pacstrap gst-libav
-	jo_pacstrap xorg-{server,xinit,apps}
-	jo_pacstrap xf86-input-{mouse,keyboard}
-	jo_pacstrap xdg-user-dirs
-	jo_pacstrap mesa
+	jo_pacstrap gst-plugins-{base,good,bad,ugly} 0
+	jo_pacstrap gst-libav 16
+	jo_pacstrap xorg-{server,xinit,apps} 32
+	jo_pacstrap xf86-input-{mouse,keyboard} 48
+	jo_pacstrap xdg-user-dirs 64
+	jo_pacstrap mesa 80
 	if [ "$intelamdgpu" = "intel" ]; then
-		jo_pacstrap xf86-video-intel
+		jo_pacstrap xf86-video-intel 96
 	elif [ "$intelamdgpu" = "amd" ]; then
-		jo_pacstrap xf86-video-amdgpu
+		jo_pacstrap xf86-video-amdgpu 96
 	fi
-	dialog --title "IV. INSTALLING LINUX"\
-		   --infobox "Extra packages installed"\
-		   4 28
+	echo 100 | dialog --title "IV. INSTALLING LINUX"\
+					  --gauge "Extra packages installed"\
+					  6 70 0
 	sleep 4
 fi
 #==================================================================================================#
