@@ -47,7 +47,7 @@ chmod +x arch-installer.sh
 Here are the partition schemes made by the installer:
 
 *** UEFI mode
-In UEFI boot mode, a *GPT* partition table is being used is this way:
+In UEFI boot mode, a *GPT* partition table is being created is this way:
 
 | partition | mountpoint | filesystem | size         |
 |-----------+------------+------------+--------------|
@@ -57,7 +57,7 @@ In UEFI boot mode, a *GPT* partition table is being used is this way:
 | /dev/sdx4 | /home      | ext4       | what remains |
 
 *** BIOS Legacy mode
-In UEFI boot mode, a *DOS* partition table is being used is this way:
+In UEFI boot mode, a *DOS* partition table is being created is this way:
 
 | partition | mountpoint | filesystem | size         |
 |-----------+------------+------------+--------------|
