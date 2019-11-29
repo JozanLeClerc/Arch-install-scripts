@@ -521,78 +521,28 @@ dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Setting up the system"\
 	   3 30
 sleep 1
-chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS
-	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-	hwclock --systohc
-	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-	locale-gen
-	echo "LANG=en_US.UTF-8" > /etc/locale.conf
-	echo "$hstnm" > /etc/hostname
-	echo "127.0.0.1 localhost" > /etc/hosts
-	echo "::1 localhost" >> /etc/hosts
-	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
-	passwd
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+hwclock --systohc
+sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "$hstnm" > /etc/hostname
+echo "127.0.0.1 localhost" > /etc/hosts
+echo "::1 localhost" >> /etc/hosts
+echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+passwd
 $rtpwd
 $rtpwd
-	systemctl enable NetworkManager
-	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-ARCH_CHROOT_CMDS
-sleep 2
-if [ "$isusr" = true ]; then
-	dialog --title "V. CONFIGURING LINUX"\
-		   --infobox "Setting up the user"\
-		   3 30
-	if [ "$isusrsudo" = true ]; then
-		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS
-	useradd -m -g wheel -s /bin/$usrshell $usr
-	passwd $usr
+systemctl enable NetworkManager
+sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
+if [ "$isusr" = true ]; then if [ "$isusrsudo" = true ]; then useradd -m -g wheel -s /bin/$usrshell $usr; sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers; else useradd -m -s /bin/$usrshell $usr; fi; passwd $usr
 $usrpwd
 $usrpwd
-	sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-ARCH_CHROOT_CMDS
-	else
-		chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS
-	useradd -m -s /bin/$usrshell $usr
-	passwd $usr
-$usrpwd
-$usrpwd
-ARCH_CHROOT_CMDS
 	fi
-	sleep 2
-fi
-dialog --title "V. CONFIGURING LINUX"\
-	   --infobox "Generating kernel image"\
-	   3 30
-if [ "$ltskern" = false ]; then
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS
-	mkinitcpio -p linux
+if [ "$ltskern" = false ]; then mkinitcpio -p linux; else mkinitcpio -p linux-lts; fi
+if [ "$efimode" = true ]; then; grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck; mkdir -p /boot/grub; grub-mkconfig -o /boot/grub/grub.cfg; mkdir -p /boot/efi/EFI/BOOT; cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI; echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh; echo "exit" >> /boot/efi/startup.nsh; else grub-install --target=i386-pc $drv; grub-mkconfig -o /boot/grub/grub.cfg
 ARCH_CHROOT_CMDS
-else
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_CMDS
-	mkinitcpio -p linux-lts
-ARCH_CHROOT_CMDS
-fi
-sleep 2
-dialog --title "V. CONFIGURING LINUX"\
-	   --infobox "Configuring bootloader"\
-	   3 30
-if [ "$efimode" = true ]; then
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_EFI_GRUB_CMDS
-	grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
-	mkdir -p /boot/grub
-	grub-mkconfig -o /boot/grub/grub.cfg
-	mkdir -p /boot/efi/EFI/BOOT
-	cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI
-	echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
-	echo "exit" >> /boot/efi/startup.nsh
-ARCH_CHROOT_EFI_GRUB_CMDS
-else
-	chroot /mnt/arch /bin/bash << ARCH_CHROOT_BIOS_GRUB_CMDS
-	grub-install --target=i386-pc $drv
-	grub-mkconfig -o /boot/grub/grub.cfg
-ARCH_CHROOT_BIOS_GRUB_CMDS
-fi
-sleep 2
 dialog --title "WORK COMPLETE"\
 	   --msgbox "\
 Arch Linux is now installed\n\
