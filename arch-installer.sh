@@ -576,6 +576,8 @@ chmod +x finishit.sh
 mv finishit.sh /mnt/arch
 arch-chroot /mnt/arch <<EOF
 ./finishit.sh
+rm finishit.sh
+reboot
 EOF
 rm -f /mnt/arch/finishit.sh
 #arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
