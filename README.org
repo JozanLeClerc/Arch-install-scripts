@@ -49,22 +49,22 @@ Here are the partition schemes made by the installer:
 *** UEFI mode
 In UEFI boot mode, a *GPT* partition table is being used is this way:
 
-| partition | mountpoint | filesystem | size         |
-|-----------+------------+------------+--------------|
-| /dev/sdx1 | /boot/efi  | FAT 32     | 128M         |
-| /dev/sdx2 | -          | swap       | user defined |
-| /dev/sdx3 | /          | ext4       | user defined |
-| /dev/sdx4 | /home      | ext4       | what remains |
+| partition | mountpoint | filesystem | size                    |
+|-----------+------------+------------+-------------------------|
+| /dev/sdx1 | /boot/efi  | FAT 32     | 128 Mo                  |
+| /dev/sdx2 | -          | swap       | user defined (min 1 Go) |
+| /dev/sdx3 | /          | ext4       | user defined (min 1 Go) |
+| /dev/sdx4 | /home      | ext4       | what remains            |
 
 *** BIOS Legacy mode
 In UEFI boot mode, a *DOS* partition table is being used is this way:
 
-| partition | mountpoint | filesystem | size         |
-|-----------+------------+------------+--------------|
-| /dev/sdx1 | /boot      | ext2       | 128M         |
-| /dev/sdx2 | -          | swap       | user defined |
-| /dev/sdx3 | /          | ext4       | user defined |
-| /dev/sdx4 | /home      | ext4       | what remains |
+| partition | mountpoint | filesystem | size                    |
+|-----------+------------+------------+-------------------------|
+| /dev/sdx1 | /boot      | ext2       | 128 Mo                  |
+| /dev/sdx2 | -          | swap       | user defined (min 1 Go) |
+| /dev/sdx3 | /          | ext4       | user defined (min 1 Go) |
+| /dev/sdx4 | /home      | ext4       | what remains            |
 
 ** Some screenshots
 Here are a handful of images of the installer in action:
