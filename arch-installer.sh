@@ -518,46 +518,100 @@ jo_fstab "IV. INSTALLING LINUX"
 #-------------------------------------------- ARCH-CHROOT -----------------------------------------#
 #==================================================================================================#
 dialog --title "V. CONFIGURING LINUX"\
-	   --infobox "Setting up the system"\
+	   --infobox "Finishing configuration"\
 	   3 30
-sleep 1
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+sleep 4
+echo "\
+#!/bin/bash
+
 ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "$hstnm" > /etc/hostname
-echo "127.0.0.1 localhost" > /etc/hosts
-echo "::1 localhost" >> /etc/hosts
-echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+echo \"LANG=en_US.UTF-8\" > /etc/locale.conf
+echo \"$hstnm\" > /etc/hostname
+echo \"127.0.0.1 localhost\" > /etc/hosts
+echo \"::1 localhost\" >> /etc/hosts
+echo \"127.0.1.1 $hstnm.localdomain $hstnm\" >> /etc/hosts
 passwd
 $rtpwd
 $rtpwd
 systemctl enable NetworkManager
-sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-ARCH_CHROOT_CMDS
+sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf\
+" > finishit.sh
 if [ "$isusr" = true ]; then
 	if [ "$isusrsudo" = true ]; then
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+			echo "\
 useradd -m -g wheel -s /bin/$usrshell $usr
-sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-ARCH_CHROOT_CMDS
+sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers\
+" >> finishit.sh
 	else
-		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-		useradd -m -s /bin/$usrshell $usr
-ARCH_CHROOT_CMDS
+			echo "useradd -m -s /bin/$usrshell $usr" >> finishit.sh
 	fi
-	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-	passwd $usr
+		echo "passwd $usr
 $usrpwd
-$usrpwd
-ARCH_CHROOT_CMDS
+$usrpwd\
+" >> finishit.sh
 fi
-arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
-if [ $ltskern = false ]; then mkinitcpio -p linux; else mkinitcpio -p linux-lts; fi
-if [ $efimode = true ]; then grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck; mkdir -p /boot/grub; grub-mkconfig -o /boot/grub/grub.cfg; mkdir -p /boot/efi/EFI/BOOT; cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI; echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh; echo "exit" >> /boot/efi/startup.nsh; else grub-install --target=i386-pc $drv; grub-mkconfig -o /boot/grub/grub.cfg; fi
-ARCH_CHROOT_CMDS
+if [ "$ltskern" = false ]; then
+	echo "mkinitcpio -p linux" >> finishit.sh
+else
+	echo "mkinitcpio -p linux-lts" >> finishit.sh
+fi
+if [ "$efimode" = true ]; then
+	echo "\
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
+mkdir -p /boot/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+" >> finishit.sh
+else
+	echo "\
+grub-install --target=i386-pc $drv
+grub-mkconfig -o /boot/grub/grub.cfg
+" >> finishit.sh
+fi
+chmod +x finishit.sh
+arch-chroot /mnt/arch <<EOF
+./../../finishit.sh
+EOF
+#arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+#	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+#	hwclock --systohc
+#	sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+#	locale-gen
+#	echo "LANG=en_US.UTF-8" > /etc/locale.conf
+#	echo "$hstnm" > /etc/hostname
+#	echo "127.0.0.1 localhost" > /etc/hosts
+#	echo "::1 localhost" >> /etc/hosts
+#	echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+#	passwd
+#$rtpwd
+#$rtpwd
+#	systemctl enable NetworkManager
+#	sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
+#ARCH_CHROOT_CMDS
+#if [ "$isusr" = true ]; then
+#	if [ "$isusrsudo" = true ]; then
+#		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+#			useradd -m -g wheel -s /bin/$usrshell $usr
+#			sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+#ARCH_CHROOT_CMDS
+#	else
+#		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+#			useradd -m -s /bin/$usrshell $usr
+#ARCH_CHROOT_CMDS
+#	fi
+#	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+#		passwd $usr
+#$usrpwd
+#$usrpwd
+#ARCH_CHROOT_CMDS
+#fi
+#arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+#	if [ $ltskern = false ]; then mkinitcpio -p linux; else mkinitcpio -p linux-lts; fi
+#	if [ $efimode = true ]; then grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck; mkdir -p /boot/grub; grub-mkconfig -o /boot/grub/grub.cfg; mkdir -p /boot/efi/EFI/BOOT; cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI; echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh; echo "exit" >> /boot/efi/startup.nsh; else grub-install --target=i386-pc $drv; grub-mkconfig -o /boot/grub/grub.cfg; fi
+#ARCH_CHROOT_CMDS
+sleep 2
 dialog --title "WORK COMPLETE"\
 	   --msgbox "\
 Arch Linux is now installed\n\
