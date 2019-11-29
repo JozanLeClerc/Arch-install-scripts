@@ -536,10 +536,25 @@ $rtpwd
 $rtpwd
 systemctl enable NetworkManager
 sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
-if [ "$isusr" = true ]; then if [ "$isusrsudo" = true ]; then useradd -m -g wheel -s /bin/$usrshell $usr; sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers; else useradd -m -s /bin/$usrshell $usr; fi; passwd $usr
+ARCH_CHROOT_CMDS
+if [ "$isusr" = true ]; then
+	if [ "$isusrsudo" = true ]; then
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+useradd -m -g wheel -s /bin/$usrshell $usr
+sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+ARCH_CHROOT_CMDS
+	else
+		arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+		useradd -m -s /bin/$usrshell $usr
+ARCH_CHROOT_CMDS
+	fi
+	arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
+	passwd $usr
 $usrpwd
 $usrpwd
+ARCH_CHROOT_CMDS
 fi
+arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 if [ "$ltskern" = false ]; then mkinitcpio -p linux; else mkinitcpio -p linux-lts; fi
 if [ "$efimode" = true ]; then; grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck; mkdir -p /boot/grub; grub-mkconfig -o /boot/grub/grub.cfg; mkdir -p /boot/efi/EFI/BOOT; cp /boot/efi/EFI/GRUB/grubx64.efi /boot/efi/EFI/BOOT/BOOTX64.EFI; echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh; echo "exit" >> /boot/efi/startup.nsh; else grub-install --target=i386-pc $drv; grub-mkconfig -o /boot/grub/grub.cfg
 ARCH_CHROOT_CMDS
