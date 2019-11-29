@@ -532,6 +532,7 @@ if [ "$utils" = true ]; then
 	jo_pacstrap alsa-utils
 	jo_pacstrap git
 	jo_pacstrap cronie
+	jo_pacstrap man
 	dialog --title "IV. INSTALLING LINUX"\
 		   --infobox "Utils installed"\
 		   3 28
