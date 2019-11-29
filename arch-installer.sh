@@ -537,12 +537,18 @@ fi
 #---------------------------------------- EXTRA DOWNLOAD ------------------------------------------#
 #==================================================================================================#
 if [ "$extras" = true ]; then
-	jo_pacstrap gst-plugins-{base,good,bad,ugly} 0
-	jo_pacstrap gst-libav 16
-	jo_pacstrap xorg-{server,xinit,apps} 32
-	jo_pacstrap xf86-input-{mouse,keyboard} 48
-	jo_pacstrap xdg-user-dirs 64
-	jo_pacstrap mesa 80
+	jo_pacstrap gst-plugins-base 0
+	jo_pacstrap gst-plugins-good 8
+	jo_pacstrap gst-plugins-bad 16
+	jo_pacstrap gst-plugins-ugly 24
+	jo_pacstrap gst-libav 32
+	jo_pacstrap xorg-server 40
+	jo_pacstrap xorg-xinit 48
+	jo_pacstrap xorg-apps 56
+	jo_pacstrap xf86-input-mouse 64
+	jo_pacstrap xf86-input-keyboard 72
+	jo_pacstrap xdg-user-dirs 80
+	jo_pacstrap mesa 88
 	if [ "$intelamdgpu" = "intel" ]; then
 		jo_pacstrap xf86-video-intel 96
 	elif [ "$intelamdgpu" = "amd" ]; then
