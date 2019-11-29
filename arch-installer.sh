@@ -111,9 +111,10 @@ awk '{print $1"-------("$4")";}' | sed -n "$id"p) " >> blkline
 		((dn--))
 		((id++))
 	done
+	line=$(cat blkline)
 	sel=$(dialog --nocancel --title "$1"\
 				 --menu "Choose the drive on which Arch Linux should be installed:" 12 55 4\
-				 $(cat blkline)\
+				 "$line"\
 				 3>&1 1>&2 2>&3 3>&-)
 	drv="/dev/"$(lsblk | grep disk | awk '{print $1}' | sed -n "$sel"p)
 	rm -f blkline > /dev/null
