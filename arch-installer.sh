@@ -529,7 +529,7 @@ if [ "$utils" = true ]; then
 	jo_pacstrap cronie 77
 	jo_pacstrap man 88
 	echo 100 | dialog --title "IV. INSTALLING LINUX"\
-					  --gauge "Util packages installed"\
+					  --gauge "Utils installed"\
 					  7 70 0
 	sleep 4
 fi
