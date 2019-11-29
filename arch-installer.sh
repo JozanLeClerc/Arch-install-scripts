@@ -408,9 +408,9 @@ jo_fstab() {
 	sleep 2
 }
 
-jo_arch_chroot() {
-	arch-chroot /mnt/arch ${@:1}
-}
+#jo_arch_chroot() {
+#	arch-chroot /mnt/arch ${@:1}
+#}
 #==================================================================================================#
 #--------------------------------------------- START ----------------------------------------------#
 #==================================================================================================#
@@ -542,22 +542,22 @@ arch-chroot /mnt/arch systemctl enable NetworkManager
 arch-chroot /mnt/arch sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 if [ "$isusr" = true ]; then
 	if [ "$isusrsudo" = true ]; then
-		arch-chroot /mnt/arch useradd -m -g wheel -s /bin/$usrshell $usr
+		arch-chroot /mnt/arch useradd -m -g wheel -s /bin/"$usrshell" "$usr"
 		arch-chroot /mnt/arch sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 	else
-		arch-chroot /mnt/arch useradd -m -s /bin/$usrshell $usr
+		arch-chroot /mnt/arch useradd -m -s /bin/"$usrshell" "$usr"
 	fi
-	arch-chroot /mnt/arch passwd $usr <<JO_USR_PWD
+	arch-chroot /mnt/arch passwd "$usr" <<JO_USR_PWD
 $usrpwd
 $usrpwd
 JO_USR_PWD
 fi
-if [ $ltskern = false ]; then
+if [ "$ltskern" = false ]; then
   arch-chroot /mnt/arch mkinitcpio -p linux
 else
   arch-chroot /mnt/arch mkinitcpio -p linux-lts
 fi
-if [ $efimode = true ]; then
+if [ "$efimode" = true ]; then
   arch-chroot /mnt/arch grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
   arch-chroot /mnt/arch mkdir -p /boot/grub
   arch-chroot /mnt/arch grub-mkconfig -o /boot/grub/grub.cfg
@@ -566,7 +566,7 @@ if [ $efimode = true ]; then
   arch-chroot /mnt/arch echo "bcf boot add 1 fs0:\\EFI\\GRUB\\grubx64.efi \"GRUB bootloader\"" > /boot/efi/startup.nsh
   arch-chroot /mnt/arch echo "exit" >> /boot/efi/startup.nsh
 else
-  arch-chroot /mnt/arch grub-install --target=i386-pc $drv
+  arch-chroot /mnt/arch grub-install --target=i386-pc "$drv"
   arch-chroot /mnt/arch grub-mkconfig -o /boot/grub/grub.cfg
 fi
 dialog --title "WORK COMPLETE"\
