@@ -533,9 +533,10 @@ echo \"$hstnm\" > /etc/hostname
 echo \"127.0.0.1 localhost\" > /etc/hosts
 echo \"::1 localhost\" >> /etc/hosts
 echo \"127.0.1.1 $hstnm.localdomain $hstnm\" >> /etc/hosts
-passwd
+passwd <<EOF
 $rtpwd
 $rtpwd
+EOF
 systemctl enable NetworkManager
 sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf\
 " > finishit.sh
@@ -548,9 +549,10 @@ sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers\
 	else
 			echo "useradd -m -s /bin/$usrshell $usr" >> finishit.sh
 	fi
-		echo "passwd $usr
+		echo "passwd $usr <<EOF
 $usrpwd
-$usrpwd\
+$usrpwd
+EOF
 " >> finishit.sh
 fi
 if [ "$ltskern" = false ]; then
@@ -571,9 +573,11 @@ grub-mkconfig -o /boot/grub/grub.cfg
 " >> finishit.sh
 fi
 chmod +x finishit.sh
+mv finishit.sh /mnt/arch
 arch-chroot /mnt/arch <<EOF
-./../../finishit.sh
+./finishit.sh
 EOF
+rm -f /mnt/arch/finishit.sh
 #arch-chroot /mnt/arch << ARCH_CHROOT_CMDS
 #	ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 #	hwclock --systohc
