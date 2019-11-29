@@ -391,7 +391,7 @@ jo_make_filesystem() {
 #-------------------------------------------- PACSTRAP --------------------------------------------#
 #==================================================================================================#
 jo_pacstrap() {
-	echo "$2" | dialog --title "IV. INSTALLING LINUX" --gauge "Installing $1" 6 70 0
+	echo "$2" | dialog --title "IV. INSTALLING LINUX" --gauge "Installing $1" 7 70 0
 	pacstrap /mnt/arch "$1" > /dev/null 2>&1
 }
 
@@ -513,7 +513,7 @@ if [ "$isusr" = true ]; then
 fi
 echo 100 | dialog --title "IV. INSTALLING LINUX"\
 				  --gauge "Base packages installed"\
-				  6 70 0
+				  7 70 0
 sleep 4
 #==================================================================================================#
 #--------------------------------------- UTILS DOWNLOAD -------------------------------------------#
@@ -530,7 +530,7 @@ if [ "$utils" = true ]; then
 	jo_pacstrap man 88
 	echo 100 | dialog --title "IV. INSTALLING LINUX"\
 					  --gauge "Util packages installed"\
-					  6 70 0
+					  7 70 0
 	sleep 4
 fi
 #==================================================================================================#
@@ -550,7 +550,7 @@ if [ "$extras" = true ]; then
 	fi
 	echo 100 | dialog --title "IV. INSTALLING LINUX"\
 					  --gauge "Extra packages installed"\
-					  6 70 0
+					  7 70 0
 	sleep 4
 fi
 #==================================================================================================#
