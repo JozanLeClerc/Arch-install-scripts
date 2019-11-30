@@ -105,16 +105,47 @@ jo_get_vm() {
 	if dialog --title "$1"\
 			  --yesno "Are you running in a virtual machine?"\
 			  6 45; then
-		sel=$(dialog --nocancel --title "$1"\
-					 --radiolist "Which hypervisor are you using?" 10 50 3 \
-					 vbox "Oracle VirtualBox" on \
-					 vmware "VMware" off \
-					 other "Something else" off \
-					 3>&1 1>&2 2>&3 3>&-)
+			sel=$(dialog --nocancel --title "$1"\
+						 --radiolist "Which desktop manager would you like?" 10 50 3 \
+						 vbox "Oracle VirtualBox" on \
+						 vmware "VMware" off \
+						 other "Something else" off \
+						 3>&1 1>&2 2>&3 3>&-)
 		if echo -n "$sel" | grep -q vbox; then
 			vbox=true
 		elif echo -n "$sel" | grep -q utils; then
 			vmware=true
+		fi
+	fi
+}
+
+jo_get_de() {
+	if [ "$extras" = true ]; then
+		if dialog --title "$1"\
+				  --yesno "Do you wish to install a graphical environment?"\
+				  6 45; then
+			sel=$(dialog --nocancel --title "$1"\
+						 --radiolist "Which hypervisor are you using?" 12 50 5 \
+						 gnome "Gnome with gdm" on \
+						 xfce "xfce with lightdm" off \
+						 lxde "lxde with lightdm" off \
+						 kde "kde with kdm" off \
+						 i3-gaps "i3-gaps with lightdm" off \
+						 bspwm "bspwm with lightdm" off \
+						 3>&1 1>&2 2>&3 3>&-)
+			if echo -n "$sel" | grep -q gnome; then
+				gnome=true
+			elif echo -n "$sel" | grep -q xfce; then
+				xfce=true
+			elif echo -n "$sel" | grep -q lxde; then
+				lxde=true
+			elif echo -n "$sel" | grep -q kde; then
+				kde=true
+			elif echo -n "$sel" | grep -q i3-gaps; then
+				i3gaps=true
+			elif echo -n "$sel" | grep -q bspwm; then
+				bspwm=true
+			fi
 		fi
 	fi
 }
