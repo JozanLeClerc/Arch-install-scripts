@@ -114,7 +114,7 @@ jo_get_de() {
 			  --yesno "Do you wish to install a graphical environment?"\
 			  6 45; then
 		sel=$(dialog --nocancel --title "$1"\
-					 --radiolist "Which desktop environment would you like to install?" 15 50 8 \
+					 --radiolist "Which desktop environment would you like to install?" 17 50 9 \
 					 gnome "Gnome with gdm" on \
 					 mate "MATE with lightdm" off \
 					 kde "KDE Plasma with kdm" off \
