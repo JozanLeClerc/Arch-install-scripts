@@ -12,10 +12,12 @@ hstnm=""
 isusr=false
 isusrsudo=false
 gnome=false
+mate=false
 xfce=false
 lxde=false
 kde=false
 i3gaps=false
+awesome=false
 bspwm=false
 vbox=false
 vmware=false
@@ -113,16 +115,20 @@ jo_get_de() {
 				  --yesno "Do you wish to install a graphical environment?"\
 				  6 45; then
 			sel=$(dialog --nocancel --title "$1"\
-						 --radiolist "Which hypervisor are you using?" 12 50 5 \
+						 --radiolist "Which hypervisor are you using?" 14 50 7 \
 						 gnome "Gnome with gdm" on \
-						 xfce "xfce with lightdm" off \
+						 mate "MATE with lightdm" off \
+						 kde "KDE Plasma with kdm" off \
+						 xfce "Xfce with lightdm" off \
 						 lxde "lxde with lightdm" off \
-						 kde "kde with kdm" off \
 						 i3-gaps "i3-gaps with lightdm" off \
+						 awesome "Awesome with lightdm" off \
 						 bspwm "bspwm with lightdm" off \
 						 3>&1 1>&2 2>&3 3>&-)
 			if echo -n "$sel" | grep -q gnome; then
 				gnome=true
+			elif echo -n "$sel" | grep -q mate; then
+				mate=true
 			elif echo -n "$sel" | grep -q xfce; then
 				xfce=true
 			elif echo -n "$sel" | grep -q lxde; then
@@ -131,6 +137,8 @@ jo_get_de() {
 				kde=true
 			elif echo -n "$sel" | grep -q i3-gaps; then
 				i3gaps=true
+			elif echo -n "$sel" | grep -q awesome; then
+				awesome=true
 			elif echo -n "$sel" | grep -q bspwm; then
 				bspwm=true
 			fi
@@ -481,6 +489,14 @@ JO_PWD
 		arch-chroot /mnt/arch systemctl enable vmtoolsd
 		arch-chroot /mnt/arch systemctl enable vmware-vmblock-fuse
 	fi
+	if [[ "$mate" = true || "$xfce" = true || "$lxde" = true \
+				|| "$i3gaps" = true || "$awesome" = true || "$bspwm" = true ]]; then
+		arch-chroot /mnt/arch systemctl enable lightdm
+	elif [ "$gnome" = true ]; then
+		arch-chroot /mnt/arch systemctl enable gdm
+	elif [ "$kde" = true ]; then
+		arch-chroot /mnt/arch systemctl enable kdm
+	fi
 	arch-chroot /mnt/arch sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	if [ "$isusr" = true ]; then
 		if [ "$isusrsudo" = true ]; then
@@ -627,6 +643,31 @@ if [ "$extras" = true ]; then
 		jo_pacstrap xf86-video-intel 96
 	elif [ "$intelamdgpu" = "amd" ]; then
 		jo_pacstrap xf86-video-amdgpu 96
+	fi
+	if [[ "$mate" = true || "$xfce" = true || "$lxde" = true \
+				|| "$i3gaps" = true || "$awesome" = true || "$bspwm" = true ]]; then
+		jo_pacstrap lightdm 97
+		jo_pacstrap lightdm-gtk-greeter 97
+	fi
+	if [ "$gnome" = true ]; then
+		jo_pacstrap gnome 98
+		jo_pacstrap gnome-extra 98
+	elif [ "$mate" = true ]; then
+		jo_pacstrap mate 98
+		jo_pacstrap mate-extra 98
+	elif [ "$kde" = true ]; then
+		jo_pacstrap plasma 98
+	elif [ "$xfce" = true ]; then
+		jo_pacstrap xfce4 98
+	elif [ "$lxde" = true ]; then
+		jo_pacstrap lxde 98
+	elif [ "$i3gaps" = true ]; then
+		jo_pacstrap i3-gaps 98
+	elif [ "$awesome" = true ]; then
+		jo_pacstrap awesome 98
+	elif [ "$bspwm" = true ]; then
+		jo_pacstrap bspwm 98
+		jo_pacstrap sxhkd 98
 	fi
 	echo 100 | dialog --title "IV. INSTALLING LINUX"\
 					  --gauge "Extra packages installed"\
