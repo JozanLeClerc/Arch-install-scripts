@@ -582,21 +582,24 @@ if [ "$ltskern" = true ]; then
 	jo_pacstrap linux-lts-headers 75
 	if [ "$vbox" = true ]; then
 		jo_pacstrap virtualbox-guest-dkms 75
+		jo_pacstrap xf86-video-vmware 75
 	fi
 else
 	jo_pacstrap linux 70
 	jo_pacstrap linux-headers 75
 	if [ "$vbox" = true ]; then
 		jo_pacstrap virtualbox-guest-modules-arch 75
+		jo_pacstrap xf86-video-vmware 75
 	fi
+fi
+if [ "$vmware" = true ]; then
+	jo_pacstrap open-vm-tools 75
+	jo_pacstrap xf86-video-vmware 75
 fi
 if [ "$intelamdcpu" = "intel" ]; then
 	jo_pacstrap intel-ucode 80
 elif [ "$intelamdcpu" = "amd" ]; then
 	jo_pacstrap amd-ucode 80
-fi
-if [ "$vmware" = true ]; then
-	jo_pacstrap open-vm-tools 75
 fi
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
