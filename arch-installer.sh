@@ -103,21 +103,20 @@ components to install:" 10 50 3 \
 
 jo_get_vm() {
 	if dialog --title "$1"\
-		 --yesno "Are you running in a virtual machine?"\
-		 6 45; then
-			 sel=$(dialog --nocancel --title "$1"\
-				 --radiolist "Which hypervisor are you using?" 10 50 3 \
-				 vbox "Oracle VirtualBox" on \
-				 vmware "VMware" off \
-				 other "Something else" off \
-				 3>&1 1>&2 2>&3 3>&-)
-							  if echo -n "$sel" | grep -q vbox; then
-								  vbox=true
-							  elif echo -n "$sel" | grep -q utils; then
-								  vmware=true
-							  fi
+			  --yesno "Are you running in a virtual machine?"\
+			  6 45; then
+		sel=$(dialog --nocancel --title "$1"\
+					 --radiolist "Which hypervisor are you using?" 10 50 3 \
+					 vbox "Oracle VirtualBox" on \
+					 vmware "VMware" off \
+					 other "Something else" off \
+					 3>&1 1>&2 2>&3 3>&-)
+		if echo -n "$sel" | grep -q vbox; then
+			vbox=true
+		elif echo -n "$sel" | grep -q utils; then
+			vmware=true
+		fi
 	fi
-
 }
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
@@ -516,19 +515,26 @@ jo_pacstrap mkinitcpio 65
 if [ "$ltskern" = true ]; then
 	jo_pacstrap linux-lts 70
 	jo_pacstrap linux-lts-headers 75
+	if [ "$vbox" = true ]; then
+		jo_pacstrap virtualbox-guest-modules-arch 75
+	fi
 else
 	jo_pacstrap linux 70
 	jo_pacstrap linux-headers 75
+	if [ "$vbox" = true ]; then
+		jo_pacstrap virtualbox-guest-dkms 75
+	fi
 fi
 if [ "$intelamdcpu" = "intel" ]; then
 	jo_pacstrap intel-ucode 80
 elif [ "$intelamdcpu" = "amd" ]; then
 	jo_pacstrap amd-ucode 80
 fi
-if [ "$vbox" = true ]; then
-	jo_pacstrap virtualbox-guest-utils 85
-elif [ "$vmware" = true ]; then
-	
+if [ "$vmware" = true ]; then
+	jo_pacstrap open-vm-tools 75
+fi
+if [ "$vmware" = true ]; then
+fi	
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh 95
