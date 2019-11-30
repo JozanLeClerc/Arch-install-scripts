@@ -104,10 +104,9 @@ components to install:" 10 50 3 \
 jo_get_vm() {
 	if dialog --title "$1"\
 		 --yesno "Are you running in a virtual machine?"\
-		 5 45; then
+		 6 45; then
 			 sel=$(dialog --nocancel --title "$1"\
-				 --radiolist "Which hypervisor are you using\
-				 components to install:" 10 50 3 \
+				 --radiolist "Which hypervisor are you using?" 10 50 3 \
 				 vbox "Oracle VirtualBox" on \
 				 vmware "VMware" off \
 				 other "Something else" off \
@@ -526,6 +525,10 @@ if [ "$intelamdcpu" = "intel" ]; then
 elif [ "$intelamdcpu" = "amd" ]; then
 	jo_pacstrap amd-ucode 80
 fi
+if [ "$vbox" = true ]; then
+	jo_pacstrap virtualbox-guest-utils 85
+elif [ "$vmware" = true ]; then
+	
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh 95
