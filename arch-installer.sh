@@ -1,6 +1,3 @@
-#!/bin/bash
-
-#==================================================================================================#
 #------------------------------------ VARIABLES DECLARATION ---------------------------------------#
 #==================================================================================================#
 ltskern=false
@@ -438,6 +435,12 @@ $rtpwd
 $rtpwd
 JO_PWD
 	arch-chroot /mnt/arch systemctl enable NetworkManager
+	if [ "$vbox" = true ]; then
+		arch-chroot /mnt/arch systemctl enable vboxservice
+	elif [ "$vmware" = true ]; then
+		arch-chroot /mnt/arch systemctl enable vmtoolsd
+		arch-chroot /mnt/arch systemctl enable vmware-vmblock-fuse
+	fi
 	arch-chroot /mnt/arch sed -i 's/#ForwardToSyslog=no/ForwardToSyslog=yes/' /etc/systemd/journald.conf
 	if [ "$isusr" = true ]; then
 		if [ "$isusrsudo" = true ]; then
@@ -533,8 +536,6 @@ fi
 if [ "$vmware" = true ]; then
 	jo_pacstrap open-vm-tools 75
 fi
-if [ "$vmware" = true ]; then
-fi	
 if [ "$isusr" = true ]; then
 	if [ "$usrshell" = "zsh" ]; then
 		jo_pacstrap zsh 95
