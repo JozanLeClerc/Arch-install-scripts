@@ -96,7 +96,7 @@ jo_get_options() {
 components to install:" 10 50 3 \
 				   linux-lts "LTS Kernel" on \
 				   utils "Utils (zip, vim, git...)" on \
-				   extras "Extras (Xorg, gst-plugins...)" off \
+				   extras "Extras (Xorg, DE...)" off \
 				   3>&1 1>&2 2>&3 3>&-)
 	if echo -n "$sel" | grep -q linux-lts; then
 		ltskern=true
@@ -114,7 +114,7 @@ jo_get_de() {
 			  --yesno "Do you wish to install a graphical environment?"\
 			  6 45; then
 		sel=$(dialog --nocancel --title "$1"\
-					 --radiolist "Which desktop environment would you like to install?" 14 50 7 \
+					 --radiolist "Which desktop environment would you like to install?" 15 50 8 \
 					 gnome "Gnome with gdm" on \
 					 mate "MATE with lightdm" off \
 					 kde "KDE Plasma with kdm" off \
@@ -123,6 +123,7 @@ jo_get_de() {
 					 i3-gaps "i3-gaps with lightdm" off \
 					 awesome "Awesome with lightdm" off \
 					 bspwm "bspwm with lightdm" off \
+					 none "none of these" off \
 					 3>&1 1>&2 2>&3 3>&-)
 		if echo -n "$sel" | grep -q gnome; then
 			gnome=true
