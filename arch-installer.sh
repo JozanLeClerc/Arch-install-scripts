@@ -640,7 +640,6 @@ if [ "$extras" = true ]; then
 	jo_pacstrap xorg-server 40
 	jo_pacstrap xorg-xinit 48
 	jo_pacstrap xorg-apps 56
-	jo_pacstrap xorg-apps 60
 	jo_pacstrap xf86-input-mouse 64
 	jo_pacstrap xf86-input-keyboard 72
 	jo_pacstrap xdg-user-dirs 80
