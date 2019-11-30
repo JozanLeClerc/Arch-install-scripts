@@ -11,6 +11,8 @@ usrusrpwd="fade"
 hstnm=""
 isusr=false
 isusrsudo=false
+vbox=false
+vmware=false
 intelamdcpu="none"
 intelamdgpu="none"
 numregex='^[0-9]+$'
@@ -97,6 +99,26 @@ components to install:" 10 50 3 \
 	if echo -n "$sel" | grep -q extras; then
 		extras=true
 	fi
+}
+
+jo_get_vm() {
+	if dialog --title "$1"\
+		 --yesno "Are you running in a virtual machine?"\
+		 5 45; then
+			 sel=$(dialog --nocancel --title "$1"\
+				 --radiolist "Which hypervisor are you using\
+				 components to install:" 10 50 3 \
+				 vbox "Oracle VirtualBox" on \
+				 vmware "VMware" off \
+				 other "Something else" off \
+				 3>&1 1>&2 2>&3 3>&-)
+							  if echo -n "$sel" | grep -q vbox; then
+								  vbox=true
+							  elif echo -n "$sel" | grep -q utils; then
+								  vmware=true
+							  fi
+	fi
+
 }
 #==================================================================================================#
 #------------------------------------------ DISK SETUP --------------------------------------------#
