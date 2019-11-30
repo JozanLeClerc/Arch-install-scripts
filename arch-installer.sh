@@ -11,6 +11,12 @@ usrusrpwd="fade"
 hstnm=""
 isusr=false
 isusrsudo=false
+gnome=false
+xfce=false
+lxde=false
+kde=false
+i3gaps=false
+bspwm=false
 vbox=false
 vmware=false
 intelamdcpu="none"
@@ -101,24 +107,6 @@ components to install:" 10 50 3 \
 	fi
 }
 
-jo_get_vm() {
-	if dialog --title "$1"\
-			  --yesno "Are you running in a virtual machine?"\
-			  6 45; then
-			sel=$(dialog --nocancel --title "$1"\
-						 --radiolist "Which desktop manager would you like?" 10 50 3 \
-						 vbox "Oracle VirtualBox" on \
-						 vmware "VMware" off \
-						 other "Something else" off \
-						 3>&1 1>&2 2>&3 3>&-)
-		if echo -n "$sel" | grep -q vbox; then
-			vbox=true
-		elif echo -n "$sel" | grep -q utils; then
-			vmware=true
-		fi
-	fi
-}
-
 jo_get_de() {
 	if [ "$extras" = true ]; then
 		if dialog --title "$1"\
@@ -146,6 +134,24 @@ jo_get_de() {
 			elif echo -n "$sel" | grep -q bspwm; then
 				bspwm=true
 			fi
+		fi
+	fi
+}
+
+jo_get_vm() {
+	if dialog --title "$1"\
+			  --yesno "Are you running in a virtual machine?"\
+			  6 45; then
+			sel=$(dialog --nocancel --title "$1"\
+						 --radiolist "Which desktop manager would you like?" 10 50 3 \
+						 vbox "Oracle VirtualBox" on \
+						 vmware "VMware" off \
+						 other "Something else" off \
+						 3>&1 1>&2 2>&3 3>&-)
+		if echo -n "$sel" | grep -q vbox; then
+			vbox=true
+		elif echo -n "$sel" | grep -q utils; then
+			vmware=true
 		fi
 	fi
 }
@@ -514,6 +520,7 @@ dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation util
 jo_chk_internet
 jo_get_hstnm "I. CORE SETUP"
 jo_get_options "I. CORE SETUP"
+jo_get_de "I. CORE SETUP"
 jo_get_vm "I. CORE SETUP"
 jo_get_disk_config "II. DISK SETUP"
 jo_warn_wiping
