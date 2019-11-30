@@ -483,6 +483,7 @@ dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation util
 jo_chk_internet
 jo_get_hstnm "I. CORE SETUP"
 jo_get_options "I. CORE SETUP"
+jo_get_vm "I. CORE SETUP"
 jo_get_disk_config "II. DISK SETUP"
 jo_warn_wiping
 jo_get_root_config "III. USERS SETUP"
