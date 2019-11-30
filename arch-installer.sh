@@ -582,14 +582,12 @@ if [ "$ltskern" = true ]; then
 	jo_pacstrap linux-lts-headers 75
 	if [ "$vbox" = true ]; then
 		jo_pacstrap virtualbox-guest-dkms 75
-		jo_pacstrap xf86-video-vmware 75
 	fi
 else
 	jo_pacstrap linux 70
 	jo_pacstrap linux-headers 75
 	if [ "$vbox" = true ]; then
 		jo_pacstrap virtualbox-guest-modules-arch 75
-		jo_pacstrap xf86-video-vmware 75
 	fi
 fi
 if [ "$vmware" = true ]; then
@@ -650,6 +648,11 @@ if [ "$extras" = true ]; then
 		jo_pacstrap xf86-video-intel 96
 	elif [ "$intelamdgpu" = "amd" ]; then
 		jo_pacstrap xf86-video-amdgpu 96
+	fi
+	if [ "$vbox" = true ]; then
+		jo_pacstrap xf86-video-vmware 75
+	elif [ "$vmware" = true ]; then
+		jo_pacstrap xf86-video-vmware 75
 	fi
 	if [[ "$mate" = true || "$xfce" = true || "$lxde" = true \
 				|| "$i3gaps" = true || "$awesome" = true || "$bspwm" = true ]]; then
