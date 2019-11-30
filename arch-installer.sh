@@ -110,38 +110,36 @@ components to install:" 10 50 3 \
 }
 
 jo_get_de() {
-	if [ "$extras" = true ]; then
-		if dialog --title "$1"\
-				  --yesno "Do you wish to install a graphical environment?"\
-				  6 45; then
-			sel=$(dialog --nocancel --title "$1"\
-						 --radiolist "Which hypervisor are you using?" 14 50 7 \
-						 gnome "Gnome with gdm" on \
-						 mate "MATE with lightdm" off \
-						 kde "KDE Plasma with kdm" off \
-						 xfce "Xfce with lightdm" off \
-						 lxde "lxde with lightdm" off \
-						 i3-gaps "i3-gaps with lightdm" off \
-						 awesome "Awesome with lightdm" off \
-						 bspwm "bspwm with lightdm" off \
-						 3>&1 1>&2 2>&3 3>&-)
-			if echo -n "$sel" | grep -q gnome; then
-				gnome=true
-			elif echo -n "$sel" | grep -q mate; then
-				mate=true
-			elif echo -n "$sel" | grep -q xfce; then
-				xfce=true
-			elif echo -n "$sel" | grep -q lxde; then
-				lxde=true
-			elif echo -n "$sel" | grep -q kde; then
-				kde=true
-			elif echo -n "$sel" | grep -q i3-gaps; then
-				i3gaps=true
-			elif echo -n "$sel" | grep -q awesome; then
-				awesome=true
-			elif echo -n "$sel" | grep -q bspwm; then
-				bspwm=true
-			fi
+	if dialog --title "$1"\
+			  --yesno "Do you wish to install a graphical environment?"\
+			  6 45; then
+		sel=$(dialog --nocancel --title "$1"\
+					 --radiolist "Which hypervisor are you using?" 14 50 7 \
+					 gnome "Gnome with gdm" on \
+					 mate "MATE with lightdm" off \
+					 kde "KDE Plasma with kdm" off \
+					 xfce "Xfce with lightdm" off \
+					 lxde "lxde with lightdm" off \
+					 i3-gaps "i3-gaps with lightdm" off \
+					 awesome "Awesome with lightdm" off \
+					 bspwm "bspwm with lightdm" off \
+					 3>&1 1>&2 2>&3 3>&-)
+		if echo -n "$sel" | grep -q gnome; then
+			gnome=true
+		elif echo -n "$sel" | grep -q mate; then
+			mate=true
+		elif echo -n "$sel" | grep -q xfce; then
+			xfce=true
+		elif echo -n "$sel" | grep -q lxde; then
+			lxde=true
+		elif echo -n "$sel" | grep -q kde; then
+			kde=true
+		elif echo -n "$sel" | grep -q i3-gaps; then
+			i3gaps=true
+		elif echo -n "$sel" | grep -q awesome; then
+			awesome=true
+		elif echo -n "$sel" | grep -q bspwm; then
+			bspwm=true
 		fi
 	fi
 }
@@ -536,7 +534,9 @@ dialog --title "Welcome" --msgbox "Welcome to Joe's Arch Linux installation util
 jo_chk_internet
 jo_get_hstnm "I. CORE SETUP"
 jo_get_options "I. CORE SETUP"
-jo_get_de "I. CORE SETUP"
+if [ "$extras" = true ]; then
+	jo_get_de "I. CORE SETUP"
+fi
 jo_get_vm "I. CORE SETUP"
 jo_get_disk_config "II. DISK SETUP"
 jo_warn_wiping
