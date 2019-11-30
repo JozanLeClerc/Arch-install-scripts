@@ -577,13 +577,13 @@ if [ "$ltskern" = true ]; then
 	jo_pacstrap linux-lts 70
 	jo_pacstrap linux-lts-headers 75
 	if [ "$vbox" = true ]; then
-		jo_pacstrap virtualbox-guest-modules-arch 75
+		jo_pacstrap virtualbox-guest-dkms 75
 	fi
 else
 	jo_pacstrap linux 70
 	jo_pacstrap linux-headers 75
 	if [ "$vbox" = true ]; then
-		jo_pacstrap virtualbox-guest-dkms 75
+		jo_pacstrap virtualbox-guest-modules-arch 75
 	fi
 fi
 if [ "$intelamdcpu" = "intel" ]; then
