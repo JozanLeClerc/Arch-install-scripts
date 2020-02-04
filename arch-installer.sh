@@ -658,6 +658,7 @@ if [ "$extras" = true ]; then
 	if [[ "$mate" = true || "$xfce" = true || "$lxde" = true \
 				|| "$i3gaps" = true || "$awesome" = true || "$bspwm" = true ]]; then
 		jo_pacstrap lightdm 97
+		jo_pacstrap xterm 97
 		jo_pacstrap lightdm-gtk-greeter 97
 	fi
 	if [ "$gnome" = true ]; then
@@ -689,7 +690,7 @@ jo_fstab "IV. INSTALLING LINUX"
 dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Finishing configuration"\
 	   3 30
-jo_arch_chroot > /dev/null 2>&1
+jo_arch_chroot 2>&1
 sleep 4
 dialog --title "WORK COMPLETE"\
 	   --msgbox "\
