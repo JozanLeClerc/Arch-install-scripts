@@ -476,11 +476,11 @@ jo_arch_chroot() {
 	arch-chroot /mnt/arch hwclock --systohc
 	arch-chroot /mnt/arch sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 	arch-chroot /mnt/arch locale-gen
-	arch-chroot /mnt/arch echo "LANG=en_US.UTF-8" > /etc/locale.conf
-	arch-chroot /mnt/arch echo "$hstnm" > /etc/hostname
-	arch-chroot /mnt/arch echo "127.0.0.1 localhost" > /etc/hosts
-	arch-chroot /mnt/arch echo "::1 localhost" >> /etc/hosts
-	arch-chroot /mnt/arch echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /etc/hosts
+	arch-chroot /mnt/arch echo "LANG=en_US.UTF-8" > /mnt/arch/etc/locale.conf
+	arch-chroot /mnt/arch echo "$hstnm" > /mnt/arch/etc/hostname
+	arch-chroot /mnt/arch echo "127.0.0.1 localhost" > /mnt/arch/etc/hosts
+	arch-chroot /mnt/arch echo "::1 localhost" >> /mnt/arch/etc/hosts
+	arch-chroot /mnt/arch echo "127.0.1.1 $hstnm.localdomain $hstnm" >> /mnt/arch/etc/hosts
 	arch-chroot /mnt/arch passwd <<JO_PWD
 $rtpwd
 $rtpwd
@@ -690,7 +690,7 @@ jo_fstab "IV. INSTALLING LINUX"
 dialog --title "V. CONFIGURING LINUX"\
 	   --infobox "Finishing configuration"\
 	   3 30
-jo_arch_chroot 2>&1
+jo_arch_chroot >/dev/null 2>&1
 sleep 4
 dialog --title "WORK COMPLETE"\
 	   --msgbox "\
