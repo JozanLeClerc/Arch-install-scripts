@@ -564,6 +564,7 @@ jo_make_filesystem "IV. INSTALLING LINUX"
 jo_pacstrap base 0
 jo_pacstrap base-devel 5
 jo_pacstrap pacman-contrib 10
+jo_pacstrap linux-firmware 12
 jo_pacstrap networkmanager 15
 jo_pacstrap syslog-ng 20
 jo_pacstrap mtools 25
