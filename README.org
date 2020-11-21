@@ -36,7 +36,7 @@ If this fails, refer to [[https://wiki.archlinux.org/index.php/Installation_guid
 Now you are ready to run the script. Run *the following commands* to begin setup and installation:
 
 #+BEGIN_SRC shell
-wget https://raw.githubusercontent.com/JozanLeClerc/arch-installer/master/arch-installer.sh
+curl -o arch-installer.sh https://raw.githubusercontent.com/JozanLeClerc/arch-installer/master/arch-installer.sh
 chmod +x arch-installer.sh
 ./arch-installer.sh
 #+END_SRC
